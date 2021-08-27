@@ -1,0 +1,10 @@
+{
+  "extends": "airbnb-base",
+  "env": {
+    "mocha": true
+  },
+  "rules": {
+    "class-methods-use-this": "off",
+    "max-len": "off"
+  }
+}

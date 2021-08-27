@@ -1,0 +1,52 @@
+{
+  "name": "jericho-framework",
+  "version": "0.0.0-development",
+  "description": "Jericho Framework for Discord Bots to make bot real easy in Java-Script and discord.js",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "npm run lint && babel ./src -d ./lib",
+    "lint": "eslint ./src --fix",
+    "commit": "git-cz",
+    "semantic-release": "semantic-release --branches main",
+    "push": "git add . && npm run commit && git push"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SidisLiveYT/Jericho-Framework.git"
+  },
+  "keywords": [
+    "api",
+    "discord",
+    "jericho-framework",
+    "discord api",
+    "jericho"
+  ],
+  "author": "Sid is Live YT",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SidisLiveYT/Jericho-Framework/issues"
+  },
+  "homepage": "https://github.com/SidisLiveYT/Jericho-Framework#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.24.2",
+    "mocha": "^9.1.0",
+    "nyc": "^15.1.0",
+    "semantic-release": "^17.4.7"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "engines": {
+    "node": ">= 15.0.0"
+  },
+  "dependencies": {
+    "discord.js": "^13.1.0"
+  }
+}
