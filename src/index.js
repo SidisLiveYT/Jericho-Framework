@@ -1,7 +1,7 @@
 import {
-    ThreadHandler
+  ThreadHandler,
 } from './Handlers/ThreadHandler';
 
 module.exports = {
-    ThreadHandler: ThreadHandler,
+  ThreadHandler,
 };

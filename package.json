@@ -4,7 +4,7 @@
   "description": "Jericho Framework for Discord Bots to make bot real easy in Java-Script and discord.js",
   "main": "src/index.js",
   "scripts": {
-    "build": "npm run lint && babel ./src -d ./lib",
+    "test": "All NPM Packages have been Loaded and Operational!!",
     "lint": "eslint ./src --fix",
     "commit": "git-cz",
     "semantic-release": "semantic-release --branches main",
@@ -45,6 +45,9 @@
   },
   "engines": {
     "node": ">= 15.0.0"
+  },
+  "standard": {
+    "parser": "@babel/eslint-parser"
   },
   "dependencies": {
     "discord.js": "^13.1.0"

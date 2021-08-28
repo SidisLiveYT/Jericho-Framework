@@ -5,6 +5,7 @@
   },
   "rules": {
     "class-methods-use-this": "off",
-    "max-len": "off"
+    "max-len": "off",
+    "no-use-before-define": "off"
   }
 }
