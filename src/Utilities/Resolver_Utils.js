@@ -1,9 +1,9 @@
 /**
- * @exports ChannnelResolver Custom Resolvable for Guild | Channel | Message
+ * @exports ChannnelResolver Custom Resolvable for Channel
  * @param {*} Client Discord API Client from discord.js v13 [ new Client() ]
  * @param {*} ChannelResolve Raw Data to be Resolved
  * @param {*} Extraif Extra Options for Resolver 
- * @returns {*} Returns the Correct Resolve Name of the Structure in terms of discord.js v13
+ * @returns Channel Collection
  */
 
 export async function ChannnelResolver(Client, ChannelResolve, Extraif) {
@@ -43,4 +43,30 @@ export async function ChannnelResolver(Client, ChannelResolve, Extraif) {
             else return Channel;
         } else throw SyntaxError(`[Wrong Channel Resolve] : Provide Channel.id or Channel Collection of discord.js v13`);
     };
+};
+
+/**
+ * @function GuildResolver Custom Resolvable for Guild
+ * @param {*} Client Discord API Client from discord.js v13 [ new Client() ]
+ * @param {*} GuildResolve Raw Guild Data to be Resolved
+ * @returns Guild Collection
+ */
+
+export async function GuildResolver(Client, GuildResolve) {
+    if (Extraif.ifmessage && GuildResolve.guild) return GuildResolve.guild;
+    else if (!isNaN(`${GuildResolve}`)) {
+        if (Client.guilds.cache.get(`${GuildResolve}`)) return Client.guilds.cache.get(`${GuildResolve}`);
+        else return await Client.guilds.fetch(`${GuildResolve}`).then(Guild => {
+            return Guild;
+        }).catch(error => {
+            throw TypeError(`Invalid Guild.id : ${error}`);
+        });
+    } else if (isNaN(`${GuildResolve}`)) {
+        if (Client.guilds.cache.get(`${GuildResolve}`)) return Client.guilds.cache.get(`${GuildResolve}`);
+        else return await Client.guilds.fetch(`${GuildResolve}`).then(Guild => {
+            return Guild;
+        }).catch(error => {
+            throw TypeError(`Invalid Guild.id : ${error}`);
+        });
+    } else return GuildResolve;
 };

@@ -11,11 +11,11 @@ export class ThreadBuilder {
      * @property {Number} InstanceNumber : For Storing Instance Numbers for further Utils Requirements
      */
 
-    static #ThreadInstnaceNumber = 0;
+    static #ThreadInstanceNumber = 0;
 
     constructor(Options) {
         this.Client = Options.Client;
-        this.ThreadInstances = ThreadBuilder.#ThreadInstnaceNumber + 1;
+        this.ThreadCode = ThreadBuilder.#ThreadInstanceNumber + 1;
         this.channel = Options.channel;
         this.guild = Options.guild;
         this.metadata = Options.metadata;
