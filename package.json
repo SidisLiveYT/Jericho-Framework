@@ -1,7 +1,7 @@
 {
   "name": "jericho-framework",
   "version": "0.0.0-development",
-  "description": "Jericho Framework for Discord Bots to make bot real easy in Java-Script and discord.js",
+  "description": "Jericho Framework for Discord Bots to make bot real easy in Java-Script and discord.js v13",
   "main": "src/index.js",
   "scripts": {
     "lint": "eslint ./src --fix",
