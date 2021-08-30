@@ -28,7 +28,6 @@
   "homepage": "https://github.com/SidisLiveYT/Jericho-Framework#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
@@ -44,9 +43,6 @@
   },
   "engines": {
     "node": ">= 15.0.0"
-  },
-  "standard": {
-    "parser": "@babel/eslint-parser"
   },
   "dependencies": {
     "discord.js": "^13.1.0"

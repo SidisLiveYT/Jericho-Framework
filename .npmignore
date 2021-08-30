@@ -1,6 +1,10 @@
 .nyc_output/
-coverage/
 node_modules/
-.idea/
 .vscode/
 test/
+README.md
+LICENSE
+.eslintrc.json
+.github/
+.gitignore
+example/
