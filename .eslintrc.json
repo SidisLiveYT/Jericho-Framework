@@ -6,6 +6,9 @@
   "rules": {
     "class-methods-use-this": "off",
     "max-len": "off",
-    "no-use-before-define": "off"
+    "no-use-before-define": "off",
+    "import/named": "off",
+    "import/extensions": "off",
+    "import/prefer-default-export": "off"
   }
 }

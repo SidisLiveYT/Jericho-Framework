@@ -49,8 +49,8 @@ export class ThreadBuilder {
 
     destroy(Options) {
         if (!Options) throw SyntaxError(`Options Variable can't be Undefined , Reason is Compulsory`);
-        if (Options.Delay && !Number.isNaN(Options.Delay) && Options.Reason) return setTimeout(ThreadDeletion(Thread, Options.Reason), parseInt(Options.Delay) * 1000);
-        else if (Options.Reason) return ThreadDeletion(Thread, Options.Reason);
+        if (Options.Delay && !Number.isNaN(Options.Delay) && Options.Reason) return setTimeout(ThreadDeletion(this.thread, Options.Reason), parseInt(Options.Delay) * 1000);
+        else if (Options.Reason) return ThreadDeletion(this.thread, Options.Reason);
         else throw SyntaxError(`Options Variable can't be Undefined , Reason is Compulsory`);
 
         function ThreadDeletion(Thread, Reason) {
