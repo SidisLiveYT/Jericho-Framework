@@ -62,14 +62,17 @@ export class ThreadHandler {
      * @param {*} Options Options to create Thread for Particular Server and Channel
      */
 
-    CreateThread(Options) {
+    async CreateThread(Options) {
         const ThreadInstanceClass = new ThreadBuilder({
             Client: this.Client,
             guild: this.guild,
-            channel: this.channel,
+            channel: ChannnelResolver(this.Client, Options.channel || this.channel, {
+                type: `text`,
+                ifmessage: true
+            }),
             metadata: Options ? Options.metadata : this.metadata,
         });
-        const ThreadInstance = ThreadInstanceClass.create(Options);
+        const ThreadInstance = await ThreadInstanceClass.create(Options);
         var ThreadInstances = ThreadHandler.#ThreadInstanceRecords[`'${this.ChannelCode}'`];
         if (ThreadInstances) ThreadInstances.push(ThreadInstance);
         else ThreadInstances = [ThreadInstance];
