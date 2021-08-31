@@ -3,5 +3,5 @@ import {
 } from './Handlers/ThreadHandler.js';
 
 export {
-  ThreadHandler
+  ThreadHandler,
 };

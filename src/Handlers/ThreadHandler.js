@@ -132,17 +132,19 @@ export class ThreadHandler {
      * @method #GetInstance Private Static Method to get Thread Instance from the Cache
      * @param {*} ThreadInstances Array of Thread Instances (Cache Value) 
      * @param {Number} Amount Amount of Instances fetch if not Instance mentioned
-     * @param {Number} Instance Exact Number of Thread Instance to Fetch
+     * @param {*} Instance Exact Number of Thread Instance to Fetch
      * @returns 
      */
     static #GetInstance(ThreadInstances, Amount, Instance) {
         var count = 0;
+        var choice = 0;
         var Threads = [];
-        if (Instance && Instance.toLowerCase().trim() === 'all') return ThreadInstances;
+        if (Instance && typeof Instance === 'string' && Instance.toLowerCase().trim() === 'all') return ThreadInstances;
         for (count = 0; count < ThreadInstances.length; ++count) {
-            if (Instance && ThreadInstances[count].ThreadInstance === Instance) Threads.push(ThreadInstances[count]);
+            if (Instance && ThreadInstances[count].ThreadCode === Instance) Threads.push(ThreadInstances[count]);
             else if (!Instance) Threads.push(ThreadInstances[count]);
-            if (Amount && count === Amount) break;
+            if (Amount && choice === Amount) break;
+            else ++choice;
         };
         return Threads;
     };

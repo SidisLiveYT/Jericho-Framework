@@ -8,8 +8,8 @@
 
 export function ChannnelResolver(Client, ChannelResolve, Extraif) {
   if (Extraif.ifmessage && ChannelResolve.channel) return ChannelFilterType(ChannelResolve.channel, Extraif);
-  else if (!Number.isNaN(`${ChannelResolve}`)) {
-    var ChannelID = ChannelResolve.id;
+  if (!Number.isNaN(`${ChannelResolve}`)) {
+    let ChannelID = ChannelResolve.id;
     if (!ChannelID) ChannelID = ChannelResolve;
     if (Client.channels.cache.get(`${ChannelID}`)) return ChannelFilterType(Client.channels.cache.get(`${ChannelID}`), Extraif);
     return Client.channels.fetch(`${ChannelID}`).then((Channel) => ChannelFilterType(Channel, Extraif)).catch((error) => {
@@ -49,7 +49,7 @@ export function ChannnelResolver(Client, ChannelResolve, Extraif) {
 export function GuildResolver(Client, GuildResolve, Extraif) {
   if (Extraif.ifmessage && GuildResolve.guild) return GuildResolve.guild;
   if (!Number.isNaN(`${GuildResolve}`)) {
-    var GuildID = GuildResolve.id;
+    let GuildID = GuildResolve.id;
     if (!GuildID) GuildID = GuildResolve;
     if (Client.guilds.cache.get(`${GuildID}`)) return Client.guilds.cache.get(`${GuildID}`);
     return Client.guilds.fetch(`${GuildID}`).then((Guild) => Guild).catch((error) => {
