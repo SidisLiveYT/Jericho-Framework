@@ -30,10 +30,10 @@ export class ThreadBuilder {
     async create(Options) {
         if (!Options) throw TypeError(`Invalid Options Detected for Thread Creator`);
         else if (Options.Type && !['private', 'public'].includes(`${Options.Type.toLowerCase().trim()}`)) throw TypeError(`Invalid Thread Type is Detected!`);
-        const Thread = await this.Channel.threads.create({
+        const Thread = await this.channel.threads.create({
             name: Options.Name ? Options.Name : `Thread Instance - ${this.ThreadInstances + 1} | Jericho Framework`,
             autoArchiveDuration: Options.AutoArchiveDuration ? Options.AutoArchiveDuration : 60,
-            type: Options.Type === 'private' ? 'private_thread' : `public_thread`,
+            type: Options.Type === 'private' ? 'GUILD_PRIVATE_THREAD' : `GUILD_PUBLIC_THREAD`,
             reason: Options.Reason ? Options.Reason : `Thread Created by ${this.Client.user.name} on Thread Handler | Jericho Framework`,
         }).catch(error => {
             throw error;

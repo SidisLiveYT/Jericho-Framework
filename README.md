@@ -46,7 +46,8 @@ const ThreadInstance = ChannelInstance.CreateThread({
      Name : <Thread-Name> || <Thread-Title>,
      AutoArchiveDuration : <Time-in-Seconds>,
      Type: <'private-thread'> || <'public-thread'>,
-     Reason: <Reason-to-Create> || null
+     Reason: <Reason-to-Create> || null,
+     Channel: <if to Change Channel { ChannelResolve }>,
 })
 ```
 

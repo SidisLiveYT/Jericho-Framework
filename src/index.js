@@ -1,6 +1,6 @@
 import {
   ThreadHandler,
-} from './Handlers/ThreadHandler';
+} from './Handlers/ThreadHandler.js';
 
 export {
   ThreadHandler
