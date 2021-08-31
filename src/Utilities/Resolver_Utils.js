@@ -8,11 +8,11 @@
 
 export function ChannnelResolver(Client, ChannelResolve, Extraif) {
   if (Extraif.ifmessage && ChannelResolve.channel) return ChannelFilterType(ChannelResolve.channel, Extraif);
+  else if (ChannelResolve.id && ChannelResolve.type) return ChannelFilterType(ChannelResolve, Extraif);
+  else if (typeof ChannelResolve !== 'string' || typeof ChannelResolve !== 'number') throw TypeError(`Invalid ChannelResolve is Detected!`);
   else if (!Number.isNaN(`${ChannelResolve}`)) {
-    var ChannelID = ChannelResolve.id;
-    if (!ChannelID) ChannelID = ChannelResolve;
-    if (Client.channels.cache.get(`${ChannelID}`)) return ChannelFilterType(Client.channels.cache.get(`${ChannelID}`), Extraif);
-    return Client.channels.fetch(`${ChannelID}`).then((Channel) => ChannelFilterType(Channel, Extraif)).catch((error) => {
+    if (Client.channels.cache.get(`${ChannelResolve}`)) return ChannelFilterType(Client.channels.cache.get(`${ChannelResolve}`), Extraif);
+    return Client.channels.fetch(`${ChannelResolve}`).then((Channel) => ChannelFilterType(Channel, Extraif)).catch((error) => {
       throw TypeError(`Invalid Channel.id : ${error}`);
     });
   }
@@ -48,11 +48,11 @@ export function ChannnelResolver(Client, ChannelResolve, Extraif) {
 
 export function GuildResolver(Client, GuildResolve, Extraif) {
   if (Extraif.ifmessage && GuildResolve.guild) return GuildResolve.guild;
-  if (!Number.isNaN(`${GuildResolve}`)) {
-    var GuildID = GuildResolve.id;
-    if (!GuildID) GuildID = GuildResolve;
-    if (Client.guilds.cache.get(`${GuildID}`)) return Client.guilds.cache.get(`${GuildID}`);
-    return Client.guilds.fetch(`${GuildID}`).then((Guild) => Guild).catch((error) => {
+  else if (GuildResolve.id && GuildResolve.members && GuildResolve.channels) return GuildResolve;
+  else if (typeof GuildResolve !== 'string' || typeof GuildResolve !== 'number') throw TypeError(`Invalid GuildResolve is Detected!`);
+  else if (!Number.isNaN(`${GuildResolve}`)) {
+    if (Client.guilds.cache.get(`${GuildResolve}`)) return Client.guilds.cache.get(`${GuildResolve}`);
+    return Client.guilds.fetch(`${GuildResolve}`).then((Guild) => Guild).catch((error) => {
       throw TypeError(`Invalid Guild.id : ${error}`);
     });
   }
