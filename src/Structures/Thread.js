@@ -1,8 +1,8 @@
 /**
  * @class ThreadBuilder is the Class to Operate Particular Threads in Same Channel Respective Server
  * @constructor Constructing Unique Instances for Each Channel
- * @param {*} Options Options Values for Particular Channel Instance
- * @returns {*} A Class Instance of Single Channel [ Unique Instance ]
+ * @param {Object} Options Options Values for Particular Channel Instance
+ * @returns {Object} A Class Instance of Single Channel [ Unique Instance ]
  */
 
 export class ThreadBuilder {
@@ -24,7 +24,7 @@ export class ThreadBuilder {
 
     /**
      * @method CreateInstance Method for Creating Instance for the particular Channel
-     * @param {*} Options Options for Name , AutoArchive Duration , Reason , Type
+     * @param {Object} Options Options for Name , AutoArchive Duration , Reason , Type
      */
 
     async create(Options) {
@@ -44,7 +44,7 @@ export class ThreadBuilder {
 
     /**
      * @method DestroyInstance Destroy Particular Instance Completely from Thread Class
-     * @param {*} Options Options for Delay Destroy 
+     * @param {Object} Options Options for Delay Destroy 
      */
 
     destroy(Options) {

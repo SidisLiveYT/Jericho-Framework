@@ -7,8 +7,8 @@ import {
 } from '../Structures/Thread.js';
 
 /**
- * @param {*} Client Discord API Client from discord.js v13
- * @param {*} Options Default Options for Thread ThreadHandler
+ * @param {Snowflake} Client Discord API Client from discord.js v13
+ * @param {Object} Options Default Options for Thread ThreadHandler
  */
 
 export class ThreadHandler {
@@ -32,7 +32,7 @@ export class ThreadHandler {
 
     /**
      * @method GetNormalThread Get Thread information of Particular Channel or Message
-     * @param {*} ChannelResolve Thread Channel or Discord Message variable
+     * @param {Snowflake} ChannelResolve Thread Channel or Discord Message variable
      */
 
     GetThread(ChannelResolve) {
@@ -59,7 +59,7 @@ export class ThreadHandler {
 
     /**
      * @method CreateThread Create Method method of the Channel Class
-     * @param {*} Options Options to create Thread for Particular Server and Channel
+     * @param {Object} Options Options to create Thread for Particular Server and Channel
      */
 
     async CreateThread(Options) {
@@ -82,8 +82,8 @@ export class ThreadHandler {
 
     /**
      * @method DestroyThread Destroying Thread from Cache and Thread Instances
-     * @param {*} ThreadInstance Unique Thread Instance for the Deletion
-     * @param {*} Options Options for Reason or Delay in Deletion
+     * @param {Object} ThreadInstance Unique Thread Instance for the Deletion
+     * @param {Object} Options Options for Reason or Delay in Deletion
      * @returns {Boolean} Boolean true on Success or undefined on faliure
      */
 
@@ -100,7 +100,7 @@ export class ThreadHandler {
     /**
      * @method #CheckInstance Private Method to Check Wheather Channel exist as Instance for Threads
      * @param {Number} ChannelCode Channel Instance Code present on Class Cache
-     * @returns {*} ThreadsInstances
+     * @returns {Object} ThreadsInstances
      */
 
     static #CheckInstance(ChannelCode) {
@@ -110,7 +110,7 @@ export class ThreadHandler {
 
     /**
      * @method #RemoveInstance private Method for Deletion of Thread Instance from the Class Cache
-     * @param {*} ThreadInstances Array  of Thread Instances for Deletion from Cache
+     * @param {Object} ThreadInstances Array  of Thread Instances for Deletion from Cache
      * @param {Number} Instance if its not all , then Number of Instance to delete
      * @param {Number} ChannelCode Channel Instance Code present on Class Cache 
      * @returns {Boolean} True or False Depends
@@ -130,10 +130,10 @@ export class ThreadHandler {
 
     /**
      * @method #GetInstance Private Static Method to get Thread Instance from the Cache
-     * @param {*} ThreadInstances Array of Thread Instances (Cache Value) 
+     * @param {Object} ThreadInstances Array of Thread Instances (Cache Value) 
      * @param {Number} Amount Amount of Instances fetch if not Instance mentioned
-     * @param {*} Instance Exact Number of Thread Instance to Fetch
-     * @returns 
+     * @param {Object} Instance Exact Number of Thread Instance to Fetch
+     * @returns {Object} ThreadInstance
      */
     static #GetInstance(ThreadInstances, Amount, Instance) {
         var count = 0;
