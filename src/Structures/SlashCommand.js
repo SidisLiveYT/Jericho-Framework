@@ -1,12 +1,39 @@
+/**
+ * @class SlashCommandBuilder - Build a Slash Commands Strucutre for Interaction
+ * @param {Snowflake} Client Discord API Client with respect to discord.js v13
+ * @param {Array} Commands Arrays of Commands for Slash Command Interaction .
+ */
+
 export class SlashCommandBuilder {
 
+    /**
+     * @property {Array} DefaultOptionsTypes Array of Option type for Slash Command Interactions.
+     */
+
     static #DefaultOptionsTypes = ["CHAT_INPUT", "USER", "MESSAGE"];
+
+    /**
+     * @property {Array} DefaultCommandTypes Array of Command type for Slash Command Interactions.
+     */
+
     static #DefaultCommandTypes = ["SUB_COMMAND", "SUB_COMMAND_GROUP", "STRING", "INTEGER", "BOOLEAN", "USER", "CHANNEL", "ROLE", "MENTIONABLE", "NUMBER"];
+
+    /**
+     * @constructor Construct Class SlashCommandBuilder
+     * @param {Snowflake} client Discord API Client with respect to discord.js v13
+     * @param {Array} commands Arrays of Commands for Slash Command Interaction .
+     */
 
     constructor(Client, Commands) {
         this.client = Client;
-        this.commands = Commands;
+        this.commands = Commands || null;
     };
+
+    /**
+     * @method create Instance of SlashCommandBuilder.create() will create a new Slash Command Array and Checked !
+     * @param {Array} Commands Arrays of Commands for Slash Command Interaction .
+     * @returns {Array} CookedCommands - Filtered Slash Command Value .
+     */
 
     create(Commands) {
         this.commands = Commands ? Commands : this.commands;
@@ -19,6 +46,12 @@ export class SlashCommandBuilder {
         return CookedCommands;
     };
 
+    /**
+     * @method #CommandPlacement Placement of Index value of Array of Commands to be Cooked
+     * @param {Array} Command Command for Slash Command Interaction .
+     * @returns {Array} CookedCommand - Filtered Slash Command Value .
+     */
+
     #CommandPlacement(Command) {
         if (!Command) throw SyntaxError(`No Application Command Credentials is Detected!`);
         var CookedCommand = {};
@@ -27,7 +60,7 @@ export class SlashCommandBuilder {
         else throw SyntaxError(`Invalid Application Command Name is Detected!`);
         if (Command.description && (typeof Command.description === 'string' || typeof Command.description === 'number')) CookedCommand.description = Command.description;
         else throw SyntaxError(`Invalid Application Command Description is Detected!`);
-        if (Command.type && typeof Command.type === 'string' && this.#ChannelTypePlacement(Command.type)) CookedCommand.type = this.#ChannelTypePlacement(Command.type);
+        if (Command.type && typeof Command.type === 'string' && this.#CommandTypePlacement(Command.type)) CookedCommand.type = this.#CommandTypePlacement(Command.type);
         else if (Command.type) throw SyntaxError(`Invalid Application Command Type is Detected!`);
         if (Command.defaultPermission === false || Command.defaultPermission === true) CookedCommand.defaultPermission = Command.defaultPermission;
         else throw SyntaxError(`Invalid Application Command Default-Permission is Detected!`);
@@ -37,7 +70,14 @@ export class SlashCommandBuilder {
                 CookedCommand.options.push(this.#OptionsPlacement(Command.options[count]));
             };
         };
+        return CookedCommand;
     };
+
+    /**
+     * @method #OptionTypePlacement Placement of Index value of Array of Command Options to be Cooked
+     * @param {string} Type Option's Type for Slash Command.options Interaction .
+     * @returns {string} Type - Raw Discord API Interaction Command.options type Value.
+     */
 
     #OptionTypePlacement(Type) {
         if (!Type) throw SyntaxError(`No Application Command Type Credential is Detected!`);
@@ -48,7 +88,13 @@ export class SlashCommandBuilder {
         return void null;
     };
 
-    #ChannelTypePlacement(Type) {
+    /**
+     * @method #CommandTypePlacement Placement of Index value of Array of Command to be Cooked
+     * @param {string} Type Command's Type for Slash Command Interaction .
+     * @returns {string} Type - Raw Discord API Interaction Command type Value.
+     */
+
+    #CommandTypePlacement(Type) {
         if (!Type) throw SyntaxError(`No Application Command Type Credential is Detected!`);
         var count = 0;
         for (count = 0; count < SlashCommandBuilder.#DefaultCommandTypes.length; ++count) {
@@ -56,6 +102,12 @@ export class SlashCommandBuilder {
         };
         return void null;
     };
+
+    /**
+     * @method #OptionsPlacement Placement of Index value of Array of Command.options to be Cooked
+     * @param {Object} Option Command's Option for Slash Command-Option Interaction .
+     * @returns {Object} CookedOptions - Raw Discord API Interaction Command.options Value.
+     */
 
     #OptionsPlacement(Option) {
         if (!Option) throw SyntaxError(`No Application Command Options Credentials is Detected!`);
@@ -83,8 +135,14 @@ export class SlashCommandBuilder {
                 CookedOptions.choices.push(this.#ChoicesPlacement(Option.choices[count]));
             };
         };
+        return CookedOptions;
     };
 
+    /**
+     * @method #ChoicesPlacement Placement of Index value of Array of Command.options.choices to be Cooked
+     * @param {Object} Choice Command.options's Choices for Slash Command-Option Interaction .
+     * @returns {Object} CookedChoices - Raw Discord API Interaction Command.options.choices Value.
+     */
 
     #ChoicesPlacement(Choice) {
         if (!Choice) throw SyntaxError(`No Application Command Options Credentials is Detected!`);
@@ -93,5 +151,6 @@ export class SlashCommandBuilder {
         else throw SyntaxError(`Invalid Application Command Choice Name is Detected!`);
         if (Choice.value) CookedChoices.value = Choice.value;
         else throw SyntaxError(`Invalid Application Command Choice Value is Detected!`);
+        return CookedChoices;
     };
 };

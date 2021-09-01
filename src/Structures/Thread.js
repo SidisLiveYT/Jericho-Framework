@@ -1,6 +1,5 @@
 /**
  * @class ThreadBuilder is the Class to Operate Particular Threads in Same Channel Respective Server
- * @constructor Constructing Unique Instances for Each Channel
  * @param {Object} Options Options Values for Particular Channel Instance
  * @returns {Object} A Class Instance of Single Channel [ Unique Instance ]
  */
@@ -8,10 +7,20 @@
 export class ThreadBuilder {
 
     /**
-     * @property {Number} InstanceNumber : For Storing Instance Numbers for further Utils Requirements
+     * @property {Number} ThreadInstanceNumber : For Storing Instance Numbers for further Utils Requirements
      */
 
     static #ThreadInstanceNumber = 0;
+
+    /**
+     * @constructor 
+     * @property {Snowflake} Client Discord API Client from discord.js v13
+     * @property {Number} ThreadCode Thread-main Channel's Code for Instance get method
+     * @property {Snowflake} channel Channel Resolve from Discord.js v13
+     * @property {Snowflake} guild Guild Resolve from Discord.js v13
+     * @property {Object} metadata Extra Stuff to check or Cache Data
+     * @property {Snowflake} thread Thread Snowflake from Discord API v9
+     */
 
     constructor(Options) {
         this.Client = Options.Client;
@@ -24,7 +33,8 @@ export class ThreadBuilder {
 
     /**
      * @method CreateInstance Method for Creating Instance for the particular Channel
-     * @param {Object} Options Options for Name , AutoArchive Duration , Reason , Type
+     * @param {Object} Options Options for Name , AutoArchive Duration , Reason , Type .
+     * @returns {Object} Thread Instance for Thread-Handler Class .
      */
 
     async create(Options) {
@@ -44,7 +54,8 @@ export class ThreadBuilder {
 
     /**
      * @method DestroyInstance Destroy Particular Instance Completely from Thread Class
-     * @param {Object} Options Options for Delay Destroy 
+     * @param {Object} Options Options for Delay Destroy
+     * @returns {boolean} ture/false Wheather the Condition is working
      */
 
     destroy(Options) {

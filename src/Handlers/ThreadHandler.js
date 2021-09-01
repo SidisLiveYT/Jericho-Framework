@@ -7,6 +7,7 @@ import {
 } from '../Structures/Thread.js';
 
 /**
+ * @class ThreadHandler - Thread handlers for Discord API 
  * @param {Snowflake} Client Discord API Client from discord.js v13
  * @param {Object} Options Default Options for Thread ThreadHandler
  */
@@ -15,6 +16,15 @@ export class ThreadHandler {
 
     static #ChannelInstancesNumber = 0;
     static #ThreadInstanceRecords = {};
+
+    /**
+     * @constructor 
+     * @property {Snowflake} Client Discord API Client from discord.js v13
+     * @property {Number} ChannelCode Thread-main Channel's Code for Instance get method
+     * @property {Snowflake} guild Guild Resolve from Discord.js v13
+     * @property {Snowflake} channel Channel Resolve from Discord.js v13
+     * @property {Object} metadata Extra Stuff to check or Cache Data
+     */
 
     constructor(Client, Options) {
         this.Client = Client;
@@ -33,6 +43,7 @@ export class ThreadHandler {
     /**
      * @method GetNormalThread Get Thread information of Particular Channel or Message
      * @param {Snowflake} ChannelResolve Thread Channel or Discord Message variable
+     * @returns {Snowflake} ThreadChannel - Thread Channel of a Single Channel , Fetched from discord.js v13
      */
 
     GetThread(ChannelResolve) {
@@ -47,6 +58,7 @@ export class ThreadHandler {
      * @method GetThreadInstances Get Instance information of Particular Channel or Message
      * @param {Number} Instance Thread Channel or Discord Message variable
      * @param {Number} Amount Amount of Threads want to Recover from the Channel Instance
+     * @returns {Snowflake} ThreadChannel - Thread Channel of a Single Channel , Fetched from Class Instance
      */
 
     GetThreadInstances(Instance, Amount) {
@@ -60,6 +72,7 @@ export class ThreadHandler {
     /**
      * @method CreateThread Create Method method of the Channel Class
      * @param {Object} Options Options to create Thread for Particular Server and Channel
+     * @returns {Object} ThreadInstance - ThreadInstance , Fetched from Class Instance .
      */
 
     async CreateThread(Options) {
@@ -100,7 +113,7 @@ export class ThreadHandler {
     /**
      * @method #CheckInstance Private Method to Check Wheather Channel exist as Instance for Threads
      * @param {Number} ChannelCode Channel Instance Code present on Class Cache
-     * @returns {Object} ThreadsInstances
+     * @returns {Object} ThreadInstances - ThreadInstances , Fetched from Class Instance .
      */
 
     static #CheckInstance(ChannelCode) {
@@ -133,7 +146,7 @@ export class ThreadHandler {
      * @param {Object} ThreadInstances Array of Thread Instances (Cache Value) 
      * @param {Number} Amount Amount of Instances fetch if not Instance mentioned
      * @param {Object} Instance Exact Number of Thread Instance to Fetch
-     * @returns {Object} ThreadInstance
+     * @returns {Object} ThreadInstance - ThreadInstance , Fetched from Class Instance .
      */
     static #GetInstance(ThreadInstances, Amount, Instance) {
         var count = 0;

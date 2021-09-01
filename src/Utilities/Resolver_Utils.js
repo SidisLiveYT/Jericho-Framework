@@ -1,9 +1,9 @@
 /**
- * @exports ChannnelResolver Custom Resolvable for Channel
+ * @function ChannnelResolver Custom Resolvable for Channel
  * @param {Snowflake} Client Discord API Client from discord.js v13 [ new Client() ]
  * @param {Snowflake} ChannelResolve Raw Data to be Resolved
  * @param {Object} Extraif Extra Options for Resolver
- * @returns Channel Collection
+ * @returns ChannelResolve - Channel Snowflake
  */
 
 export function ChannnelResolver(Client, ChannelResolve, Extraif) {
@@ -22,7 +22,7 @@ export function ChannnelResolver(Client, ChannelResolve, Extraif) {
    * @function ChannelFilterType Returning the Channel Type After Getting Accurate Resolve form Source
    * @param {Snowflake} Channel Filtered Data in the Process to be checked Perfectly
    * @param {Object} Extraifconditions Extra Options for Checking Type if
-   * @returns {Snowflake} Channel's Data to the Source
+   * @returns {Snowflake} Channel - Channel Snowflake
    */
 
   function ChannelFilterType(Channel, Extraifconditions) {
@@ -43,7 +43,7 @@ export function ChannnelResolver(Client, ChannelResolve, Extraif) {
  * @function GuildResolver Custom Resolvable for Guild
  * @param {Snowflake} Client Discord API Client from discord.js v13 [ new Client() ]
  * @param {Snowflake} GuildResolve Raw Guild Data to be Resolved
- * @returns {Snowflake} Guild Collection
+ * @returns {Snowflake} GuildResolve - Guild Snowflake
  */
 
 export function GuildResolver(Client, GuildResolve, Extraif) {
