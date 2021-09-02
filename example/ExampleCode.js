@@ -1,7 +1,4 @@
-import {
-    ThreadHandler,
-    SlashCommandHandler
-} from '../src/index';
+import { ThreadHandler, SlashCommandHandler } from "../src/index";
 
 //Creating Channel Instance for Particular Text Channel
 const ChannelInstance = new ThreadHandler(Client, Options);
@@ -16,14 +13,13 @@ const Thread2 = ThreadInstance2.Thread;
 
 //Slash Command handler Usage
 const SlashCommandInstance = new SlashCommandHandler(Client, {
-    guild: message,
-    global: false,
+  guild: message,
+  global: false,
 });
 //Slash Command Handler to Set Commands
 SlashCommandInstance.set(Commands);
 //Slash Command Handler to Deploy Commands
 SlashCommandInstance.deploy();
-
 
 console.log(Thread1);
 console.log(Thread2);
