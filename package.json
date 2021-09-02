@@ -1,6 +1,6 @@
 {
   "name": "jericho-framework",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Jericho Framework for Discord Bots to make bot real easy in Java-Script and discord.js v13",
   "main": "src/index.js",
   "type": "module",

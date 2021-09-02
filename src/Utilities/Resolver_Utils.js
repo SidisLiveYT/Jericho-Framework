@@ -8,8 +8,8 @@
 
 export function ChannnelResolver(Client, ChannelResolve, Extraif) {
   if (Extraif.ifmessage && ChannelResolve.channel) return ChannelFilterType(ChannelResolve.channel, Extraif);
-  else if (ChannelResolve.id && ChannelResolve.type) return ChannelFilterType(ChannelResolve, Extraif);
-  else if (typeof ChannelResolve !== 'string' || typeof ChannelResolve !== 'number') throw TypeError(`Invalid ChannelResolve is Detected!`);
+  if (ChannelResolve.id && ChannelResolve.type) return ChannelFilterType(ChannelResolve, Extraif);
+  if (typeof ChannelResolve !== 'string' || typeof ChannelResolve !== 'number') throw TypeError('Invalid ChannelResolve is Detected!');
   else if (!Number.isNaN(`${ChannelResolve}`)) {
     if (Client.channels.cache.get(`${ChannelResolve}`)) return ChannelFilterType(Client.channels.cache.get(`${ChannelResolve}`), Extraif);
     return Client.channels.fetch(`${ChannelResolve}`).then((Channel) => ChannelFilterType(Channel, Extraif)).catch((error) => {
@@ -48,8 +48,8 @@ export function ChannnelResolver(Client, ChannelResolve, Extraif) {
 
 export function GuildResolver(Client, GuildResolve, Extraif) {
   if (Extraif.ifmessage && GuildResolve.guild) return GuildResolve.guild;
-  else if (GuildResolve.id && GuildResolve.members && GuildResolve.channels) return GuildResolve;
-  else if (typeof GuildResolve !== 'string' || typeof GuildResolve !== 'number') throw TypeError(`Invalid GuildResolve is Detected!`);
+  if (GuildResolve.id && GuildResolve.members && GuildResolve.channels) return GuildResolve;
+  if (typeof GuildResolve !== 'string' || typeof GuildResolve !== 'number') throw TypeError('Invalid GuildResolve is Detected!');
   else if (!Number.isNaN(`${GuildResolve}`)) {
     if (Client.guilds.cache.get(`${GuildResolve}`)) return Client.guilds.cache.get(`${GuildResolve}`);
     return Client.guilds.fetch(`${GuildResolve}`).then((Guild) => Guild).catch((error) => {
