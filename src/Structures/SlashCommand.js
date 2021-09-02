@@ -26,7 +26,7 @@ export class SlashCommandBuilder {
 
     constructor(Client, Commands) {
         this.client = Client;
-        this.commands = Commands || null;
+        this.SlashCommands = Commands || null;
     };
 
     /**
@@ -36,8 +36,8 @@ export class SlashCommandBuilder {
      */
 
     create(Commands) {
-        this.commands = Commands ? Commands : this.commands;
-        if (!this.commands) throw new Error("No Commands have been Passed to Slash Command Handler!");
+        this.SlashCommands = Commands ? Commands : this.SlashCommands;
+        if (!this.SlashCommands) throw new Error("No Commands have been Passed to Slash Command Handler!");
         var count = 0;
         const CookedCommands = [];
         for (count = 0; count < Commands.length; count++) {
