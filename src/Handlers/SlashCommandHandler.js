@@ -1,5 +1,9 @@
-import { SlashCommandBuilder } from "../Structures/SlashCommand.js";
-import { GuildResolver } from "../Utilities/Resolver_Utils.js";
+import {
+  SlashCommandBuilder
+} from "../Structures/SlashCommand.js";
+import {
+  GuildResolver
+} from "../Utilities/Resolver_Utils.js";
 
 /**
  * @class SlashCommandHandler - Handler for deploying Interaction-commands in Discord API
@@ -20,12 +24,12 @@ export class SlashCommandHandler {
 
   constructor(client, CreateOptions) {
     this.client = client;
-    this.guild = CreateOptions.guild
-      ? GuildResolver(client, CreateOptions.guild, {
-          ifmessage: true,
-        })
-      : null;
-    this.global = CreateOptions.global || false;
+    this.guild = CreateOptions.guild ?
+      GuildResolver(client, CreateOptions.guild, {
+        ifmessage: true,
+      }) :
+      null;
+    this.global = this.guild ? false : true;
     this.SlashCommands = CreateOptions.commands || null;
     this.deployed = false;
     this.ApplicationCommands = [];
@@ -76,16 +80,29 @@ export class SlashCommandHandler {
       );
     else if (!this.client.application?.owner)
       await this.client.application?.fetch();
-    return await this.client.application.commands
-      .set(this.SlashCommands)
-      .then((ApplicationCommands) => {
-        this.deployed = true;
-        this.ApplicationCommands = Array.from(ApplicationCommands.values());
-        return this;
-      })
-      .catch((error) => {
-        throw Error(error);
-      });
+    if (this.global) {
+      return await this.client.application.commands
+        .set(this.SlashCommands)
+        .then((ApplicationCommands) => {
+          this.deployed = true;
+          this.ApplicationCommands = Array.from(ApplicationCommands.values());
+          return this;
+        })
+        .catch((error) => {
+          throw Error(error);
+        });
+    } else {
+      return await this.client.application.commands
+        .set(this.SlashCommands, this.guild.id)
+        .then((ApplicationCommands) => {
+          this.deployed = true;
+          this.ApplicationCommands = Array.from(ApplicationCommands.values());
+          return this;
+        })
+        .catch((error) => {
+          throw Error(error);
+        });
+    }
   }
 
   /**
@@ -173,31 +190,34 @@ export class SlashCommandHandler {
    */
 
   #DeleteApplciationCommands(CommandId) {
-    var count = 0;
     const ApplicationCommands = this.ApplicationCommands;
-    for (count = 0; count < this.ApplicationCommands.length; ++count) {
-      if (CommandId && this.ApplicationCommands[count].id === CommandId) {
-        this.client.application.commands
-          .delete(`${CommandId}`)
-          .then((ApplicationCommand) => {
-            this.ApplicationCommands[count].splice(count, 1);
-            return ApplicationCommand;
-          })
-          .catch((error) => {
-            throw Error(error);
-          });
-      }
+    if (!CommandId) {
       this.client.application.commands
-        .delete(`${this.ApplicationCommands[count].id}`)
+        .set([])
         .then(() => {
-          this.ApplicationCommands[count].splice(count, 1);
+          this.ApplicationCommands = null;
+          this.deployed = false;
+          this.SlashCommands = null;
+          return [ApplicationCommands];
         })
         .catch((error) => {
           throw Error(error);
         });
-    }
-    this.deployed = false;
-    this.SlashCommands = null;
-    return ApplicationCommands;
-  }
+    } else {
+      var count = 0;
+      for (count = 0; count < this.ApplicationCommands.length; ++count) {
+        if (CommandId && this.ApplicationCommands[count].id === CommandId) {
+          return this.client.application.commands
+            .delete(`${CommandId}`)
+            .then((ApplicationCommand) => {
+              this.ApplicationCommands[count].splice(count, 1);
+              return ApplicationCommand;
+            })
+            .catch((error) => {
+              throw Error(error);
+            });
+        };
+      };
+    };
+  };
 }
