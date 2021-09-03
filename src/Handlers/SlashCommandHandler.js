@@ -22,6 +22,12 @@ export class SlashCommandHandler {
    * @property {Array} ApplicationCommands Discord API Fetched Application Commands Collection.<Array>
    */
 
+  /**
+   * @property {boolean} deployed What if Slash Command has been deployed to Discord API
+   */
+
+  static #deployed = false;
+
   constructor(client, CreateOptions) {
     this.client = client;
     this.guild = CreateOptions.guild ?
@@ -31,7 +37,6 @@ export class SlashCommandHandler {
       null;
     this.global = this.guild ? false : true;
     this.SlashCommands = CreateOptions.commands || null;
-    this.deployed = false;
     this.ApplicationCommands = [];
   }
 
@@ -42,8 +47,8 @@ export class SlashCommandHandler {
    */
 
   async set(commands) {
-    this.SlashCommands = commands || this.deployed ? null : this.SlashCommands;
-    if (!this.SlashCommands && this.deployed)
+    this.SlashCommands = commands || SlashCommandHandler.#deployed ? null : this.SlashCommands;
+    if (!this.SlashCommands && SlashCommandHandler.#deployed)
       throw SyntaxError(
         `Slash Command has been already Deployed with Previous Set Values | Try Setting New Slash Commands`
       );
@@ -59,7 +64,7 @@ export class SlashCommandHandler {
     );
     this.SlashCommands = SlashCommandInstance.create();
     if (this.SlashCommands) {
-      this.deployed = false;
+      SlashCommandHandler.#deployed = false;
       return this.SlashCommands;
     } else return void null;
   }
@@ -70,7 +75,7 @@ export class SlashCommandHandler {
    */
 
   async deploy() {
-    if (this.deployed || !this.SlashCommands)
+    if (SlashCommandHandler.#deployed || !this.SlashCommands)
       throw SyntaxError(
         `No New Slash Command has been Set to Deploy | Try Setting New Slash Commands- <SlashCommandHandler>.set()`
       );
@@ -84,7 +89,7 @@ export class SlashCommandHandler {
       return await this.client.application.commands
         .set(this.SlashCommands)
         .then((ApplicationCommands) => {
-          this.deployed = true;
+          SlashCommandHandler.#deployed = true;
           this.ApplicationCommands = Array.from(ApplicationCommands.values());
           return this;
         })
@@ -95,7 +100,7 @@ export class SlashCommandHandler {
       return await this.client.application.commands
         .set(this.SlashCommands, this.guild.id)
         .then((ApplicationCommands) => {
-          this.deployed = true;
+          SlashCommandHandler.#deployed = true;
           this.ApplicationCommands = Array.from(ApplicationCommands.values());
           return this;
         })
@@ -112,7 +117,7 @@ export class SlashCommandHandler {
    */
 
   async get(CommandId) {
-    if (!this.deployed || !this.SlashCommands)
+    if (!SlashCommandHandler.#deployed || !this.SlashCommands)
       throw SyntaxError(
         `No New Slash Command has been Set to Deploy | Try Setting New Slash Commands- <SlashCommandHandler>.set()`
       );
@@ -152,7 +157,7 @@ export class SlashCommandHandler {
    */
 
   async destroy(CommandId) {
-    if (!this.deployed || !this.SlashCommands)
+    if (!SlashCommandHandler.#deployed || !this.SlashCommands)
       throw SyntaxError(
         `No New Slash Command has been Set to Deploy | Try Setting New Slash Commands- <SlashCommandHandler>.set()`
       );
@@ -196,7 +201,7 @@ export class SlashCommandHandler {
         .set([])
         .then(() => {
           this.ApplicationCommands = null;
-          this.deployed = false;
+          SlashCommandHandler.#deployed = false;
           this.SlashCommands = null;
           return [ApplicationCommands];
         })

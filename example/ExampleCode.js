@@ -14,7 +14,6 @@ const Thread2 = ThreadInstance2.Thread;
 //Slash Command handler Usage
 const SlashCommandInstance = new SlashCommandHandler(Client, {
   guild: message,
-  global: false,
 });
 //Slash Command Handler to Set Commands
 SlashCommandInstance.set(Commands);

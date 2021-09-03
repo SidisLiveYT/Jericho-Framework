@@ -86,6 +86,44 @@ Structure of Thread-Instance and Channel-Instance :
 }
 ```
 
+
+Register a Slash Command Handler for Discord API:
+```js
+import { SlashCommandHandler } from 'jericho-framework';
+const SlashInstance = new SlashCommandHandler(Client, { 
+     guild : <GuildResolve>, || <message> | <channel> | <guild> | <guildId>
+});
+SlashInstance.set(<Array of Slash Commands>);
+SlashInstance.deploy();
+SlashInstance.destroy(<CommandId || null>);
+SlashInstance.get(<CommandId || null>);
+```
+
+Structure of Slash Commands :
+### Slash Commands
+```
+{
+    guild,
+    SlashCommands,
+    ApplicationCommands,
+    global,
+    Client,
+}
+```
+
+Jericho-Framework Utilities :
+It can Support any Resolve including IDs too
+### Resolvers
+```
+const Channel = ChannelResolver(<Channel-Resolve>,{
+  ifmessage: true,
+  type:text
+  });
+const Guild = GuildResolver(<Guild-Resolve>,{
+  ifmessage: true,
+  });
+```
+
 ## Links
 
 - [Website](www.jerichobot.xyz) ([source](https://github.com/SidisLiveYT/Jericho-Framework.git))
@@ -93,6 +131,7 @@ Structure of Thread-Instance and Channel-Instance :
 - [Discord API Discord server](https://discord.gg/discord-api)
 - [GitHub](https://github.com/SidisLiveYT/Jericho-Framework)
 - [NPM](https://www.npmjs.com/package/jericho-framework)
+- [Yarn](https://yarn.pm/jericho-framework)
 
 ## Contributing
 
