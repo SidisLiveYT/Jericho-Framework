@@ -1,17 +1,12 @@
-import {
-  ChannnelResolver,
-  GuildResolver,
-} from "../Utilities/Resolver_Utils.js";
-import {
-  ThreadBuilder
-} from "../Structures/Thread.js";
+import { ChannnelResolver, GuildResolver } from '../Utilities/Resolver_Utils.js'
+import { ThreadBuilder } from '../Structures/Thread.js'
 import {
   Client,
   Guild,
   GuildChannel,
   TextChannel,
-  ThreadChannel,
-} from "discord.js";
+  ThreadChannel
+} from 'discord.js'
 
 /**
  * @class ThreadHandler - Thread handlers for Discord API
@@ -20,8 +15,8 @@ import {
  */
 
 export class ThreadHandler {
-  static #ChannelInstancesNumber = 0;
-  static #ThreadInstanceRecords = {};
+  static #ChannelInstancesNumber = 0
+  static #ThreadInstanceRecords = {}
 
   /**
    * @constructor
@@ -31,27 +26,27 @@ export class ThreadHandler {
    * @param {object} metadata Extra Stuff to check or Cache Data
    */
 
-  constructor(
+  constructor (
     Client,
     ThreadClassCreateOptions = {
       guild: undefined,
       channel: undefined,
-      metadata: null,
+      metadata: null
     }
   ) {
-    this.Client = Client;
-    this.ChannelCode = ++ThreadHandler.#ChannelInstancesNumber;
+    this.Client = Client
+    this.ChannelCode = ++ThreadHandler.#ChannelInstancesNumber
     this.guild = GuildResolver(Client, ThreadClassCreateOptions.guild, {
-      ifmessage: true,
-    });
+      ifmessage: true
+    })
     this.channel = ChannnelResolver(Client, ThreadClassCreateOptions.channel, {
       type: `text`,
-      ifmessage: true,
-    });
-    this.metadata = ThreadClassCreateOptions.metadata;
+      ifmessage: true
+    })
+    this.metadata = ThreadClassCreateOptions.metadata
     ThreadHandler.#ThreadInstanceRecords[
       `'${ThreadHandler.#ChannelInstancesNumber}'`
-    ] = [];
+    ] = []
   }
 
   /**
@@ -60,12 +55,12 @@ export class ThreadHandler {
    * @returns {ThreadChannel} ThreadChannel - Thread Channel of a Single Channel , Fetched from discord.js v13
    */
 
-  GetThread(ChannelResolve) {
+  GetThread (ChannelResolve) {
     const ThreadChannel = ChannnelResolver(this.Client, ChannelResolve, {
       type: `thread`,
-      ifmessage: true,
-    });
-    return ThreadChannel;
+      ifmessage: true
+    })
+    return ThreadChannel
   }
 
   /**
@@ -75,16 +70,12 @@ export class ThreadHandler {
    * @returns {ThreadChannel} ThreadChannel - Thread Channel of a Single Channel , Fetched from Class Instance
    */
 
-  GetThreadInstances(Instance, Amount) {
-    const ThreadInstances = ThreadHandler.#CheckInstance(this.ChannelCode);
+  GetThreadInstances (Instance, Amount) {
+    const ThreadInstances = ThreadHandler.#CheckInstance(this.ChannelCode)
     if (ThreadInstances && ThreadInstances.length > 0) {
-      var Thread = ThreadHandler.#GetInstance(
-        ThreadInstances,
-        Amount,
-        Instance
-      );
-      return Thread;
-    } else return void null;
+      var Thread = ThreadHandler.#GetInstance(ThreadInstances, Amount, Instance)
+      return Thread
+    } else return void null
   }
 
   /**
@@ -93,14 +84,14 @@ export class ThreadHandler {
    * @returns {object} ThreadInstance - ThreadInstance , Fetched from Class Instance .
    */
 
-  async CreateThread(
+  async CreateThread (
     CreateThreadOptions = {
       channel: undefined,
       metadata: undefined,
       Type: `GUILD_PUBLIC_THREAD`,
       Name: undefined,
       Reason: undefined,
-      AutoArchiveDuration: 0,
+      AutoArchiveDuration: 0
     }
   ) {
     const ThreadInstanceClass = new ThreadBuilder({
@@ -108,25 +99,25 @@ export class ThreadHandler {
       guild: this.guild,
       channel: ChannnelResolver(
         this.Client,
-        CreateThreadOptions.channel || this.channel, {
+        CreateThreadOptions.channel || this.channel,
+        {
           type: `text`,
-          ifmessage: true,
+          ifmessage: true
         }
       ),
-      metadata: CreateThreadOptions ?
-        CreateThreadOptions.metadata :
-        this.metadata,
-    });
-    const ThreadInstance = await ThreadInstanceClass.create(
-      CreateThreadOptions
-    );
+      metadata: CreateThreadOptions
+        ? CreateThreadOptions.metadata
+        : this.metadata
+    })
+    const ThreadInstance = await ThreadInstanceClass.create(CreateThreadOptions)
     var ThreadInstances =
-      ThreadHandler.#ThreadInstanceRecords[`'${this.ChannelCode}'`];
-    if (ThreadInstances) ThreadInstances.push(ThreadInstance);
-    else ThreadInstances = [ThreadInstance];
-    ThreadHandler.#ThreadInstanceRecords[`'${this.ChannelCode}'`] =
-      ThreadInstances;
-    return ThreadInstance;
+      ThreadHandler.#ThreadInstanceRecords[`'${this.ChannelCode}'`]
+    if (ThreadInstances) ThreadInstances.push(ThreadInstance)
+    else ThreadInstances = [ThreadInstance]
+    ThreadHandler.#ThreadInstanceRecords[
+      `'${this.ChannelCode}'`
+    ] = ThreadInstances
+    return ThreadInstance
   }
 
   /**
@@ -136,29 +127,29 @@ export class ThreadHandler {
    * @returns {Boolean} Boolean true on Success or undefined on faliure
    */
 
-  async DestroyThread(
+  async DestroyThread (
     ThreadInstance,
     DestroyThreadOptions = {
       Delay: 0,
-      Reason: undefined,
+      Reason: undefined
     }
   ) {
-    var ThreadInstances = ThreadHandler.#CheckInstance(this.ChannelCode);
+    var ThreadInstances = ThreadHandler.#CheckInstance(this.ChannelCode)
     if (ThreadInstances && ThreadInstances.length > 0) {
       var Thread = ThreadHandler.#GetInstance(
         ThreadInstances,
         1,
         ThreadInstance
-      );
-      const Success = await Thread.destroy(DestroyThreadOptions);
+      )
+      const Success = await Thread.destroy(DestroyThreadOptions)
       if (Success)
         return ThreadHandler.#RemoveInstance(
           ThreadInstances,
           ThreadInstance,
           this.ChannelCode
-        );
-      else return void null;
-    } else return void null;
+        )
+      else return void null
+    } else return void null
   }
 
   /**
@@ -167,10 +158,10 @@ export class ThreadHandler {
    * @returns {object} ThreadInstances - ThreadInstances , Fetched from Class Instance .
    */
 
-  static #CheckInstance(ChannelCode) {
+  static #CheckInstance (ChannelCode) {
     const ThreadInstances =
-      ThreadHandler.#ThreadInstanceRecords[`'${ChannelCode}'`];
-    return ThreadInstances;
+      ThreadHandler.#ThreadInstanceRecords[`'${ChannelCode}'`]
+    return ThreadInstances
   }
 
   /**
@@ -181,16 +172,16 @@ export class ThreadHandler {
    * @returns {Boolean} True or False Depends
    */
 
-  static #RemoveInstance(ThreadInstances, Instance, ChannelCode) {
-    var count = 0;
+  static #RemoveInstance (ThreadInstances, Instance, ChannelCode) {
+    var count = 0
     for (count = 0; count < ThreadInstances.length; ++count) {
       if (ThreadInstances[count].ThreadInstance === Instance) {
-        ThreadInstances[count] = undefined;
-        break;
+        ThreadInstances[count] = undefined
+        break
       }
     }
-    ThreadHandler.#ThreadInstanceRecords[`'${ChannelCode}'`] = ThreadInstances;
-    return true;
+    ThreadHandler.#ThreadInstanceRecords[`'${ChannelCode}'`] = ThreadInstances
+    return true
   }
 
   /**
@@ -200,23 +191,23 @@ export class ThreadHandler {
    * @param {object} Instance Exact Number of Thread Instance to Fetch
    * @returns {object} ThreadInstance - ThreadInstance , Fetched from Class Instance .
    */
-  static #GetInstance(ThreadInstances, Amount, Instance) {
-    var count = 0;
-    var choice = 0;
-    var Threads = [];
+  static #GetInstance (ThreadInstances, Amount, Instance) {
+    var count = 0
+    var choice = 0
+    var Threads = []
     if (
       Instance &&
-      typeof Instance === "string" &&
-      Instance.toLowerCase().trim() === "all"
+      typeof Instance === 'string' &&
+      Instance.toLowerCase().trim() === 'all'
     )
-      return ThreadInstances;
+      return ThreadInstances
     for (count = 0; count < ThreadInstances.length; ++count) {
       if (Instance && ThreadInstances[count].ThreadCode === Instance)
-        Threads.push(ThreadInstances[count]);
-      else if (!Instance) Threads.push(ThreadInstances[count]);
-      if (Amount && choice === Amount) break;
-      else ++choice;
+        Threads.push(ThreadInstances[count])
+      else if (!Instance) Threads.push(ThreadInstances[count])
+      if (Amount && choice === Amount) break
+      else ++choice
     }
-    return Threads;
+    return Threads
   }
 }

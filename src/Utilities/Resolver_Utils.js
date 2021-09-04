@@ -8,7 +8,7 @@ import { Channel, Client, Guild, GuildChannel } from 'discord.js'
  * @returns {Channel} ChannelResolve - Channel Collection
  */
 
-export function ChannnelResolver(Client, ChannelResolve, Extraif) {
+export function ChannnelResolver (Client, ChannelResolve, Extraif) {
   if (Extraif.ifmessage && ChannelResolve.channel)
     return ChannelFilterType(ChannelResolve.channel, Extraif)
   if (ChannelResolve.id && ChannelResolve.type)
@@ -19,12 +19,12 @@ export function ChannnelResolver(Client, ChannelResolve, Extraif) {
     if (Client.channels.cache.get(`${ChannelResolve}`))
       return ChannelFilterType(
         Client.channels.cache.get(`${ChannelResolve}`),
-        Extraif,
+        Extraif
       )
     return Client.channels
       .fetch(`${ChannelResolve}`)
-      .then((Channel) => ChannelFilterType(Channel, Extraif))
-      .catch((error) => {
+      .then(Channel => ChannelFilterType(Channel, Extraif))
+      .catch(error => {
         throw TypeError(`Invalid Channel.id : ${error}`)
       })
   }
@@ -37,7 +37,7 @@ export function ChannnelResolver(Client, ChannelResolve, Extraif) {
    * @returns {Channel} Channel - Channel Collection
    */
 
-  function ChannelFilterType(Channel, Extraifconditions) {
+  function ChannelFilterType (Channel, Extraifconditions) {
     if (
       Channel.type === 'GUILD_PUBLIC_THREAD' ||
       Channel.type === 'GUILD_PRIVATE_THREAD' ||
@@ -90,7 +90,7 @@ export function ChannnelResolver(Client, ChannelResolve, Extraif) {
       return Channel
     }
     throw SyntaxError(
-      '[Wrong Channel Resolve] : Provide Channel.id or Channel Collection of discord.js v13',
+      '[Wrong Channel Resolve] : Provide Channel.id or Channel Collection of discord.js v13'
     )
   }
 }
@@ -103,7 +103,7 @@ export function ChannnelResolver(Client, ChannelResolve, Extraif) {
  * @returns {Guild} GuildResolve - Guild Collection
  */
 
-export function GuildResolver(Client, GuildResolve, Extraif) {
+export function GuildResolver (Client, GuildResolve, Extraif) {
   if (Extraif.ifmessage && GuildResolve.guild) return GuildResolve.guild
   if (GuildResolve.id && GuildResolve.members && GuildResolve.channels)
     return GuildResolve
@@ -114,8 +114,8 @@ export function GuildResolver(Client, GuildResolve, Extraif) {
       return Client.guilds.cache.get(`${GuildResolve}`)
     return Client.guilds
       .fetch(`${GuildResolve}`)
-      .then((Guild) => Guild)
-      .catch((error) => {
+      .then(Guild => Guild)
+      .catch(error => {
         throw TypeError(`Invalid Guild.id : ${error}`)
       })
   }
@@ -129,7 +129,7 @@ export function GuildResolver(Client, GuildResolve, Extraif) {
  * @returns {Boolean} Boolean Value
  */
 
-export function BooleanResolver(FirstHand, SecondHand) {
+export function BooleanResolver (FirstHand, SecondHand) {
   if (![true, false].includes(FirstHand)) return SecondHand
   else if (![true, false].includes(SecondHand)) return FirstHand
   else if (FirstHand) return FirstHand

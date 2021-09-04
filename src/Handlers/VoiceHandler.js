@@ -1,6 +1,6 @@
 import {
   ChannnelResolver,
-  BooleanResolver,
+  BooleanResolver
 } from '../Utilities/Resolver_Utils.js'
 import { StageChannel, VoiceChannel, Client, Guild } from 'discord.js'
 import { VoiceConnectionBuilder } from '../Structures/VoiceConnection.js'
@@ -19,7 +19,7 @@ export class VoiceHandler {
    * @param {object} VoiceHandlerOptions Voice handler Interface options for class VoiceHandler
    */
 
-  constructor(
+  constructor (
     Client,
     VoiceHandlerInterfaceOptions = {
       LeaveOnEmpty: false,
@@ -27,8 +27,8 @@ export class VoiceHandler {
       LeaveOnOnlyUsers: false,
       LeaveDelay: 0,
       selfDeaf: false,
-      selfMute: false,
-    },
+      selfMute: false
+    }
   ) {
     this.Client = Client
     this.LeaveOnEmpty = VoiceHandlerInterfaceOptions.LeaveOnEmpty ? true : false
@@ -55,7 +55,7 @@ export class VoiceHandler {
    * @return
    */
 
-  async join(
+  async join (
     channel,
     JoinVoiceChannelOptions = {
       StageChannelTitle: `Voice Channel Handler - Jericho Framework`,
@@ -66,23 +66,23 @@ export class VoiceHandler {
       LeaveOnOnlyUsers: false,
       LeaveDelay: 0,
       selfDeaf: false,
-      selfMute: false,
-    },
+      selfMute: false
+    }
   ) {
     if (!channel) throw SyntaxError(`Invalid Voice Type Channel is Detected !`)
     else channel = ChannnelResolver(this.Client, channel, { type: 'allvoice' })
     //Updating Class Properties
     JoinVoiceChannelOptions.LeaveOnEmpty = BooleanResolver(
       JoinVoiceChannelOptions.LeaveOnEmpty,
-      this.LeaveOnEmpty,
+      this.LeaveOnEmpty
     )
     JoinVoiceChannelOptions.LeaveOnOnlyBot = BooleanResolver(
       JoinVoiceChannelOptions.LeaveOnEmpty,
-      this.LeaveOnEmpty,
+      this.LeaveOnEmpty
     )
     JoinVoiceChannelOptions.LeaveOnOnlyUsers = BooleanResolver(
       JoinVoiceChannelOptions.LeaveOnEmpty,
-      this.LeaveOnEmpty,
+      this.LeaveOnEmpty
     )
     JoinVoiceChannelOptions.LeaveDelay =
       JoinVoiceChannelOptions.LeaveDelay > 0
@@ -90,11 +90,11 @@ export class VoiceHandler {
         : this.LeaveDelay
     JoinVoiceChannelOptions.selfDeaf = BooleanResolver(
       JoinVoiceChannelOptions.LeaveOnEmpty,
-      this.LeaveOnEmpty,
+      this.LeaveOnEmpty
     )
     JoinVoiceChannelOptions.selfMute = BooleanResolver(
       JoinVoiceChannelOptions.LeaveOnEmpty,
-      this.LeaveOnEmpty,
+      this.LeaveOnEmpty
     )
 
     const VoiceConnectionInstance = new VoiceConnectionBuilder(
@@ -108,13 +108,13 @@ export class VoiceHandler {
         LeaveOnOnlyUsers: this.LeaveOnOnlyUsers,
         LeaveDelay: this.LeaveDelay,
         selfDeaf: this.selfDeaf,
-        selfMute: this.selfMute,
-      },
+        selfMute: this.selfMute
+      }
     )
     VoiceConnectionInstance = VoiceConnectionInstance.create()
     return VoiceHandler.#RegisterVoiceConnection(
       channel.guild.id,
-      VoiceConnectionInstance,
+      VoiceConnectionInstance
     )
   }
 
@@ -123,15 +123,15 @@ export class VoiceHandler {
    * @param {Snowflake} GuildId Guild.id Snowflake for Getter Private method
    */
 
-  disconnect(GuildId) {
+  disconnect (GuildId) {
     const VoiceConnectionInstance = VoiceHandler.#GetVoiceConnection(GuildId)
     if (VoiceConnectionInstance && VoiceConnectionInstance.disconnect)
       throw Error(
-        `[Connection is already Disconnected] : Please Connect to Channel`,
+        `[Connection is already Disconnected] : Please Connect to Channel`
       )
     else if (!VoiceConnectionInstance)
       throw Error(
-        `[Connection is already Destroyed] : Please Connect to Channel`,
+        `[Connection is already Destroyed] : Please Connect to Channel`
       )
     VoiceConnectionInstance.disconnect()
   }
@@ -142,15 +142,15 @@ export class VoiceHandler {
    * @param {Boolean} AdapterAvailable Boolean Checker if Adaptar is Required
    */
 
-  destroy(GuildId, AdapterAvailable = true) {
+  destroy (GuildId, AdapterAvailable = true) {
     const VoiceConnectionInstance = VoiceHandler.#GetVoiceConnection(GuildId)
     if (VoiceConnectionInstance && VoiceConnectionInstance.disconnect)
       throw Error(
-        `[Connection is already Disconnected] : Please Connect to Channel`,
+        `[Connection is already Disconnected] : Please Connect to Channel`
       )
     else if (!VoiceConnectionInstance)
       throw Error(
-        `[Connection is already Destroyed] : Please Connect to Channel`,
+        `[Connection is already Destroyed] : Please Connect to Channel`
       )
     VoiceConnectionInstance.destroy(AdapterAvailable)
     return VoiceHandler.#DestroyVoiceConnection(GuildId)
@@ -161,11 +161,11 @@ export class VoiceHandler {
    * @param {Snowflake} GuildId Guild.id Snowflake for Getter Private method
    */
 
-  get(GuildId) {
+  get (GuildId) {
     const VoiceConnectionInstance = VoiceHandler.#GetVoiceConnection(GuildId)
     if (!VoiceConnectionInstance)
       throw Error(
-        `[Connection is already Destroyed] : Please Connect to Channel`,
+        `[Connection is already Destroyed] : Please Connect to Channel`
       )
     return VoiceConnectionInstance.get()
   }
@@ -176,7 +176,7 @@ export class VoiceHandler {
    * @param {object} VoiceConnectionInstance Builder Class Instance for Cache
    */
 
-  static #RegisterVoiceConnection(GuildId, VoiceConnectionInstance) {
+  static #RegisterVoiceConnection (GuildId, VoiceConnectionInstance) {
     VoiceHandler.#VoiceConnectionRecords[
       `"${GuildId}"`
     ] = VoiceConnectionInstance
@@ -188,7 +188,7 @@ export class VoiceHandler {
    * @param {Snowflake} GuildId Guild.id Snowflake for Getter Private method
    */
 
-  static #GetVoiceConnection(GuildId) {
+  static #GetVoiceConnection (GuildId) {
     return VoiceHandler.#VoiceConnectionRecords[`"${GuildId}"`]
   }
 
@@ -197,7 +197,7 @@ export class VoiceHandler {
    * @param {Snowflake} GuildId Guild.id Snowflake for Getter Private method
    */
 
-  static #DestroyVoiceConnection(GuildId) {
+  static #DestroyVoiceConnection (GuildId) {
     VoiceHandler.#VoiceConnectionRecords[`"${GuildId}"`] = null
     return true
   }

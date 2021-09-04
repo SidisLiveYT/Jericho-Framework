@@ -1,6 +1,6 @@
-export { ThreadHandler } from '.././Handlers/ThreadHandler.js';
-export { SlashCommandHandler } from '.././Handlers/SlashCommandHandler.js';
-import { Client, Guild, GuildChannel } from 'discord.js';
+export { ThreadHandler } from '.././Handlers/ThreadHandler.js'
+export { SlashCommandHandler } from '.././Handlers/SlashCommandHandler.js'
+import { Client, Guild, GuildChannel } from 'discord.js'
 
 /**
  * @typedef ThreadHandler
@@ -11,10 +11,10 @@ import { Client, Guild, GuildChannel } from 'discord.js';
  */
 
 export interface ThreadHandler {
-	Client: Client;
-	guild: Guild;
-	channel: GuildChannel;
-	metadata: object;
+  Client: Client
+  guild: Guild
+  channel: GuildChannel
+  metadata: object
 }
 
 /**
@@ -28,12 +28,12 @@ export interface ThreadHandler {
  */
 
 export interface SlashCommandHandler {
-	Client: Client;
-	guild: Guild;
-	global: Boolean;
-	SlashCommands: Array;
-	deployed: Boolean;
-	ApplicationCommands: Array;
+  Client: Client
+  guild: Guild
+  global: Boolean
+  SlashCommands: Array
+  deployed: Boolean
+  ApplicationCommands: Array
 }
 
-declare module 'jericho-framework';
+declare module 'jericho-framework'
