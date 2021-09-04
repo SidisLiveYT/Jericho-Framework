@@ -3,11 +3,11 @@ import {
   GuildResolver,
 } from "../Utilities/Resolver_Utils.js";
 import { ThreadBuilder } from "../Structures/Thread.js";
-import { Snowflake } from "discord-api-types";
+import { Client, Guild, GuildChannel, TextChannel, ThreadChannel } from "discord.js";
 
 /**
  * @class ThreadHandler - Thread handlers for Discord API
- * @param {Snowflake} Client Discord API Client from discord.js v13
+ * @param {Client} Client Discord API Client from discord.js v13
  * @param {object} ThreadClassCreateOptions Default Options for Thread ThreadHandler
  */
 
@@ -17,10 +17,10 @@ export class ThreadHandler {
 
   /**
    * @constructor
-   * @property {Snowflake} Client Discord API Client from discord.js v13
-   * @property {Snowflake} guild Guild Resolve from Discord.js v13
-   * @property {Snowflake} channel Channel Resolve from Discord.js v13
-   * @property {object} metadata Extra Stuff to check or Cache Data
+   * @param {Client} Client Discord API Client from discord.js v13
+   * @param {Guild} guild Guild Resolve from Discord.js v13
+   * @param {GuildChannel} channel Channel Resolve from Discord.js v13
+   * @param {object} metadata Extra Stuff to check or Cache Data
    */
 
   constructor(
@@ -48,8 +48,8 @@ export class ThreadHandler {
 
   /**
    * @method GetNormalThread Get Thread information of Particular Channel or Message
-   * @param {Snowflake} ChannelResolve Thread Channel or Discord Message variable
-   * @returns {Snowflake} ThreadChannel - Thread Channel of a Single Channel , Fetched from discord.js v13
+   * @param {TextChannel} ChannelResolve Thread Channel or Discord Message variable
+   * @returns {ThreadChannel} ThreadChannel - Thread Channel of a Single Channel , Fetched from discord.js v13
    */
 
   GetThread(ChannelResolve) {
@@ -64,7 +64,7 @@ export class ThreadHandler {
    * @method GetThreadInstances Get Instance information of Particular Channel or Message
    * @param {Number} Instance Thread Channel or Discord Message variable
    * @param {Number} Amount Amount of Threads want to Recover from the Channel Instance
-   * @returns {Snowflake} ThreadChannel - Thread Channel of a Single Channel , Fetched from Class Instance
+   * @returns {ThreadChannel} ThreadChannel - Thread Channel of a Single Channel , Fetched from Class Instance
    */
 
   GetThreadInstances(Instance, Amount) {
@@ -124,7 +124,7 @@ export class ThreadHandler {
 
   /**
    * @method DestroyThread Destroying Thread from Cache and Thread Instances
-   * @param {object} ThreadInstance Unique Thread Instance for the Deletion
+   * @param {Instance} ThreadInstance Unique Thread Instance for the Deletion
    * @param {object} DestroyOptions Options for Reason or Delay in Deletion
    * @returns {Boolean} Boolean true on Success or undefined on faliure
    */

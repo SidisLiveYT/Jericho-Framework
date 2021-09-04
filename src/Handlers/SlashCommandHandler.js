@@ -1,10 +1,10 @@
 import { SlashCommandBuilder } from "../Structures/SlashCommand.js";
 import { GuildResolver } from "../Utilities/Resolver_Utils.js";
-import { Snowflake } from "discord-api-types";
+import { Guild, Client } from "discord.js";
 
 /**
  * @class SlashCommandHandler - Handler for deploying Interaction-commands in Discord API
- * @param {Snowflake} client Discord API Client for Accessing Application Commands for Guild and Global
+ * @param {Client} client Discord API Client for Accessing Application Commands for Guild and Global
  * @param {object} CreateSlashCommandsOptions CreateOptions for Creating a Slash Command Data
  */
 
@@ -17,8 +17,8 @@ export class SlashCommandHandler {
 
   /**
    * @constructor
-   * @property {Collection} client Discord API Client for Accessing Application Commands for Guild and Global
-   * @property {Collection} guild Discord Guild Collection <Snowflake>.<Collection> from discord.js v13
+   * @property {Client} client Discord API Client for Accessing Application Commands for Guild and Global
+   * @property {Guild} guild Discord Guild Collection <Collection>.<Collection> from discord.js v13
    * @property {Boolean} global If Handler should Deploy Slash Commands Globally | Can take time minimum 1 Hour as per Discord API Protocols
    * @property {Array} SlashCommands Array of Slash Commands for Interaction of Application Commands Manager
    * @property {Array} ApplicationCommands Discord API Fetched Application Commands Collection.<Array>
@@ -35,8 +35,8 @@ export class SlashCommandHandler {
     this.client = client;
     this.guild = CreateSlashCommandsOptions.guild
       ? GuildResolver(client, CreateSlashCommandsOptions.guild, {
-          ifmessage: true,
-        })
+        ifmessage: true,
+      })
       : null;
     this.global =
       this.guild || !CreateSlashCommandsOptions.global ? false : true;
@@ -178,7 +178,7 @@ export class SlashCommandHandler {
 
   /**
    * @method #HandleApplicationCommandsCache - Handle Slash Commands Data from the Cache for Discord's Application Command Manager for New Value
-   * @param {Snowflake} AppplicationCommand Discord API Fetched Application Commands Collection.<Array>[index]
+   * @param {Collection} AppplicationCommand Discord API Fetched Application Commands Collection.<Array>[index]
    * @returns {null} Undefined Value | Null Value
    */
 

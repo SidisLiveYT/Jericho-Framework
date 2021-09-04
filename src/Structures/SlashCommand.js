@@ -1,8 +1,8 @@
-import { Snowflake } from "discord-api-types";
+import { Client } from "discord.js";
 
 /**
  * @class SlashCommandBuilder - Build a Slash Commands Strucutre for Interaction
- * @param {Snowflake} Client Discord API Client with respect to discord.js v13
+ * @param {Collection} Client Discord API Client with respect to discord.js v13
  * @param {Array} Commands Arrays of Commands for Slash Command Interaction .
  */
 
@@ -32,7 +32,7 @@ export class SlashCommandBuilder {
 
   /**
    * @constructor Construct Class SlashCommandBuilder
-   * @param {Snowflake} Client Discord API Client with respect to discord.js v13
+   * @param {Client} Client Discord API Client with respect to discord.js v13
    * @param {Array} commands Arrays of Commands for Slash Command Interaction .
    */
 

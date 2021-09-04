@@ -1,18 +1,17 @@
 import Collection from "@discordjs/collection";
 import { joinVoiceChannel } from "@discordjs/voice";
-import { Snowflake } from "discord-api-types";
 import { StageChannel, VoiceChannel } from "discord.js";
 
 /**
  * @class VoiceHandler - Voice Handler for discord.js v13
- * @param {Snowflake} Client Discord API Client from discord.js v13
+ * @param {Collection} Client Discord API Client from discord.js v13
  * @param {object} VoiceHandlerInterfaceOptions Voice handler Interface options for class VoiceHandler
  */
 
 export class VoiceHandler {
   /**
    * @constructor VoiceHandler - Voice Handler for discord.js v13
-   * @param {Snowflake} Client Discord API Client from discord.js v13
+   * @param {Collection} Client Discord API Client from discord.js v13
    * @param {object} VoiceHandlerInterfaceOptions Voice handler Interface options for class VoiceHandler
    */
 

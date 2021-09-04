@@ -1,3 +1,5 @@
+import { Client, GuildChannel, Guild, ThreadChannel } from "discord.js";
+
 /**
  * @class ThreadBuilder is the Class to Operate Particular Threads in Same Channel Respective Server
  * @param {object} ThreadBuilderCreateOptions Options Values for Particular Channel Instance
@@ -12,13 +14,12 @@ export class ThreadBuilder {
   static #ThreadInstanceNumber = 0;
 
   /**
-   * @constructor
-   * @property {Snowflake} Client Discord API Client from discord.js v13
+   * @property {Client} Client Discord API Client from discord.js v13
    * @property {Number} ThreadCode Thread-main Channel's Code for Instance get method
-   * @property {Snowflake} channel Channel Resolve from Discord.js v13
-   * @property {Snowflake} guild Guild Resolve from Discord.js v13
+   * @property {GuildChannel} channel Channel Resolve from Discord.js v13
+   * @property {Guild} guild Guild Resolve from Discord.js v13
    * @property {object} metadata Extra Stuff to check or Cache Data
-   * @property {Snowflake} thread Thread Snowflake from Discord API v9
+   * @property {ThreadChannel} thread Thread Collection from Discord API v9
    */
 
   constructor(
