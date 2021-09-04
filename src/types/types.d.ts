@@ -21,7 +21,7 @@ export interface ThreadHandler {
  * @typedef {class} SlashCommandHandler
  * @property {Client} client Discord API Client from discord.js v13
  * @property {Guild} guild Guild Resolve from Discord.js v13
- * @property {boolean} global Channel Resolve from Discord.js v13
+ * @property {Boolean} global Channel Resolve from Discord.js v13
  * @property {Array} SlashCommands Extra Stuff to check or Cache Data
  * @property {Boolean} deployed Extra Stuff to check or Cache Data
  * @property {Array} ApplicationCommands Extra Stuff to check or Cache Data
@@ -30,9 +30,9 @@ export interface ThreadHandler {
 export interface SlashCommandHandler {
 	Client: Client;
 	guild: Guild;
-	global: boolean;
+	global: Boolean;
 	SlashCommands: Array;
-	deployed: boolean;
+	deployed: Boolean;
 	ApplicationCommands: Array;
 }
 

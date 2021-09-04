@@ -1,6 +1,6 @@
-import { SlashCommandBuilder } from "../Structures/SlashCommand.js";
-import { GuildResolver } from "../Utilities/Resolver_Utils.js";
-import { Guild, Client } from "discord.js";
+import { SlashCommandBuilder } from '../Structures/SlashCommand.js'
+import { GuildResolver } from '../Utilities/Resolver_Utils.js'
+import { Client } from 'discord.js'
 
 /**
  * @class SlashCommandHandler - Handler for deploying Interaction-commands in Discord API
@@ -10,38 +10,35 @@ import { Guild, Client } from "discord.js";
 
 export class SlashCommandHandler {
   /**
-   * @property {boolean} deployed What if Slash Command has been deployed to Discord API
+   * @property {Boolean} deployed What if Slash Command has been deployed to Discord API
    */
 
-  static #deployed = false;
+  static #deployed = false
 
   /**
    * @constructor
-   * @property {Client} client Discord API Client for Accessing Application Commands for Guild and Global
-   * @property {Guild} guild Discord Guild Collection <Collection>.<Collection> from discord.js v13
-   * @property {Boolean} global If Handler should Deploy Slash Commands Globally | Can take time minimum 1 Hour as per Discord API Protocols
-   * @property {Array} SlashCommands Array of Slash Commands for Interaction of Application Commands Manager
-   * @property {Array} ApplicationCommands Discord API Fetched Application Commands Collection.<Array>
+   * @param {Client} client Discord API Client for Accessing Application Commands for Guild and Global
+   * @param {Array} ApplicationCommands Discord API Fetched Application Commands Collection.<Array>
    */
 
   constructor(
     client,
     CreateSlashCommandsOptions = {
-      guild: GuildCollection,
+      guild: undefined,
       global: false,
       SlashCommands: [],
-    }
+    },
   ) {
-    this.client = client;
+    this.client = client
     this.guild = CreateSlashCommandsOptions.guild
       ? GuildResolver(client, CreateSlashCommandsOptions.guild, {
-        ifmessage: true,
-      })
-      : null;
+          ifmessage: true,
+        })
+      : null
     this.global =
-      this.guild || !CreateSlashCommandsOptions.global ? false : true;
-    this.SlashCommands = CreateSlashCommandsOptions.SlashCommands || null;
-    this.ApplicationCommands = [];
+      this.guild || !CreateSlashCommandsOptions.global ? false : true
+    this.SlashCommands = CreateSlashCommandsOptions.SlashCommands || null
+    this.ApplicationCommands = []
   }
 
   /**
@@ -52,26 +49,26 @@ export class SlashCommandHandler {
 
   async set(commands) {
     this.SlashCommands =
-      commands || SlashCommandHandler.#deployed ? null : this.SlashCommands;
+      commands || SlashCommandHandler.#deployed ? null : this.SlashCommands
     if (!this.SlashCommands && SlashCommandHandler.#deployed)
       throw SyntaxError(
-        `Slash Command has been already Deployed with Previous Set Values | Try Setting New Slash Commands`
-      );
+        `Slash Command has been already Deployed with Previous Set Values | Try Setting New Slash Commands`,
+      )
     else if (!this.SlashCommands)
       throw SyntaxError(
-        `Slash Command has not been Set/Saved | Try Setting Slash Commands - <SlashCommandHandler>.set()`
-      );
+        `Slash Command has not been Set/Saved | Try Setting Slash Commands - <SlashCommandHandler>.set()`,
+      )
     else if (!this.client.application?.owner)
-      await this.client.application?.fetch();
+      await this.client.application?.fetch()
     const SlashCommandInstance = new SlashCommandBuilder(
       Client,
-      this.SlashCommands
-    );
-    this.SlashCommands = SlashCommandInstance.create();
+      this.SlashCommands,
+    )
+    this.SlashCommands = SlashCommandInstance.create()
     if (this.SlashCommands) {
-      SlashCommandHandler.#deployed = false;
-      return this.SlashCommands;
-    } else return void null;
+      SlashCommandHandler.#deployed = false
+      return this.SlashCommands
+    } else return void null
   }
 
   /**
@@ -82,36 +79,36 @@ export class SlashCommandHandler {
   async deploy() {
     if (SlashCommandHandler.#deployed || !this.SlashCommands)
       throw SyntaxError(
-        `No New Slash Command has been Set to Deploy | Try Setting New Slash Commands- <SlashCommandHandler>.set()`
-      );
+        `No New Slash Command has been Set to Deploy | Try Setting New Slash Commands- <SlashCommandHandler>.set()`,
+      )
     else if (this.ApplicationCommands.length <= 0)
       throw SyntaxError(
-        `No Slash Command has been Set to Deploy | try - <SlashCommandHandler>.set()`
-      );
+        `No Slash Command has been Set to Deploy | try - <SlashCommandHandler>.set()`,
+      )
     else if (!this.client.application?.owner)
-      await this.client.application?.fetch();
+      await this.client.application?.fetch()
     if (this.global) {
       return await this.client.application.commands
         .set(this.SlashCommands)
         .then((ApplicationCommands) => {
-          SlashCommandHandler.#deployed = true;
-          this.ApplicationCommands = Array.from(ApplicationCommands.values());
-          return this;
+          SlashCommandHandler.#deployed = true
+          this.ApplicationCommands = Array.from(ApplicationCommands.values())
+          return this
         })
         .catch((error) => {
-          throw Error(error);
-        });
+          throw Error(error)
+        })
     } else {
       return await this.client.application.commands
         .set(this.SlashCommands, this.guild.id)
         .then((ApplicationCommands) => {
-          SlashCommandHandler.#deployed = true;
-          this.ApplicationCommands = Array.from(ApplicationCommands.values());
-          return this;
+          SlashCommandHandler.#deployed = true
+          this.ApplicationCommands = Array.from(ApplicationCommands.values())
+          return this
         })
         .catch((error) => {
-          throw Error(error);
-        });
+          throw Error(error)
+        })
     }
   }
 
@@ -124,34 +121,34 @@ export class SlashCommandHandler {
   async get(CommandId) {
     if (!SlashCommandHandler.#deployed || !this.SlashCommands)
       throw SyntaxError(
-        `No New Slash Command has been Set to Deploy | Try Setting New Slash Commands- <SlashCommandHandler>.set()`
-      );
+        `No New Slash Command has been Set to Deploy | Try Setting New Slash Commands- <SlashCommandHandler>.set()`,
+      )
     else if (this.ApplicationCommands.length <= 0)
       throw SyntaxError(
-        `No Slash Command has been Set to Deploy | try - <SlashCommandHandler>.set()`
-      );
+        `No Slash Command has been Set to Deploy | try - <SlashCommandHandler>.set()`,
+      )
     else if (!this.client.application?.owner)
-      await this.client.application?.fetch();
+      await this.client.application?.fetch()
     if (CommandId) {
       return this.client.application.commands
         .fetch(`${CommandId}`)
         .then((ApplicationCommand) => {
-          this.#HandleApplicationCommandsCache(ApplicationCommand);
-          return ApplicationCommand;
+          this.#HandleApplicationCommandsCache(ApplicationCommand)
+          return ApplicationCommand
         })
         .catch((error) => {
-          throw Error(error);
-        });
+          throw Error(error)
+        })
     } else {
       return this.client.application.commands
         .fetch()
         .then((ApplicationCommands) => {
-          this.ApplicationCommands = Array.from(ApplicationCommands.values());
-          return ApplicationCommands;
+          this.ApplicationCommands = Array.from(ApplicationCommands.values())
+          return ApplicationCommands
         })
         .catch((error) => {
-          throw Error(error);
-        });
+          throw Error(error)
+        })
     }
   }
 
@@ -164,16 +161,16 @@ export class SlashCommandHandler {
   async destroy(CommandId) {
     if (!SlashCommandHandler.#deployed || !this.SlashCommands)
       throw SyntaxError(
-        `No New Slash Command has been Set to Deploy | Try Setting New Slash Commands- <SlashCommandHandler>.set()`
-      );
+        `No New Slash Command has been Set to Deploy | Try Setting New Slash Commands- <SlashCommandHandler>.set()`,
+      )
     else if (this.ApplicationCommands.length <= 0)
       throw SyntaxError(
-        `No Slash Command has been Set to Deploy | try - <SlashCommandHandler>.set()`
-      );
+        `No Slash Command has been Set to Deploy | try - <SlashCommandHandler>.set()`,
+      )
     else if (!this.client.application?.owner)
-      await this.client.application?.fetch();
-    if (CommandId) return this.#DeleteApplciationCommands();
-    else return this.#DeleteApplciationCommands();
+      await this.client.application?.fetch()
+    if (CommandId) return this.#DeleteApplciationCommands()
+    else return this.#DeleteApplciationCommands()
   }
 
   /**
@@ -183,14 +180,14 @@ export class SlashCommandHandler {
    */
 
   #HandleApplicationCommandsCache(AppplicationCommand) {
-    var count = 0;
+    var count = 0
     for (count = 0; count < this.ApplicationCommands.length; ++count) {
       if (this.ApplicationCommands[count].id === AppplicationCommand.id) {
-        this.ApplicationCommands[count] = AppplicationCommand;
-        break;
+        this.ApplicationCommands[count] = AppplicationCommand
+        break
       }
     }
-    return void null;
+    return void null
   }
 
   /**
@@ -200,32 +197,32 @@ export class SlashCommandHandler {
    */
 
   #DeleteApplciationCommands(CommandId) {
-    const ApplicationCommands = this.ApplicationCommands;
+    const ApplicationCommands = this.ApplicationCommands
     if (!CommandId) {
       this.client.application.commands
         .set([])
         .then(() => {
-          this.ApplicationCommands = null;
-          SlashCommandHandler.#deployed = false;
-          this.SlashCommands = null;
-          return [ApplicationCommands];
+          this.ApplicationCommands = null
+          SlashCommandHandler.#deployed = false
+          this.SlashCommands = null
+          return [ApplicationCommands]
         })
         .catch((error) => {
-          throw Error(error);
-        });
+          throw Error(error)
+        })
     } else {
-      var count = 0;
+      var count = 0
       for (count = 0; count < this.ApplicationCommands.length; ++count) {
         if (CommandId && this.ApplicationCommands[count].id === CommandId) {
           return this.client.application.commands
             .delete(`${CommandId}`)
             .then((ApplicationCommand) => {
-              this.ApplicationCommands[count].splice(count, 1);
-              return ApplicationCommand;
+              this.ApplicationCommands[count].splice(count, 1)
+              return ApplicationCommand
             })
             .catch((error) => {
-              throw Error(error);
-            });
+              throw Error(error)
+            })
         }
       }
     }

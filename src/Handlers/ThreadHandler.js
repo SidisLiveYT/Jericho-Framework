@@ -2,8 +2,16 @@ import {
   ChannnelResolver,
   GuildResolver,
 } from "../Utilities/Resolver_Utils.js";
-import { ThreadBuilder } from "../Structures/Thread.js";
-import { Client, Guild, GuildChannel, TextChannel, ThreadChannel } from "discord.js";
+import {
+  ThreadBuilder
+} from "../Structures/Thread.js";
+import {
+  Client,
+  Guild,
+  GuildChannel,
+  TextChannel,
+  ThreadChannel,
+} from "discord.js";
 
 /**
  * @class ThreadHandler - Thread handlers for Discord API
@@ -100,15 +108,14 @@ export class ThreadHandler {
       guild: this.guild,
       channel: ChannnelResolver(
         this.Client,
-        CreateThreadOptions.channel || this.channel,
-        {
+        CreateThreadOptions.channel || this.channel, {
           type: `text`,
           ifmessage: true,
         }
       ),
-      metadata: CreateThreadOptions
-        ? CreateThreadOptions.metadata
-        : this.metadata,
+      metadata: CreateThreadOptions ?
+        CreateThreadOptions.metadata :
+        this.metadata,
     });
     const ThreadInstance = await ThreadInstanceClass.create(
       CreateThreadOptions

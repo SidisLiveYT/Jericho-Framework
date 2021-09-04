@@ -1,4 +1,4 @@
-import { Client, GuildChannel, Guild, ThreadChannel } from "discord.js";
+import { Client, GuildChannel, Guild, ThreadChannel } from 'discord.js'
 
 /**
  * @class ThreadBuilder is the Class to Operate Particular Threads in Same Channel Respective Server
@@ -11,7 +11,7 @@ export class ThreadBuilder {
    * @property {Number} ThreadInstanceNumber : For Storing Instance Numbers for further Utils Requirements
    */
 
-  static #ThreadInstanceNumber = 0;
+  static #ThreadInstanceNumber = 0
 
   /**
    * @property {Client} Client Discord API Client from discord.js v13
@@ -28,14 +28,14 @@ export class ThreadBuilder {
       channel: undefined,
       guild: undefined,
       metadata: undefined,
-    }
+    },
   ) {
-    this.Client = ThreadBuilderCreateOptions.Client;
-    this.ThreadCode = ThreadBuilder.#ThreadInstanceNumber + 1;
-    this.channel = ThreadBuilderCreateOptions.channel;
-    this.guild = ThreadBuilderCreateOptions.guild;
-    this.metadata = OptThreadBuilderCreateOptionsions.metadata;
-    this.thread = null;
+    this.Client = ThreadBuilderCreateOptions.Client
+    this.ThreadCode = ThreadBuilder.#ThreadInstanceNumber + 1
+    this.channel = ThreadBuilderCreateOptions.channel
+    this.guild = ThreadBuilderCreateOptions.guild
+    this.metadata = OptThreadBuilderCreateOptionsions.metadata
+    this.thread = null
   }
 
   /**
@@ -52,17 +52,17 @@ export class ThreadBuilder {
       Name: undefined,
       Reason: undefined,
       AutoArchiveDuration: 0,
-    }
+    },
   ) {
     if (!CreateThreadOptions)
-      throw TypeError(`Invalid Options Detected for Thread Creator`);
+      throw TypeError(`Invalid Options Detected for Thread Creator`)
     else if (
       CreateThreadOptions.Type &&
-      !["private", "public"].includes(
-        `${CreateThreadOptions.Type.toLowerCase().trim()}`
+      !['private', 'public'].includes(
+        `${CreateThreadOptions.Type.toLowerCase().trim()}`,
       )
     )
-      throw TypeError(`Invalid Thread Type is Detected!`);
+      throw TypeError(`Invalid Thread Type is Detected!`)
     const Thread = await this.channel.threads
       .create({
         name: CreateThreadOptions.Name
@@ -72,36 +72,36 @@ export class ThreadBuilder {
           ? CreateThreadOptions.AutoArchiveDuration
           : 60,
         type:
-          CreateThreadOptions.Type === "private"
-            ? "GUILD_PRIVATE_THREAD"
+          CreateThreadOptions.Type === 'private'
+            ? 'GUILD_PRIVATE_THREAD'
             : `GUILD_PUBLIC_THREAD`,
         reason: CreateThreadOptions.Reason
           ? CreateThreadOptions.Reason
           : `Thread Created by ${this.Client.user.name} on Thread Handler | Jericho Framework`,
       })
       .catch((error) => {
-        throw error;
-      });
-    this.thread = Thread;
-    return this;
+        throw error
+      })
+    this.thread = Thread
+    return this
   }
 
   /**
    * @method DestroyInstance Destroy Particular Instance Completely from Thread Class
    * @param {object} DestroyOptions Options for Delay Destroy and Reason
-   * @returns {boolean} ture/false Wheather the Condition is working
+   * @returns {Boolean} ture/false Wheather the Condition is working
    */
 
   destroy(
     DestroyThreadOptions = {
       Delay: 0,
       Reason: undefined,
-    }
+    },
   ) {
     if (!DestroyThreadOptions)
       throw SyntaxError(
-        `Options Variable can't be Undefined , Reason is Compulsory`
-      );
+        `Options Variable can't be Undefined , Reason is Compulsory`,
+      )
     if (
       DestroyThreadOptions.Delay &&
       !Number.isNaN(DestroyThreadOptions.Delay) &&
@@ -109,23 +109,23 @@ export class ThreadBuilder {
     )
       return setTimeout(
         ThreadDeletion(this.thread, DestroyThreadOptions.Reason),
-        parseInt(DestroyThreadOptions.Delay) * 1000
-      );
+        parseInt(DestroyThreadOptions.Delay) * 1000,
+      )
     else if (DestroyThreadOptions.Reason)
-      return ThreadDeletion(this.thread, DestroyThreadOptions.Reason);
+      return ThreadDeletion(this.thread, DestroyThreadOptions.Reason)
     else
       throw SyntaxError(
-        `Options Variable can't be Undefined , Reason is Compulsory`
-      );
+        `Options Variable can't be Undefined , Reason is Compulsory`,
+      )
 
     function ThreadDeletion(Thread, Reason) {
       return Thread.delete(`${Reason ? Reason : `Deleted Thread Instance}`}`)
         .then(() => {
-          return true;
+          return true
         })
         .catch((error) => {
-          throw error;
-        });
+          throw error
+        })
     }
   }
 }

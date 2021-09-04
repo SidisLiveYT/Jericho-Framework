@@ -1,4 +1,4 @@
-import { Client } from "discord.js";
+import { Client } from 'discord.js'
 
 /**
  * @class SlashCommandBuilder - Build a Slash Commands Strucutre for Interaction
@@ -11,24 +11,24 @@ export class SlashCommandBuilder {
    * @property {Array} DefaultOptionsTypes Array of Option type for Slash Command Interactions.
    */
 
-  static #DefaultOptionsTypes = ["CHAT_INPUT", "USER", "MESSAGE"];
+  static #DefaultOptionsTypes = ['CHAT_INPUT', 'USER', 'MESSAGE']
 
   /**
    * @property {Array} DefaultCommandTypes Array of Command type for Slash Command Interactions.
    */
 
   static #DefaultCommandTypes = [
-    "SUB_COMMAND",
-    "SUB_COMMAND_GROUP",
-    "STRING",
-    "INTEGER",
-    "BOOLEAN",
-    "USER",
-    "CHANNEL",
-    "ROLE",
-    "MENTIONABLE",
-    "NUMBER",
-  ];
+    'SUB_COMMAND',
+    'SUB_COMMAND_GROUP',
+    'STRING',
+    'INTEGER',
+    'BOOLEAN',
+    'USER',
+    'CHANNEL',
+    'ROLE',
+    'MENTIONABLE',
+    'NUMBER',
+  ]
 
   /**
    * @constructor Construct Class SlashCommandBuilder
@@ -37,8 +37,8 @@ export class SlashCommandBuilder {
    */
 
   constructor(Client, Commands) {
-    this.client = Client;
-    this.SlashCommands = Commands || null;
+    this.client = Client
+    this.SlashCommands = Commands || null
   }
 
   /**
@@ -48,15 +48,15 @@ export class SlashCommandBuilder {
    */
 
   create(Commands) {
-    this.SlashCommands = Commands ? Commands : this.SlashCommands;
+    this.SlashCommands = Commands ? Commands : this.SlashCommands
     if (!this.SlashCommands)
-      throw new Error("No Commands have been Passed to Slash Command Handler!");
-    var count = 0;
-    const CookedCommands = [];
+      throw new Error('No Commands have been Passed to Slash Command Handler!')
+    var count = 0
+    const CookedCommands = []
     for (count = 0; count < Commands.length; count++) {
-      CookedCommands.push(this.#CommandPlacement(CookedData[0]));
+      CookedCommands.push(this.#CommandPlacement(CookedData[0]))
     }
-    return CookedCommands;
+    return CookedCommands
   }
 
   /**
@@ -67,46 +67,46 @@ export class SlashCommandBuilder {
 
   #CommandPlacement(Command) {
     if (!Command)
-      throw SyntaxError(`No Application Command Credentials is Detected!`);
-    var CookedCommand = {};
-    var count = 0;
-    if (Command.name && typeof Command.name === "string")
-      CookedCommand.name = Command.name;
-    else throw SyntaxError(`Invalid Application Command Name is Detected!`);
+      throw SyntaxError(`No Application Command Credentials is Detected!`)
+    var CookedCommand = {}
+    var count = 0
+    if (Command.name && typeof Command.name === 'string')
+      CookedCommand.name = Command.name
+    else throw SyntaxError(`Invalid Application Command Name is Detected!`)
     if (
       Command.description &&
-      (typeof Command.description === "string" ||
-        typeof Command.description === "number")
+      (typeof Command.description === 'string' ||
+        typeof Command.description === 'number')
     )
-      CookedCommand.description = Command.description;
+      CookedCommand.description = Command.description
     else
-      throw SyntaxError(`Invalid Application Command Description is Detected!`);
+      throw SyntaxError(`Invalid Application Command Description is Detected!`)
     if (
       Command.type &&
-      typeof Command.type === "string" &&
+      typeof Command.type === 'string' &&
       this.#CommandTypePlacement(Command.type)
     )
-      CookedCommand.type = this.#CommandTypePlacement(Command.type);
+      CookedCommand.type = this.#CommandTypePlacement(Command.type)
     else if (Command.type)
-      throw SyntaxError(`Invalid Application Command Type is Detected!`);
+      throw SyntaxError(`Invalid Application Command Type is Detected!`)
     if (
       Command.defaultPermission === false ||
       Command.defaultPermission === true
     )
-      CookedCommand.defaultPermission = Command.defaultPermission;
+      CookedCommand.defaultPermission = Command.defaultPermission
     else
       throw SyntaxError(
-        `Invalid Application Command Default-Permission is Detected!`
-      );
+        `Invalid Application Command Default-Permission is Detected!`,
+      )
     if (Command.options && Command.options.length > 0) {
-      CookedCommand.options = [];
+      CookedCommand.options = []
       for (count = 0; count < Command.options.length; ++count) {
         CookedCommand.options.push(
-          this.#OptionsPlacement(Command.options[count])
-        );
+          this.#OptionsPlacement(Command.options[count]),
+        )
       }
     }
-    return CookedCommand;
+    return CookedCommand
   }
 
   /**
@@ -117,8 +117,8 @@ export class SlashCommandBuilder {
 
   #OptionTypePlacement(Type) {
     if (!Type)
-      throw SyntaxError(`No Application Command Type Credential is Detected!`);
-    var count = 0;
+      throw SyntaxError(`No Application Command Type Credential is Detected!`)
+    var count = 0
     for (
       count = 0;
       count < SlashCommandBuilder.#DefaultOptionsTypes.length;
@@ -128,9 +128,9 @@ export class SlashCommandBuilder {
         SlashCommandBuilder.#DefaultOptionsTypes[count].toLowerCase().trim() ===
         Type.toLowerCase().trim()
       )
-        return SlashCommandBuilder.#DefaultOptionsTypes[count];
+        return SlashCommandBuilder.#DefaultOptionsTypes[count]
     }
-    return void null;
+    return void null
   }
 
   /**
@@ -141,8 +141,8 @@ export class SlashCommandBuilder {
 
   #CommandTypePlacement(Type) {
     if (!Type)
-      throw SyntaxError(`No Application Command Type Credential is Detected!`);
-    var count = 0;
+      throw SyntaxError(`No Application Command Type Credential is Detected!`)
+    var count = 0
     for (
       count = 0;
       count < SlashCommandBuilder.#DefaultCommandTypes.length;
@@ -152,9 +152,9 @@ export class SlashCommandBuilder {
         SlashCommandBuilder.#DefaultCommandTypes[count].toLowerCase().trim() ===
         Type.toLowerCase().trim()
       )
-        return SlashCommandBuilder.#DefaultCommandTypes[count];
+        return SlashCommandBuilder.#DefaultCommandTypes[count]
     }
-    return void null;
+    return void null
   }
 
   /**
@@ -166,60 +166,60 @@ export class SlashCommandBuilder {
   #OptionsPlacement(Option) {
     if (!Option)
       throw SyntaxError(
-        `No Application Command Options Credentials is Detected!`
-      );
-    var CookedOptions = {};
-    var count = 0;
-    if (Option.name && typeof Option.name === "string")
-      CookedOptions.name = Option.name;
+        `No Application Command Options Credentials is Detected!`,
+      )
+    var CookedOptions = {}
+    var count = 0
+    if (Option.name && typeof Option.name === 'string')
+      CookedOptions.name = Option.name
     else
-      throw SyntaxError(`Invalid Application Command Option Name is Detected!`);
+      throw SyntaxError(`Invalid Application Command Option Name is Detected!`)
     if (
       Option.description &&
-      (typeof Option.description === "string" ||
-        typeof Option.description === "number")
+      (typeof Option.description === 'string' ||
+        typeof Option.description === 'number')
     )
-      CookedOptions.description = Option.description;
+      CookedOptions.description = Option.description
     else
       throw SyntaxError(
-        `Invalid Application Command Option Description is Detected!`
-      );
+        `Invalid Application Command Option Description is Detected!`,
+      )
     if (
       Option.type &&
-      typeof Option.type === "string" &&
+      typeof Option.type === 'string' &&
       this.#OptionTypePlacement(Option.type)
     )
-      CookedOptions.type = this.#OptionTypePlacement(Option.type);
-    else throw SyntaxError(`Invalid Application Command Type is Detected!`);
+      CookedOptions.type = this.#OptionTypePlacement(Option.type)
+    else throw SyntaxError(`Invalid Application Command Type is Detected!`)
     if (Option.defaultPermission === false || Option.defaultPermission === true)
-      CookedOptions.defaultPermission = Option.defaultPermission;
+      CookedOptions.defaultPermission = Option.defaultPermission
     else
       throw SyntaxError(
-        `Invalid Application Command Option Default-Permission is Detected!`
-      );
+        `Invalid Application Command Option Default-Permission is Detected!`,
+      )
     if (Option.required === false || Option.required === true)
-      CookedOptions.required = Option.required;
+      CookedOptions.required = Option.required
     else
       throw SyntaxError(
-        `Invalid Application Command Option required? is Detected!`
-      );
+        `Invalid Application Command Option required? is Detected!`,
+      )
     if (Option.options && Option.options.length > 0) {
-      CookedOptions.options = [];
+      CookedOptions.options = []
       for (count = 0; count < Option.options.length; ++count) {
         CookedOptions.options.push(
-          this.#OptionsPlacement(Option.options[count])
-        );
+          this.#OptionsPlacement(Option.options[count]),
+        )
       }
     }
     if (Option.choices && Option.choices.length > 0) {
-      CookedOptions.choices = [];
+      CookedOptions.choices = []
       for (count = 0; count < Option.choices.length; ++count) {
         CookedOptions.choices.push(
-          this.#ChoicesPlacement(Option.choices[count])
-        );
+          this.#ChoicesPlacement(Option.choices[count]),
+        )
       }
     }
-    return CookedOptions;
+    return CookedOptions
   }
 
   /**
@@ -231,18 +231,16 @@ export class SlashCommandBuilder {
   #ChoicesPlacement(Choice) {
     if (!Choice)
       throw SyntaxError(
-        `No Application Command Options Credentials is Detected!`
-      );
-    var CookedChoices = {};
-    if (Choice.name && typeof Choice.name === "string")
-      CookedChoices.name = Choice.name;
+        `No Application Command Options Credentials is Detected!`,
+      )
+    var CookedChoices = {}
+    if (Choice.name && typeof Choice.name === 'string')
+      CookedChoices.name = Choice.name
     else
-      throw SyntaxError(`Invalid Application Command Choice Name is Detected!`);
-    if (Choice.value) CookedChoices.value = Choice.value;
+      throw SyntaxError(`Invalid Application Command Choice Name is Detected!`)
+    if (Choice.value) CookedChoices.value = Choice.value
     else
-      throw SyntaxError(
-        `Invalid Application Command Choice Value is Detected!`
-      );
-    return CookedChoices;
+      throw SyntaxError(`Invalid Application Command Choice Value is Detected!`)
+    return CookedChoices
   }
 }
