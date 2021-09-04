@@ -1,3 +1,5 @@
+import { Snowflake } from "discord-api-types";
+
 /**
  * @class SlashCommandBuilder - Build a Slash Commands Strucutre for Interaction
  * @param {Snowflake} Client Discord API Client with respect to discord.js v13
@@ -30,7 +32,7 @@ export class SlashCommandBuilder {
 
   /**
    * @constructor Construct Class SlashCommandBuilder
-   * @param {Snowflake} client Discord API Client with respect to discord.js v13
+   * @param {Snowflake} Client Discord API Client with respect to discord.js v13
    * @param {Array} commands Arrays of Commands for Slash Command Interaction .
    */
 
@@ -157,8 +159,8 @@ export class SlashCommandBuilder {
 
   /**
    * @method #OptionsPlacement Placement of Index value of Array of Command.options to be Cooked
-   * @param {Object} Option Command's Option for Slash Command-Option Interaction .
-   * @returns {Object} CookedOptions - Raw Discord API Interaction Command.options Value.
+   * @param {object} Option Command's Option for Slash Command-Option Interaction .
+   * @returns {object} CookedOptions - Raw Discord API Interaction Command.options Value.
    */
 
   #OptionsPlacement(Option) {
@@ -222,8 +224,8 @@ export class SlashCommandBuilder {
 
   /**
    * @method #ChoicesPlacement Placement of Index value of Array of Command.options.choices to be Cooked
-   * @param {Object} Choice Command.options's Choices for Slash Command-Option Interaction .
-   * @returns {Object} CookedChoices - Raw Discord API Interaction Command.options.choices Value.
+   * @param {object} Choice Command.options's Choices for Slash Command-Option Interaction .
+   * @returns {object} CookedChoices - Raw Discord API Interaction Command.options.choices Value.
    */
 
   #ChoicesPlacement(Choice) {

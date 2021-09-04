@@ -1,19 +1,20 @@
 export { ThreadHandler } from ".././Handlers/ThreadHandler.js";
 export { SlashCommandHandler } from ".././Handlers/SlashCommandHandler.js";
+import { Snowflake } from "discord-api-types";
 
 /**
- * @typedef {class} ThreadHandler
+ * @typedef ThreadHandler
  * @property {Snowflake} Client Discord API Client from discord.js v13
  * @property {Snowflake} guild Guild Resolve from Discord.js v13
  * @property {Snowflake} channel Channel Resolve from Discord.js v13
- * @property {Object} metadata Extra Stuff to check or Cache Data
+ * @property {object} metadata Extra Stuff to check or Cache Data
  */
 
 export interface ThreadHandler {
   Client: Snowflake;
   guild: Snowflake;
   channel: Snowflake;
-  metadata: Object;
+  metadata: object;
 }
 
 /**

@@ -1,7 +1,7 @@
 /**
  * @class ThreadBuilder is the Class to Operate Particular Threads in Same Channel Respective Server
- * @param {Object} Options Options Values for Particular Channel Instance
- * @returns {Object} A Class Instance of Single Channel [ Unique Instance ]
+ * @param {object} ThreadBuilderCreateOptions Options Values for Particular Channel Instance
+ * @returns {object} A Class Instance of Single Channel [ Unique Instance ]
  */
 
 export class ThreadBuilder {
@@ -17,47 +17,65 @@ export class ThreadBuilder {
    * @property {Number} ThreadCode Thread-main Channel's Code for Instance get method
    * @property {Snowflake} channel Channel Resolve from Discord.js v13
    * @property {Snowflake} guild Guild Resolve from Discord.js v13
-   * @property {Object} metadata Extra Stuff to check or Cache Data
+   * @property {object} metadata Extra Stuff to check or Cache Data
    * @property {Snowflake} thread Thread Snowflake from Discord API v9
    */
 
-  constructor(Options) {
-    this.Client = Options.Client;
+  constructor(
+    ThreadBuilderCreateOptions = {
+      Client: undefined,
+      channel: undefined,
+      guild: undefined,
+      metadata: undefined,
+    }
+  ) {
+    this.Client = ThreadBuilderCreateOptions.Client;
     this.ThreadCode = ThreadBuilder.#ThreadInstanceNumber + 1;
-    this.channel = Options.channel;
-    this.guild = Options.guild;
-    this.metadata = Options.metadata;
+    this.channel = ThreadBuilderCreateOptions.channel;
+    this.guild = ThreadBuilderCreateOptions.guild;
+    this.metadata = OptThreadBuilderCreateOptionsions.metadata;
     this.thread = null;
   }
 
   /**
    * @method CreateInstance Method for Creating Instance for the particular Channel
-   * @param {Object} Options Options for Name , AutoArchive Duration , Reason , Type .
-   * @returns {Object} Thread Instance for Thread-Handler Class .
+   * @param {object} CreateOptions Options for Name , AutoArchive Duration , Reason , Type .
+   * @returns {object} Thread Instance for Thread-Handler Class .
    */
 
-  async create(Options) {
-    if (!Options)
+  async create(
+    CreateThreadOptions = {
+      channel: undefined,
+      metadata: undefined,
+      Type: `GUILD_PUBLIC_THREAD`,
+      Name: undefined,
+      Reason: undefined,
+      AutoArchiveDuration: 0,
+    }
+  ) {
+    if (!CreateThreadOptions)
       throw TypeError(`Invalid Options Detected for Thread Creator`);
     else if (
-      Options.Type &&
-      !["private", "public"].includes(`${Options.Type.toLowerCase().trim()}`)
+      CreateThreadOptions.Type &&
+      !["private", "public"].includes(
+        `${CreateThreadOptions.Type.toLowerCase().trim()}`
+      )
     )
       throw TypeError(`Invalid Thread Type is Detected!`);
     const Thread = await this.channel.threads
       .create({
-        name: Options.Name
-          ? Options.Name
+        name: CreateThreadOptions.Name
+          ? CreateThreadOptions.Name
           : `Thread Instance - ${this.ThreadInstances + 1} | Jericho Framework`,
-        autoArchiveDuration: Options.AutoArchiveDuration
-          ? Options.AutoArchiveDuration
+        autoArchiveDuration: CreateThreadOptions.AutoArchiveDuration
+          ? CreateThreadOptions.AutoArchiveDuration
           : 60,
         type:
-          Options.Type === "private"
+          CreateThreadOptions.Type === "private"
             ? "GUILD_PRIVATE_THREAD"
             : `GUILD_PUBLIC_THREAD`,
-        reason: Options.Reason
-          ? Options.Reason
+        reason: CreateThreadOptions.Reason
+          ? CreateThreadOptions.Reason
           : `Thread Created by ${this.Client.user.name} on Thread Handler | Jericho Framework`,
       })
       .catch((error) => {
@@ -69,21 +87,31 @@ export class ThreadBuilder {
 
   /**
    * @method DestroyInstance Destroy Particular Instance Completely from Thread Class
-   * @param {Object} Options Options for Delay Destroy
+   * @param {object} DestroyOptions Options for Delay Destroy and Reason
    * @returns {boolean} ture/false Wheather the Condition is working
    */
 
-  destroy(Options) {
-    if (!Options)
+  destroy(
+    DestroyThreadOptions = {
+      Delay: 0,
+      Reason: undefined,
+    }
+  ) {
+    if (!DestroyThreadOptions)
       throw SyntaxError(
         `Options Variable can't be Undefined , Reason is Compulsory`
       );
-    if (Options.Delay && !Number.isNaN(Options.Delay) && Options.Reason)
+    if (
+      DestroyThreadOptions.Delay &&
+      !Number.isNaN(DestroyThreadOptions.Delay) &&
+      DestroyThreadOptions.Reason
+    )
       return setTimeout(
-        ThreadDeletion(this.thread, Options.Reason),
-        parseInt(Options.Delay) * 1000
+        ThreadDeletion(this.thread, DestroyThreadOptions.Reason),
+        parseInt(DestroyThreadOptions.Delay) * 1000
       );
-    else if (Options.Reason) return ThreadDeletion(this.thread, Options.Reason);
+    else if (DestroyThreadOptions.Reason)
+      return ThreadDeletion(this.thread, DestroyThreadOptions.Reason);
     else
       throw SyntaxError(
         `Options Variable can't be Undefined , Reason is Compulsory`

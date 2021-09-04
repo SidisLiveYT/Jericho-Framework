@@ -3,11 +3,12 @@ import {
   GuildResolver,
 } from "../Utilities/Resolver_Utils.js";
 import { ThreadBuilder } from "../Structures/Thread.js";
+import { Snowflake } from "discord-api-types";
 
 /**
  * @class ThreadHandler - Thread handlers for Discord API
  * @param {Snowflake} Client Discord API Client from discord.js v13
- * @param {Object} Options Default Options for Thread ThreadHandler
+ * @param {object} ThreadClassCreateOptions Default Options for Thread ThreadHandler
  */
 
 export class ThreadHandler {
@@ -17,23 +18,29 @@ export class ThreadHandler {
   /**
    * @constructor
    * @property {Snowflake} Client Discord API Client from discord.js v13
-   * @property {Number} ChannelCode Thread-main Channel's Code for Instance get method
    * @property {Snowflake} guild Guild Resolve from Discord.js v13
    * @property {Snowflake} channel Channel Resolve from Discord.js v13
-   * @property {Object} metadata Extra Stuff to check or Cache Data
+   * @property {object} metadata Extra Stuff to check or Cache Data
    */
 
-  constructor(Client, Options) {
+  constructor(
+    Client,
+    ThreadClassCreateOptions = {
+      guild: undefined,
+      channel: undefined,
+      metadata: null,
+    }
+  ) {
     this.Client = Client;
     this.ChannelCode = ++ThreadHandler.#ChannelInstancesNumber;
-    this.guild = GuildResolver(Client, Options.guild, {
+    this.guild = GuildResolver(Client, ThreadClassCreateOptions.guild, {
       ifmessage: true,
     });
-    this.channel = ChannnelResolver(Client, Options.channel, {
+    this.channel = ChannnelResolver(Client, ThreadClassCreateOptions.channel, {
       type: `text`,
       ifmessage: true,
     });
-    this.metadata = Options.metadata;
+    this.metadata = ThreadClassCreateOptions.metadata;
     ThreadHandler.#ThreadInstanceRecords[
       `'${ThreadHandler.#ChannelInstancesNumber}'`
     ] = [];
@@ -74,21 +81,38 @@ export class ThreadHandler {
 
   /**
    * @method CreateThread Create Method method of the Channel Class
-   * @param {Object} Options Options to create Thread for Particular Server and Channel
-   * @returns {Object} ThreadInstance - ThreadInstance , Fetched from Class Instance .
+   * @param {object} ThreadOptions Options to create Thread for Particular Server and Channel
+   * @returns {object} ThreadInstance - ThreadInstance , Fetched from Class Instance .
    */
 
-  async CreateThread(Options) {
+  async CreateThread(
+    CreateThreadOptions = {
+      channel: undefined,
+      metadata: undefined,
+      Type: `GUILD_PUBLIC_THREAD`,
+      Name: undefined,
+      Reason: undefined,
+      AutoArchiveDuration: 0,
+    }
+  ) {
     const ThreadInstanceClass = new ThreadBuilder({
       Client: this.Client,
       guild: this.guild,
-      channel: ChannnelResolver(this.Client, Options.channel || this.channel, {
-        type: `text`,
-        ifmessage: true,
-      }),
-      metadata: Options ? Options.metadata : this.metadata,
+      channel: ChannnelResolver(
+        this.Client,
+        CreateThreadOptions.channel || this.channel,
+        {
+          type: `text`,
+          ifmessage: true,
+        }
+      ),
+      metadata: CreateThreadOptions
+        ? CreateThreadOptions.metadata
+        : this.metadata,
     });
-    const ThreadInstance = await ThreadInstanceClass.create(Options);
+    const ThreadInstance = await ThreadInstanceClass.create(
+      CreateThreadOptions
+    );
     var ThreadInstances =
       ThreadHandler.#ThreadInstanceRecords[`'${this.ChannelCode}'`];
     if (ThreadInstances) ThreadInstances.push(ThreadInstance);
@@ -100,12 +124,18 @@ export class ThreadHandler {
 
   /**
    * @method DestroyThread Destroying Thread from Cache and Thread Instances
-   * @param {Object} ThreadInstance Unique Thread Instance for the Deletion
-   * @param {Object} Options Options for Reason or Delay in Deletion
+   * @param {object} ThreadInstance Unique Thread Instance for the Deletion
+   * @param {object} DestroyOptions Options for Reason or Delay in Deletion
    * @returns {Boolean} Boolean true on Success or undefined on faliure
    */
 
-  async DestroyThread(ThreadInstance, Options) {
+  async DestroyThread(
+    ThreadInstance,
+    DestroyThreadOptions = {
+      Delay: 0,
+      Reason: undefined,
+    }
+  ) {
     var ThreadInstances = ThreadHandler.#CheckInstance(this.ChannelCode);
     if (ThreadInstances && ThreadInstances.length > 0) {
       var Thread = ThreadHandler.#GetInstance(
@@ -113,7 +143,7 @@ export class ThreadHandler {
         1,
         ThreadInstance
       );
-      const Success = await Thread.destroy(Options);
+      const Success = await Thread.destroy(DestroyThreadOptions);
       if (Success)
         return ThreadHandler.#RemoveInstance(
           ThreadInstances,
@@ -127,7 +157,7 @@ export class ThreadHandler {
   /**
    * @method #CheckInstance Private Method to Check Wheather Channel exist as Instance for Threads
    * @param {Number} ChannelCode Channel Instance Code present on Class Cache
-   * @returns {Object} ThreadInstances - ThreadInstances , Fetched from Class Instance .
+   * @returns {object} ThreadInstances - ThreadInstances , Fetched from Class Instance .
    */
 
   static #CheckInstance(ChannelCode) {
@@ -138,7 +168,7 @@ export class ThreadHandler {
 
   /**
    * @method #RemoveInstance private Method for Deletion of Thread Instance from the Class Cache
-   * @param {Object} ThreadInstances Array  of Thread Instances for Deletion from Cache
+   * @param {object} ThreadInstances Array  of Thread Instances for Deletion from Cache
    * @param {Number} Instance if its not all , then Number of Instance to delete
    * @param {Number} ChannelCode Channel Instance Code present on Class Cache
    * @returns {Boolean} True or False Depends
@@ -158,10 +188,10 @@ export class ThreadHandler {
 
   /**
    * @method #GetInstance Private Static Method to get Thread Instance from the Cache
-   * @param {Object} ThreadInstances Array of Thread Instances (Cache Value)
+   * @param {object} ThreadInstances Array of Thread Instances (Cache Value)
    * @param {Number} Amount Amount of Instances fetch if not Instance mentioned
-   * @param {Object} Instance Exact Number of Thread Instance to Fetch
-   * @returns {Object} ThreadInstance - ThreadInstance , Fetched from Class Instance .
+   * @param {object} Instance Exact Number of Thread Instance to Fetch
+   * @returns {object} ThreadInstance - ThreadInstance , Fetched from Class Instance .
    */
   static #GetInstance(ThreadInstances, Amount, Instance) {
     var count = 0;

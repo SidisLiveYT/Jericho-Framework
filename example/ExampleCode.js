@@ -1,7 +1,10 @@
-import { ThreadHandler, SlashCommandHandler } from "../src/index";
+import { ThreadHandler, SlashCommandHandler, VoiceHandler } from "../src/index";
 
 //Creating Channel Instance for Particular Text Channel
-const ChannelInstance = new ThreadHandler(Client, Options);
+const ChannelInstance = new ThreadHandler(Client, {
+  guild: message,
+  channel: message,
+});
 
 //Creating Thread Instance for Particular Thread-Main Channel
 const ThreadInstance1 = ChannelInstance.CreateThread(Options);
@@ -10,6 +13,9 @@ const Thread1 = ThreadInstance1.Thread;
 
 const ThreadInstance2 = ChannelInstance.CreateThread(Options);
 const Thread2 = ThreadInstance2.Thread;
+
+console.log(Thread1);
+console.log(Thread2);
 
 //Slash Command handler Usage
 const SlashCommandInstance = new SlashCommandHandler(Client, {
@@ -20,5 +26,6 @@ SlashCommandInstance.set(Commands);
 //Slash Command Handler to Deploy Commands
 SlashCommandInstance.deploy();
 
-console.log(Thread1);
-console.log(Thread2);
+const VoiceInstance = new VoiceHandler(Client, {
+  LeaveOnEmpty: true,
+});

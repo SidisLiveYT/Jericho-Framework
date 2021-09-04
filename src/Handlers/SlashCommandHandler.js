@@ -1,42 +1,46 @@
-import {
-  SlashCommandBuilder
-} from "../Structures/SlashCommand.js";
-import {
-  GuildResolver
-} from "../Utilities/Resolver_Utils.js";
+import { SlashCommandBuilder } from "../Structures/SlashCommand.js";
+import { GuildResolver } from "../Utilities/Resolver_Utils.js";
+import { Snowflake } from "discord-api-types";
 
 /**
  * @class SlashCommandHandler - Handler for deploying Interaction-commands in Discord API
  * @param {Snowflake} client Discord API Client for Accessing Application Commands for Guild and Global
- * @param {Object} CreateOptions CreateOptions for Creating a Slash Command Data
+ * @param {object} CreateSlashCommandsOptions CreateOptions for Creating a Slash Command Data
  */
 
 export class SlashCommandHandler {
-  /**
-   * @constructor
-   * @property {Snowflake} client Discord API Client for Accessing Application Commands for Guild and Global
-   * @property {Snowflake} guild Discord Guild Collection <Snowflake>.<Collection> from discord.js v13
-   * @property {Boolean} global If Handler should Deploy Slash Commands Globally | Can take time minimum 1 Hour as per Discord API Protocols
-   * @property {Array} SlashCommands Array of Slash Commands for Interaction of Application Commands Manager
-   * @property {Boolean} deployed if Previous Set Commands are Deployed ? True/False
-   * @property {Array} ApplicationCommands Discord API Fetched Application Commands Collection.<Array>
-   */
-
   /**
    * @property {boolean} deployed What if Slash Command has been deployed to Discord API
    */
 
   static #deployed = false;
 
-  constructor(client, CreateOptions) {
+  /**
+   * @constructor
+   * @property {Collection} client Discord API Client for Accessing Application Commands for Guild and Global
+   * @property {Collection} guild Discord Guild Collection <Snowflake>.<Collection> from discord.js v13
+   * @property {Boolean} global If Handler should Deploy Slash Commands Globally | Can take time minimum 1 Hour as per Discord API Protocols
+   * @property {Array} SlashCommands Array of Slash Commands for Interaction of Application Commands Manager
+   * @property {Array} ApplicationCommands Discord API Fetched Application Commands Collection.<Array>
+   */
+
+  constructor(
+    client,
+    CreateSlashCommandsOptions = {
+      guild: GuildCollection,
+      global: false,
+      SlashCommands: [],
+    }
+  ) {
     this.client = client;
-    this.guild = CreateOptions.guild ?
-      GuildResolver(client, CreateOptions.guild, {
-        ifmessage: true,
-      }) :
-      null;
-    this.global = this.guild ? false : true;
-    this.SlashCommands = CreateOptions.commands || null;
+    this.guild = CreateSlashCommandsOptions.guild
+      ? GuildResolver(client, CreateSlashCommandsOptions.guild, {
+          ifmessage: true,
+        })
+      : null;
+    this.global =
+      this.guild || !CreateSlashCommandsOptions.global ? false : true;
+    this.SlashCommands = CreateSlashCommandsOptions.SlashCommands || null;
     this.ApplicationCommands = [];
   }
 
@@ -47,7 +51,8 @@ export class SlashCommandHandler {
    */
 
   async set(commands) {
-    this.SlashCommands = commands || SlashCommandHandler.#deployed ? null : this.SlashCommands;
+    this.SlashCommands =
+      commands || SlashCommandHandler.#deployed ? null : this.SlashCommands;
     if (!this.SlashCommands && SlashCommandHandler.#deployed)
       throw SyntaxError(
         `Slash Command has been already Deployed with Previous Set Values | Try Setting New Slash Commands`
@@ -221,8 +226,8 @@ export class SlashCommandHandler {
             .catch((error) => {
               throw Error(error);
             });
-        };
-      };
-    };
-  };
+        }
+      }
+    }
+  }
 }
