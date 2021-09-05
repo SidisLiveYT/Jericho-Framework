@@ -51,6 +51,7 @@ export class VoiceHandler {
       ? true
       : false
 
+    //Event Call for Leaveon attributes to check
     /**
      * @event voiceStateUpdate Voice Update from discord.js v13
      * @param OldState old State in Voice Channel
