@@ -233,7 +233,7 @@ export class VoiceHandler {
     if (Delay && Delay !== 0)
       return setTimeout(() => {
         return VoiceConnectionInstance.disconnect()
-      }, Delay)
+      }, Delay * 1000)
     else return VoiceConnectionInstance.disconnect()
   }
 
@@ -241,9 +241,10 @@ export class VoiceHandler {
    * @method destroy Destroy Voice Connection on Discord Server
    * @param {Snowflake} GuildId Guild.id Snowflake for Getter Private method
    * @param {Boolean} AdapterAvailable Boolean Checker if Adaptar is Required
+   * @param {Number} Delay Disconnect Delay in Number in Seconds
    */
 
-  destroy(GuildId, AdapterAvailable = true) {
+  destroy(GuildId, AdapterAvailable = true, Delay = 0) {
     const VoiceConnectionInstance = VoiceHandler.#GetVoiceConnection(GuildId)
     if (VoiceConnectionInstance && VoiceConnectionInstance.disconnect)
       throw Error(
@@ -254,7 +255,11 @@ export class VoiceHandler {
         `[Connection is already Destroyed] : Please Connect to Channel`,
       )
     VoiceConnectionInstance.destroy(AdapterAvailable)
-    return VoiceHandler.#DestroyVoiceConnection(GuildId)
+    if (Delay && Delay !== 0)
+      return setTimeout(() => {
+        return VoiceHandler.#DestroyVoiceConnection(GuildId)
+      }, Delay * 1000)
+    else return VoiceHandler.#DestroyVoiceConnection(GuildId)
   }
 
   /**

@@ -5,7 +5,7 @@ import {
   Guild,
   GuildChannel,
   TextChannel,
-  ThreadChannel
+  ThreadChannel,
 } from 'discord.js'
 
 /**
@@ -26,22 +26,22 @@ export class ThreadHandler {
    * @param {object} metadata Extra Stuff to check or Cache Data
    */
 
-  constructor (
+  constructor(
     Client,
     ThreadClassCreateOptions = {
       guild: undefined,
       channel: undefined,
-      metadata: null
-    }
+      metadata: null,
+    },
   ) {
     this.Client = Client
     this.ChannelCode = ++ThreadHandler.#ChannelInstancesNumber
     this.guild = GuildResolver(Client, ThreadClassCreateOptions.guild, {
-      ifmessage: true
+      ifmessage: true,
     })
     this.channel = ChannnelResolver(Client, ThreadClassCreateOptions.channel, {
       type: `text`,
-      ifmessage: true
+      ifmessage: true,
     })
     this.metadata = ThreadClassCreateOptions.metadata
     ThreadHandler.#ThreadInstanceRecords[
@@ -55,10 +55,10 @@ export class ThreadHandler {
    * @returns {ThreadChannel} ThreadChannel - Thread Channel of a Single Channel , Fetched from discord.js v13
    */
 
-  GetThread (ChannelResolve) {
+  GetThread(ChannelResolve) {
     const ThreadChannel = ChannnelResolver(this.Client, ChannelResolve, {
       type: `thread`,
-      ifmessage: true
+      ifmessage: true,
     })
     return ThreadChannel
   }
@@ -70,7 +70,7 @@ export class ThreadHandler {
    * @returns {ThreadChannel} ThreadChannel - Thread Channel of a Single Channel , Fetched from Class Instance
    */
 
-  GetThreadInstances (Instance, Amount) {
+  GetThreadInstances(Instance, Amount) {
     const ThreadInstances = ThreadHandler.#CheckInstance(this.ChannelCode)
     if (ThreadInstances && ThreadInstances.length > 0) {
       var Thread = ThreadHandler.#GetInstance(ThreadInstances, Amount, Instance)
@@ -84,15 +84,15 @@ export class ThreadHandler {
    * @returns {object} ThreadInstance - ThreadInstance , Fetched from Class Instance .
    */
 
-  async CreateThread (
+  async CreateThread(
     CreateThreadOptions = {
       channel: undefined,
       metadata: undefined,
       Type: `GUILD_PUBLIC_THREAD`,
       Name: undefined,
       Reason: undefined,
-      AutoArchiveDuration: 0
-    }
+      AutoArchiveDuration: 0,
+    },
   ) {
     const ThreadInstanceClass = new ThreadBuilder({
       Client: this.Client,
@@ -102,12 +102,12 @@ export class ThreadHandler {
         CreateThreadOptions.channel || this.channel,
         {
           type: `text`,
-          ifmessage: true
-        }
+          ifmessage: true,
+        },
       ),
       metadata: CreateThreadOptions
         ? CreateThreadOptions.metadata
-        : this.metadata
+        : this.metadata,
     })
     const ThreadInstance = await ThreadInstanceClass.create(CreateThreadOptions)
     var ThreadInstances =
@@ -127,26 +127,26 @@ export class ThreadHandler {
    * @returns {Boolean} Boolean true on Success or undefined on faliure
    */
 
-  async DestroyThread (
+  async DestroyThread(
     ThreadInstance,
     DestroyThreadOptions = {
       Delay: 0,
-      Reason: undefined
-    }
+      Reason: undefined,
+    },
   ) {
     var ThreadInstances = ThreadHandler.#CheckInstance(this.ChannelCode)
     if (ThreadInstances && ThreadInstances.length > 0) {
       var Thread = ThreadHandler.#GetInstance(
         ThreadInstances,
         1,
-        ThreadInstance
+        ThreadInstance,
       )
       const Success = await Thread.destroy(DestroyThreadOptions)
       if (Success)
         return ThreadHandler.#RemoveInstance(
           ThreadInstances,
           ThreadInstance,
-          this.ChannelCode
+          this.ChannelCode,
         )
       else return void null
     } else return void null
@@ -158,7 +158,7 @@ export class ThreadHandler {
    * @returns {object} ThreadInstances - ThreadInstances , Fetched from Class Instance .
    */
 
-  static #CheckInstance (ChannelCode) {
+  static #CheckInstance(ChannelCode) {
     const ThreadInstances =
       ThreadHandler.#ThreadInstanceRecords[`'${ChannelCode}'`]
     return ThreadInstances
@@ -172,7 +172,7 @@ export class ThreadHandler {
    * @returns {Boolean} True or False Depends
    */
 
-  static #RemoveInstance (ThreadInstances, Instance, ChannelCode) {
+  static #RemoveInstance(ThreadInstances, Instance, ChannelCode) {
     var count = 0
     for (count = 0; count < ThreadInstances.length; ++count) {
       if (ThreadInstances[count].ThreadInstance === Instance) {
@@ -191,7 +191,7 @@ export class ThreadHandler {
    * @param {object} Instance Exact Number of Thread Instance to Fetch
    * @returns {object} ThreadInstance - ThreadInstance , Fetched from Class Instance .
    */
-  static #GetInstance (ThreadInstances, Amount, Instance) {
+  static #GetInstance(ThreadInstances, Amount, Instance) {
     var count = 0
     var choice = 0
     var Threads = []

@@ -1,6 +1,8 @@
-import { joinVoiceChannel, getVoiceConnection } from '@discordjs/voice'
-import { Client, Guild, StageChannel, VoiceChannel } from 'discord.js'
-import { GuildResolver } from '../Utilities/Resolver_Utils.js'
+import { joinVoiceChannel, getVoiceConnection } from '@discordjs/voice';
+import {
+  Client, Guild, StageChannel, VoiceChannel,
+} from 'discord.js';
+import { GuildResolver } from '../Utilities/Resolver_Utils.js';
 
 /**
  * @class VoiceConnectionBuilder - VoiceConnectionInstanceBuilder for Voice Handler for discord.js v13
@@ -30,16 +32,16 @@ export class VoiceConnectionBuilder {
       selfMute: false,
     },
   ) {
-    this.Client = Client
-    this.ChannelId = Channel.id
-    this.GuildId = Guild.id
-    this.Adaptar = Adaptar || Guild.voiceAdapterCreator
-    this.LeaveOnEmpty = ConnectionInterfaceOptions.LeaveOnEmpty
-    this.LeaveOnOnlyBot = ConnectionInterfaceOptions.LeaveOnOnlyBot
-    this.LeaveOnOnlyUsers = ConnectionInterfaceOptions.LeaveOnOnlyUsers
-    this.LeaveDelay = ConnectionInterfaceOptions.LeaveDelay
-    this.selfDeaf = ConnectionInterfaceOptions.selfDeaf
-    this.selfMute = ConnectionInterfaceOptions.selfMute
+    this.Client = Client;
+    this.ChannelId = Channel.id;
+    this.GuildId = Guild.id;
+    this.Adaptar = Adaptar || Guild.voiceAdapterCreator;
+    this.LeaveOnEmpty = ConnectionInterfaceOptions.LeaveOnEmpty;
+    this.LeaveOnOnlyBot = ConnectionInterfaceOptions.LeaveOnOnlyBot;
+    this.LeaveOnOnlyUsers = ConnectionInterfaceOptions.LeaveOnOnlyUsers;
+    this.LeaveDelay = ConnectionInterfaceOptions.LeaveDelay;
+    this.selfDeaf = ConnectionInterfaceOptions.selfDeaf;
+    this.selfMute = ConnectionInterfaceOptions.selfMute;
   }
 
   /**
@@ -52,14 +54,14 @@ export class VoiceConnectionBuilder {
       const VoiceConnection = joinVoiceChannel({
         channelId: this.ChannelId,
         guildId: this.GuildId,
-        selfDeaf: this.selfDeaf ? true : false,
-        selfMute: this.selfMute ? true : false,
-        adapterCreator: Adaptar ? Adaptar : this.Adaptar,
-      })
-      this.VoiceConnection = VoiceConnection
-      return this
+        selfDeaf: !!this.selfDeaf,
+        selfMute: !!this.selfMute,
+        adapterCreator: this.Adaptar,
+      });
+      this.VoiceConnection = VoiceConnection;
+      return this;
     } catch (error) {
-      throw Error(error)
+      throw Error(error);
     }
   }
   /**
@@ -68,12 +70,12 @@ export class VoiceConnectionBuilder {
    */
 
   get() {
-    this.VoiceConnection = getVoiceConnection({ guildId: this.GuildId })
-    const Guild = GuildResolver(this.Client, this.GuildId)
+    this.VoiceConnection = getVoiceConnection({ guildId: this.GuildId });
+    const Guild = GuildResolver(this.Client, this.GuildId);
     if (Guild.me && Guild.me.voice && Guild.me.voice.channel) {
-      this.ChannelId = Guild.me.voice.channel.id
+      this.ChannelId = Guild.me.voice.channel.id;
     }
-    return this
+    return this;
   }
 
   /**
@@ -82,12 +84,9 @@ export class VoiceConnectionBuilder {
    */
 
   disconnect() {
-    if (!this.VoiceConnection)
-      throw TypeError(`No Voice Connection found in Handler!`)
-    const SuccessBooleanResult = this.VoiceConnection.disconnect()
-    if (!SuccessBooleanResult)
-      throw TypeError(`Voice Connection can't be disconnected!`)
-    else return SuccessBooleanResult
+    if (!this.VoiceConnection) { throw TypeError('No Voice Connection found in Handler!'); }
+    const SuccessBooleanResult = this.VoiceConnection.disconnect();
+    if (!SuccessBooleanResult) { throw TypeError('Voice Connection can\'t be disconnected!'); } else return SuccessBooleanResult;
   }
 
   /**
@@ -97,16 +96,13 @@ export class VoiceConnectionBuilder {
    */
 
   destroy(AdapterAvailable = true) {
-    if (!this.VoiceConnection)
-      throw TypeError(`No Voice Connection found in Handler!`)
+    if (!this.VoiceConnection) { throw TypeError('No Voice Connection found in Handler!'); }
     const SuccessBooleanResult = this.VoiceConnection.destroy({
       adapterAvailable: AdapterAvailable,
-    })
-    if (!SuccessBooleanResult)
-      throw TypeError(`Voice Connection can't be distroyed!`)
-    else {
-      this.VoiceConnection = null
-      return true
+    });
+    if (!SuccessBooleanResult) { throw TypeError('Voice Connection can\'t be distroyed!'); } else {
+      this.VoiceConnection = null;
+      return true;
     }
   }
 }

@@ -21,18 +21,18 @@ export class SlashCommandHandler {
    * @param {Array} ApplicationCommands Discord API Fetched Application Commands Collection.<Array>
    */
 
-  constructor (
+  constructor(
     client,
     CreateSlashCommandsOptions = {
       guild: undefined,
       global: false,
-      SlashCommands: []
-    }
+      SlashCommands: [],
+    },
   ) {
     this.client = client
     this.guild = CreateSlashCommandsOptions.guild
       ? GuildResolver(client, CreateSlashCommandsOptions.guild, {
-          ifmessage: true
+          ifmessage: true,
         })
       : null
     this.global =
@@ -47,22 +47,22 @@ export class SlashCommandHandler {
    * @returns {Array} SlashCommands - Cooked Slash Command from the Builder
    */
 
-  async set (commands) {
+  async set(commands) {
     this.SlashCommands =
       commands || SlashCommandHandler.#deployed ? null : this.SlashCommands
     if (!this.SlashCommands && SlashCommandHandler.#deployed)
       throw SyntaxError(
-        `Slash Command has been already Deployed with Previous Set Values | Try Setting New Slash Commands`
+        `Slash Command has been already Deployed with Previous Set Values | Try Setting New Slash Commands`,
       )
     else if (!this.SlashCommands)
       throw SyntaxError(
-        `Slash Command has not been Set/Saved | Try Setting Slash Commands - <SlashCommandHandler>.set()`
+        `Slash Command has not been Set/Saved | Try Setting Slash Commands - <SlashCommandHandler>.set()`,
       )
     else if (!this.client.application?.owner)
       await this.client.application?.fetch()
     const SlashCommandInstance = new SlashCommandBuilder(
       Client,
-      this.SlashCommands
+      this.SlashCommands,
     )
     this.SlashCommands = SlashCommandInstance.create()
     if (this.SlashCommands) {
@@ -76,37 +76,37 @@ export class SlashCommandHandler {
    * @returns {this} SlashCommandHandler - Well Formed Class Instance after deployment
    */
 
-  async deploy () {
+  async deploy() {
     if (SlashCommandHandler.#deployed || !this.SlashCommands)
       throw SyntaxError(
-        `No New Slash Command has been Set to Deploy | Try Setting New Slash Commands- <SlashCommandHandler>.set()`
+        `No New Slash Command has been Set to Deploy | Try Setting New Slash Commands- <SlashCommandHandler>.set()`,
       )
     else if (this.ApplicationCommands.length <= 0)
       throw SyntaxError(
-        `No Slash Command has been Set to Deploy | try - <SlashCommandHandler>.set()`
+        `No Slash Command has been Set to Deploy | try - <SlashCommandHandler>.set()`,
       )
     else if (!this.client.application?.owner)
       await this.client.application?.fetch()
     if (this.global) {
       return await this.client.application.commands
         .set(this.SlashCommands)
-        .then(ApplicationCommands => {
+        .then((ApplicationCommands) => {
           SlashCommandHandler.#deployed = true
           this.ApplicationCommands = Array.from(ApplicationCommands.values())
           return this
         })
-        .catch(error => {
+        .catch((error) => {
           throw Error(error)
         })
     } else {
       return await this.client.application.commands
         .set(this.SlashCommands, this.guild.id)
-        .then(ApplicationCommands => {
+        .then((ApplicationCommands) => {
           SlashCommandHandler.#deployed = true
           this.ApplicationCommands = Array.from(ApplicationCommands.values())
           return this
         })
-        .catch(error => {
+        .catch((error) => {
           throw Error(error)
         })
     }
@@ -118,35 +118,35 @@ export class SlashCommandHandler {
    * @returns {Array} ApplicationCommand - Well Formed Data of Appliaction Commands after deployment
    */
 
-  async get (CommandId) {
+  async get(CommandId) {
     if (!SlashCommandHandler.#deployed || !this.SlashCommands)
       throw SyntaxError(
-        `No New Slash Command has been Set to Deploy | Try Setting New Slash Commands- <SlashCommandHandler>.set()`
+        `No New Slash Command has been Set to Deploy | Try Setting New Slash Commands- <SlashCommandHandler>.set()`,
       )
     else if (this.ApplicationCommands.length <= 0)
       throw SyntaxError(
-        `No Slash Command has been Set to Deploy | try - <SlashCommandHandler>.set()`
+        `No Slash Command has been Set to Deploy | try - <SlashCommandHandler>.set()`,
       )
     else if (!this.client.application?.owner)
       await this.client.application?.fetch()
     if (CommandId) {
       return this.client.application.commands
         .fetch(`${CommandId}`)
-        .then(ApplicationCommand => {
+        .then((ApplicationCommand) => {
           this.#HandleApplicationCommandsCache(ApplicationCommand)
           return ApplicationCommand
         })
-        .catch(error => {
+        .catch((error) => {
           throw Error(error)
         })
     } else {
       return this.client.application.commands
         .fetch()
-        .then(ApplicationCommands => {
+        .then((ApplicationCommands) => {
           this.ApplicationCommands = Array.from(ApplicationCommands.values())
           return ApplicationCommands
         })
-        .catch(error => {
+        .catch((error) => {
           throw Error(error)
         })
     }
@@ -158,14 +158,14 @@ export class SlashCommandHandler {
    * @returns {Array} ApplicationCommands - Well Formed Data of Appliaction Commands after deployment
    */
 
-  async destroy (CommandId) {
+  async destroy(CommandId) {
     if (!SlashCommandHandler.#deployed || !this.SlashCommands)
       throw SyntaxError(
-        `No New Slash Command has been Set to Deploy | Try Setting New Slash Commands- <SlashCommandHandler>.set()`
+        `No New Slash Command has been Set to Deploy | Try Setting New Slash Commands- <SlashCommandHandler>.set()`,
       )
     else if (this.ApplicationCommands.length <= 0)
       throw SyntaxError(
-        `No Slash Command has been Set to Deploy | try - <SlashCommandHandler>.set()`
+        `No Slash Command has been Set to Deploy | try - <SlashCommandHandler>.set()`,
       )
     else if (!this.client.application?.owner)
       await this.client.application?.fetch()
@@ -179,7 +179,7 @@ export class SlashCommandHandler {
    * @returns {null} Undefined Value | Null Value
    */
 
-  #HandleApplicationCommandsCache (AppplicationCommand) {
+  #HandleApplicationCommandsCache(AppplicationCommand) {
     var count = 0
     for (count = 0; count < this.ApplicationCommands.length; ++count) {
       if (this.ApplicationCommands[count].id === AppplicationCommand.id) {
@@ -196,7 +196,7 @@ export class SlashCommandHandler {
    * @returns {Array} ApplicationCommands - Well Formed Data of Appliaction Commands after deployment
    */
 
-  #DeleteApplciationCommands (CommandId) {
+  #DeleteApplciationCommands(CommandId) {
     const ApplicationCommands = this.ApplicationCommands
     if (!CommandId) {
       this.client.application.commands
@@ -207,7 +207,7 @@ export class SlashCommandHandler {
           this.SlashCommands = null
           return [ApplicationCommands]
         })
-        .catch(error => {
+        .catch((error) => {
           throw Error(error)
         })
     } else {
@@ -216,11 +216,11 @@ export class SlashCommandHandler {
         if (CommandId && this.ApplicationCommands[count].id === CommandId) {
           return this.client.application.commands
             .delete(`${CommandId}`)
-            .then(ApplicationCommand => {
+            .then((ApplicationCommand) => {
               this.ApplicationCommands[count].splice(count, 1)
               return ApplicationCommand
             })
-            .catch(error => {
+            .catch((error) => {
               throw Error(error)
             })
         }

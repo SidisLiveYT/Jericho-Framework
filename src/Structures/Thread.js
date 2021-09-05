@@ -22,13 +22,13 @@ export class ThreadBuilder {
    * @property {ThreadChannel} thread Thread Collection from Discord API v9
    */
 
-  constructor (
+  constructor(
     ThreadBuilderCreateOptions = {
       Client: undefined,
       channel: undefined,
       guild: undefined,
-      metadata: undefined
-    }
+      metadata: undefined,
+    },
   ) {
     this.Client = ThreadBuilderCreateOptions.Client
     this.ThreadCode = ThreadBuilder.#ThreadInstanceNumber + 1
@@ -44,22 +44,22 @@ export class ThreadBuilder {
    * @returns {object} Thread Instance for Thread-Handler Class .
    */
 
-  async create (
+  async create(
     CreateThreadOptions = {
       channel: undefined,
       metadata: undefined,
       Type: `GUILD_PUBLIC_THREAD`,
       Name: undefined,
       Reason: undefined,
-      AutoArchiveDuration: 0
-    }
+      AutoArchiveDuration: 0,
+    },
   ) {
     if (!CreateThreadOptions)
       throw TypeError(`Invalid Options Detected for Thread Creator`)
     else if (
       CreateThreadOptions.Type &&
       !['private', 'public'].includes(
-        `${CreateThreadOptions.Type.toLowerCase().trim()}`
+        `${CreateThreadOptions.Type.toLowerCase().trim()}`,
       )
     )
       throw TypeError(`Invalid Thread Type is Detected!`)
@@ -77,9 +77,9 @@ export class ThreadBuilder {
             : `GUILD_PUBLIC_THREAD`,
         reason: CreateThreadOptions.Reason
           ? CreateThreadOptions.Reason
-          : `Thread Created by ${this.Client.user.name} on Thread Handler | Jericho Framework`
+          : `Thread Created by ${this.Client.user.name} on Thread Handler | Jericho Framework`,
       })
-      .catch(error => {
+      .catch((error) => {
         throw error
       })
     this.thread = Thread
@@ -92,15 +92,15 @@ export class ThreadBuilder {
    * @returns {Boolean} ture/false Wheather the Condition is working
    */
 
-  destroy (
+  destroy(
     DestroyThreadOptions = {
       Delay: 0,
-      Reason: undefined
-    }
+      Reason: undefined,
+    },
   ) {
     if (!DestroyThreadOptions)
       throw SyntaxError(
-        `Options Variable can't be Undefined , Reason is Compulsory`
+        `Options Variable can't be Undefined , Reason is Compulsory`,
       )
     if (
       DestroyThreadOptions.Delay &&
@@ -109,21 +109,21 @@ export class ThreadBuilder {
     )
       return setTimeout(
         ThreadDeletion(this.thread, DestroyThreadOptions.Reason),
-        parseInt(DestroyThreadOptions.Delay) * 1000
+        parseInt(DestroyThreadOptions.Delay) * 1000,
       )
     else if (DestroyThreadOptions.Reason)
       return ThreadDeletion(this.thread, DestroyThreadOptions.Reason)
     else
       throw SyntaxError(
-        `Options Variable can't be Undefined , Reason is Compulsory`
+        `Options Variable can't be Undefined , Reason is Compulsory`,
       )
 
-    function ThreadDeletion (Thread, Reason) {
+    function ThreadDeletion(Thread, Reason) {
       return Thread.delete(`${Reason ? Reason : `Deleted Thread Instance}`}`)
         .then(() => {
           return true
         })
-        .catch(error => {
+        .catch((error) => {
           throw error
         })
     }
