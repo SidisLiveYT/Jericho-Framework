@@ -28,6 +28,8 @@ export class VoiceHandler {
       LeaveDelay: 0,
       selfDeaf: false,
       selfMute: false,
+      StageTopic: `Jericho-Framework v2`,
+      StageSuppress: true,
     },
   ) {
     this.Client = Client
@@ -44,6 +46,10 @@ export class VoiceHandler {
         : 0
     this.selfDeaf = VoiceHandlerInterfaceOptions.selfDeaf ? true : false
     this.selfMute = VoiceHandlerInterfaceOptions.selfMute ? true : false
+    this.StageTopic = VoiceHandlerInterfaceOptions.StageTopic
+    this.StageSuppress = VoiceHandlerInterfaceOptions.StageSuppress
+      ? true
+      : false
 
     /**
      * @event voiceStateUpdate Voice Update from discord.js v13
@@ -93,6 +99,35 @@ export class VoiceHandler {
         )
           return this.disconnect(OldState.guild.id, this.LeaveDelay)
         else return void null
+      } else if (
+        OldState &&
+        !NewState &&
+        OldState.member.id === this.Client.user.id &&
+        VoiceHandler.#GetVoiceConnection(OldState.guild.id) &&
+        VoiceHandler.#GetVoiceConnection(OldState.guild.id).ActiveChannel
+      ) {
+        return this.join(
+          VoiceHandler.#GetVoiceConnection(OldState.guild.id).ChannelId,
+          {
+            LeaveOnEmpty: VoiceHandler.#GetVoiceConnection(OldState.guild.id)
+              .LeaveOnEmpty,
+            LeaveOnOnlyBot: VoiceHandler.#GetVoiceConnection(OldState.guild.id)
+              .LeaveOnOnlyBot,
+            LeaveOnOnlyUsers: VoiceHandler.#GetVoiceConnection(
+              OldState.guild.id,
+            ).LeaveOnOnlyUsers,
+            LeaveDelay: VoiceHandler.#GetVoiceConnection(OldState.guild.id)
+              .LeaveDelay,
+            selfDeaf: VoiceHandler.#GetVoiceConnection(OldState.guild.id)
+              .selfDeaf,
+            selfMute: VoiceHandler.#GetVoiceConnection(OldState.guild.id)
+              .selfMute,
+            StageTopic: VoiceHandler.#GetVoiceConnection(OldState.guild.id)
+              .StageTopic,
+            StageSuppress: VoiceHandler.#GetVoiceConnection(OldState.guild.id)
+              .StageSuppress,
+          },
+        )
       } else if (
         NewState &&
         !OldState &&
@@ -153,8 +188,6 @@ export class VoiceHandler {
   async join(
     channel,
     JoinVoiceChannelOptions = {
-      StageChannelTitle: `Voice Channel Handler - Jericho Framework`,
-      debug: false,
       Adapter: null,
       LeaveOnEmpty: false,
       LeaveOnOnlyBot: false,
@@ -162,6 +195,9 @@ export class VoiceHandler {
       LeaveDelay: 0,
       selfDeaf: false,
       selfMute: false,
+      StageTopic: `Jericho-Framework v2`,
+      StageSuppress: true,
+      ActiveChannel: false,
     },
   ) {
     if (!channel) throw SyntaxError(`Invalid Voice Type Channel is Detected !`)
@@ -183,6 +219,12 @@ export class VoiceHandler {
       JoinVoiceChannelOptions.LeaveDelay > 0
         ? JoinVoiceChannelOptions.LeaveDelay
         : this.LeaveDelay
+    JoinVoiceChannelOptions.StageTopic =
+      VoiceHandlerInterfaceOptions.StageTopic || this.StageTopic
+    JoinVoiceChannelOptions.StageSuppress = BooleanResolver(
+      JoinVoiceChannelOptions.StageSuppress,
+      this.StageSuppress,
+    )
     JoinVoiceChannelOptions.selfDeaf = BooleanResolver(
       JoinVoiceChannelOptions.LeaveOnEmpty,
       this.LeaveOnEmpty,
@@ -191,19 +233,46 @@ export class VoiceHandler {
       JoinVoiceChannelOptions.LeaveOnEmpty,
       this.LeaveOnEmpty,
     )
+    JoinVoiceChannelOptions.ActiveChannel = BooleanResolver(
+      JoinVoiceChannelOptions.ActiveChannel,
+      false,
+    )
 
+    if (VoiceHandler.#GetVoiceConnection(channel.guild.id)) {
+      const VoiceConnectionInstance = VoiceHandler.#GetVoiceConnection(
+        channel.guild.id,
+      )
+      const NewVoiceConnectionInstance = VoiceConnectionInstance.set(channel, {
+        LeaveOnEmpty: JoinVoiceChannelOptions.LeaveOnEmpty,
+        LeaveOnOnlyBot: JoinVoiceChannelOptions.LeaveOnOnlyBot,
+        LeaveOnOnlyUsers: JoinVoiceChannelOptions.LeaveOnOnlyUsers,
+        LeaveDelay: JoinVoiceChannelOptions.LeaveDelay,
+        selfDeaf: JoinVoiceChannelOptions.selfDeaf,
+        selfMute: JoinVoiceChannelOptions.selfMute,
+        StageSuppress: JoinVoiceChannelOptions.StageSuppress,
+        StageTopic: JoinVoiceChannelOptions.StageTopic,
+        ActiveChannel: JoinVoiceChannelOptions.ActiveChannel,
+      })
+      return VoiceHandler.#RegisterVoiceConnection(
+        channel.guild.id,
+        NewVoiceConnectionInstance,
+      )
+    }
     const VoiceConnectionInstance = new VoiceConnectionBuilder(
       this.Client,
       channel,
       channel.guild,
       Adapter,
       {
-        LeaveOnEmpty: this.LeaveOnEmpty,
-        LeaveOnOnlyBot: this.LeaveOnOnlyBot,
-        LeaveOnOnlyUsers: this.LeaveOnOnlyUsers,
-        LeaveDelay: this.LeaveDelay,
-        selfDeaf: this.selfDeaf,
-        selfMute: this.selfMute,
+        LeaveOnEmpty: JoinVoiceChannelOptions.LeaveOnEmpty,
+        LeaveOnOnlyBot: JoinVoiceChannelOptions.LeaveOnOnlyBot,
+        LeaveOnOnlyUsers: JoinVoiceChannelOptions.LeaveOnOnlyUsers,
+        LeaveDelay: JoinVoiceChannelOptions.LeaveDelay,
+        selfDeaf: JoinVoiceChannelOptions.selfDeaf,
+        selfMute: JoinVoiceChannelOptions.selfMute,
+        StageSuppress: JoinVoiceChannelOptions.StageSuppress,
+        StageTopic: JoinVoiceChannelOptions.StageTopic,
+        ActiveChannel: JoinVoiceChannelOptions.ActiveChannel,
       },
     )
     VoiceConnectionInstance = VoiceConnectionInstance.create()

@@ -1,8 +1,6 @@
-import { joinVoiceChannel, getVoiceConnection } from '@discordjs/voice';
-import {
-  Client, Guild, StageChannel, VoiceChannel,
-} from 'discord.js';
-import { GuildResolver } from '../Utilities/Resolver_Utils.js';
+import { joinVoiceChannel, getVoiceConnection } from '@discordjs/voice'
+import { Client, Guild, StageChannel, VoiceChannel } from 'discord.js'
+import { GuildResolver } from '../Utilities/Resolver_Utils.js'
 
 /**
  * @class VoiceConnectionBuilder - VoiceConnectionInstanceBuilder for Voice Handler for discord.js v13
@@ -30,18 +28,24 @@ export class VoiceConnectionBuilder {
       LeaveDelay: 0,
       selfDeaf: false,
       selfMute: false,
+      StageTopic: `Jericho-Framework v2`,
+      StageSuppress: true,
+      ActiveChannel: false,
     },
   ) {
-    this.Client = Client;
-    this.ChannelId = Channel.id;
-    this.GuildId = Guild.id;
-    this.Adaptar = Adaptar || Guild.voiceAdapterCreator;
-    this.LeaveOnEmpty = ConnectionInterfaceOptions.LeaveOnEmpty;
-    this.LeaveOnOnlyBot = ConnectionInterfaceOptions.LeaveOnOnlyBot;
-    this.LeaveOnOnlyUsers = ConnectionInterfaceOptions.LeaveOnOnlyUsers;
-    this.LeaveDelay = ConnectionInterfaceOptions.LeaveDelay;
-    this.selfDeaf = ConnectionInterfaceOptions.selfDeaf;
-    this.selfMute = ConnectionInterfaceOptions.selfMute;
+    this.Client = Client
+    this.ChannelId = Channel.id
+    this.GuildId = Guild.id
+    this.Adaptar = Adaptar || Guild.voiceAdapterCreator
+    this.LeaveOnEmpty = ConnectionInterfaceOptions.LeaveOnEmpty
+    this.LeaveOnOnlyBot = ConnectionInterfaceOptions.LeaveOnOnlyBot
+    this.LeaveOnOnlyUsers = ConnectionInterfaceOptions.LeaveOnOnlyUsers
+    this.LeaveDelay = ConnectionInterfaceOptions.LeaveDelay
+    this.selfDeaf = ConnectionInterfaceOptions.selfDeaf
+    this.selfMute = ConnectionInterfaceOptions.selfMute
+    this.StageTopic = ConnectionInterfaceOptions.StageTopic
+    this.StageSuppress = ConnectionInterfaceOptions.StageSuppress
+    this.ActiveChannel = ConnectionInterfaceOptions.ActiveChannel
   }
 
   /**
@@ -57,11 +61,12 @@ export class VoiceConnectionBuilder {
         selfDeaf: !!this.selfDeaf,
         selfMute: !!this.selfMute,
         adapterCreator: this.Adaptar,
-      });
-      this.VoiceConnection = VoiceConnection;
-      return this;
+      })
+      this.VoiceConnection = VoiceConnection
+      this.#RegisterStageChannel()
+      return this
     } catch (error) {
-      throw Error(error);
+      throw Error(error)
     }
   }
   /**
@@ -70,12 +75,12 @@ export class VoiceConnectionBuilder {
    */
 
   get() {
-    this.VoiceConnection = getVoiceConnection({ guildId: this.GuildId });
-    const Guild = GuildResolver(this.Client, this.GuildId);
+    this.VoiceConnection = getVoiceConnection({ guildId: this.GuildId })
+    const Guild = GuildResolver(this.Client, this.GuildId)
     if (Guild.me && Guild.me.voice && Guild.me.voice.channel) {
-      this.ChannelId = Guild.me.voice.channel.id;
+      this.ChannelId = Guild.me.voice.channel.id
     }
-    return this;
+    return this
   }
 
   /**
@@ -84,9 +89,13 @@ export class VoiceConnectionBuilder {
    */
 
   disconnect() {
-    if (!this.VoiceConnection) { throw TypeError('No Voice Connection found in Handler!'); }
-    const SuccessBooleanResult = this.VoiceConnection.disconnect();
-    if (!SuccessBooleanResult) { throw TypeError('Voice Connection can\'t be disconnected!'); } else return SuccessBooleanResult;
+    if (!this.VoiceConnection) {
+      throw TypeError('No Voice Connection found in Handler!')
+    }
+    const SuccessBooleanResult = this.VoiceConnection.disconnect()
+    if (!SuccessBooleanResult) {
+      throw TypeError("Voice Connection can't be disconnected!")
+    } else return SuccessBooleanResult
   }
 
   /**
@@ -96,13 +105,116 @@ export class VoiceConnectionBuilder {
    */
 
   destroy(AdapterAvailable = true) {
-    if (!this.VoiceConnection) { throw TypeError('No Voice Connection found in Handler!'); }
+    if (!this.VoiceConnection) {
+      throw TypeError('No Voice Connection found in Handler!')
+    }
     const SuccessBooleanResult = this.VoiceConnection.destroy({
       adapterAvailable: AdapterAvailable,
-    });
-    if (!SuccessBooleanResult) { throw TypeError('Voice Connection can\'t be distroyed!'); } else {
-      this.VoiceConnection = null;
-      return true;
+    })
+    if (!SuccessBooleanResult) {
+      throw TypeError("Voice Connection can't be distroyed!")
+    } else {
+      this.VoiceConnection = null
+      return true
     }
+  }
+
+  /**
+   * @method set Create method for Builder [ Creating Voice Connection for the Handler ]
+   * @param {VoiceChannel | StageChannel} channel Voice Channel Resolve for Voice Connection Builder
+   * @param {object} SetVoiceOptions Object Options Same as per JoinVoiceChannelOptions . for Edit Purpose in Instance
+   * @returns VoiceConnectionBuilder's Instance
+   */
+
+  set(
+    channel,
+    SetVoiceChannelOptions = {
+      Adapter: null,
+      LeaveOnEmpty: false,
+      LeaveOnOnlyBot: false,
+      LeaveOnOnlyUsers: false,
+      LeaveDelay: 0,
+      selfDeaf: false,
+      selfMute: false,
+      StageTopic: `Jericho-Framework v2`,
+      StageSuppress: true,
+      ActiveChannel: false,
+    },
+  ) {
+    this.ChannelId = channel.id
+    this.GuildId = channel.guild.id
+    this.Adaptar = Adaptar || channel.Guild.voiceAdapterCreator
+    this.LeaveOnEmpty = SetVoiceChannelOptions.LeaveOnEmpty
+    this.LeaveOnOnlyBot = SetVoiceChannelOptions.LeaveOnOnlyBot
+    this.LeaveOnOnlyUsers = SetVoiceChannelOptions.LeaveOnOnlyUsers
+    this.LeaveDelay = SetVoiceChannelOptions.LeaveDelay
+    this.selfDeaf = SetVoiceChannelOptions.selfDeaf
+    this.selfMute = SetVoiceChannelOptions.selfMute
+    this.StageTopic = SetVoiceChannelOptions.StageTopic
+    this.StageSuppress = SetVoiceChannelOptions.StageSuppress
+    this.ActiveChannel = SetVoiceChannelOptions.ActiveChannel
+
+    try {
+      const VoiceConnection = joinVoiceChannel({
+        channelId: this.ChannelId,
+        guildId: this.GuildId,
+        selfDeaf: !!this.selfDeaf,
+        selfMute: !!this.selfMute,
+        adapterCreator: this.Adaptar,
+      })
+      this.VoiceConnection = VoiceConnection
+      this.#RegisterStageChannel()
+      return this
+    } catch (error) {
+      throw Error(error)
+    }
+  }
+
+  #RegisterStageChannel() {
+    return void this.Client.channels
+      .fetch(`${this.ChannelId}`)
+      .then((Channel) => {
+        if (Channel.type !== 'GUILD_STAGE_VOICE') return void null
+        else if (
+          Channel.Guild.me &&
+          Channel.Guild.me.voice &&
+          this.StageSuppress
+        ) {
+          return void Channel.Guild.me.voice
+            .setSuppressed(false)
+            .then(() => {
+              if (this.StageTopic) {
+                return void Channel.createStageInstance({
+                  topic: this.StageTopic,
+                  privacyLevel: this.privacyLevel,
+                })
+                  .then(() => {
+                    return true
+                  })
+                  .catch((error) => {
+                    throw error
+                  })
+              } else return true
+            })
+            .catch((error) => {
+              throw error
+            })
+        }
+        if (this.StageTopic) {
+          return void Channel.createStageInstance({
+            topic: this.StageTopic,
+            privacyLevel: this.privacyLevel,
+          })
+            .then(() => {
+              return true
+            })
+            .catch((error) => {
+              throw error
+            })
+        } else return true
+      })
+      .catch((error) => {
+        throw error
+      })
   }
 }
