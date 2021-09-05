@@ -18,7 +18,7 @@ Jericho-Framework is a Framework Build for Jericho Discord Bot Requirements and 
 
 ## Installation
 
-**Node.js 15 or newer is required.**  
+**Node.js 15 or newer is required.**
 
 ```
 npm install jericho-framework
@@ -26,7 +26,9 @@ npm install jericho-framework
 
 ### Optional packages
 
-- [discord.js v13](https://www.npmjs.com/package/discord.js) for major Library Support for Discord API 
+- [discord.js v13](https://www.npmjs.com/package/discord.js) for major Library Support for Discord API
+- [@discordjs/voice](https://www.npmjs.com/package/@discordjs/voice) for major Voice Support for Discord API
+
 ```
 npm install discord.js@latest
 ```
@@ -34,9 +36,10 @@ npm install discord.js@latest
 ## Example usage
 
 Register a Thread Handler for Discord API:
+
 ```js
 import { ThreadHandler } from 'jericho-framework';
-const ChannelInstance = new ThreadHandler(Client, { 
+const ChannelInstance = new ThreadHandler(Client, {
      guild : <GuildResolve>,
      channel: <ChannelResolve>,
      metdata: <Saved-Data> || null,
@@ -52,6 +55,7 @@ const ThreadInstance = ChannelInstance.CreateThread({
 ```
 
 Get and Destroy Handler:
+
 ```js
 const ThreadInstances = ChannelInstance.GetThreadInstances(ThreadInstance.ThreadCode,<Amount of Instances>);
 
@@ -62,7 +66,9 @@ const DestroyThread = ChannelInstance.DestroyThread(ThreadInstance.ThreadCode,{
 ```
 
 Structure of Thread-Instance and Channel-Instance :
+
 ### Thread Instance
+
 ```
 {
     guild,
@@ -75,6 +81,7 @@ Structure of Thread-Instance and Channel-Instance :
 ```
 
 ### Channel Instance
+
 ```
 {
     Client,
@@ -86,13 +93,72 @@ Structure of Thread-Instance and Channel-Instance :
 }
 ```
 
+Register a Slash Command Handler for Discord API:
+
+```js
+import { SlashCommandHandler } from 'jericho-framework';
+const SlashInstance = new SlashCommandHandler(Client, {
+     guild : <GuildResolve>, || <message> | <channel> | <guild> | <guildId>
+});
+SlashInstance.set(<Array of Slash Commands>);
+SlashInstance.deploy();
+SlashInstance.destroy(<CommandId || null>);
+SlashInstance.get(<CommandId || null>);
+```
+
+Structure of Slash Commands :
+
+### Slash Commands
+
+```
+{
+    guild,
+    SlashCommands,
+    ApplicationCommands,
+    global,
+    Client,
+}
+```
+
+Jericho-Framework Utilities :
+It can Support any Resolve including IDs too
+
+### Resolvers
+
+```
+const Channel = ChannelResolver(<Channel-Resolve>,{
+  ifmessage: true,
+  type:text
+});
+
+const Guild = GuildResolver(<Guild-Resolve>,{
+  ifmessage: true,
+});
+```
+
+Register a Void Handler for Discord API:
+
+```js
+import { VoiceHandler } from 'jericho-framework'
+const Voice_Handler = new VoiceHandler(Client, {
+  LeaveOnEmpty: true,
+})
+Voice_Handler.disconnect()
+Voice_Handler.destroy()
+Voice_Handler.get()
+```
+
+Structure of Void Connection is Same as Connection in "@discordjs/voice"
+
 ## Links
 
-- [Website](www.jerichobot.xyz) ([source](https://github.com/SidisLiveYT/Jericho-Framework.git))
+- [Website](www.jerichobot.xyz)
+- [Source Code](https://github.com/SidisLiveYT/Jericho-Framework.git)
 - [Discord.js Discord server](https://discord.gg/djs)
 - [Discord API Discord server](https://discord.gg/discord-api)
-- [GitHub](https://github.com/SidisLiveYT/Jericho-Framework)
-- [NPM](https://www.npmjs.com/package/jericho-framework)
+- [GitHub Repo Link](https://github.com/SidisLiveYT/Jericho-Framework)
+- [NPM Package](https://www.npmjs.com/package/jericho-framework)
+- [Yarn Package](https://yarn.pm/jericho-framework)
 
 ## Contributing
 
