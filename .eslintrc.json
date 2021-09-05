@@ -9,6 +9,8 @@
     "no-use-before-define": "off",
     "import/named": "off",
     "import/extensions": "off",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "no-unused-vars": "off",
+    "no-shadow": "off"
   }
 }
