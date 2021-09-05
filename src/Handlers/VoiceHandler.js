@@ -1,8 +1,8 @@
 import {
   ChannnelResolver,
-  BooleanResolver
+  BooleanResolver,
 } from '../Utilities/Resolver_Utils.js'
-import { StageChannel, VoiceChannel, Client, Guild } from 'discord.js'
+import { StageChannel, VoiceChannel, Client } from 'discord.js'
 import { VoiceConnectionBuilder } from '../Structures/VoiceConnection.js'
 import { Snowflake } from 'discord-api-types'
 
@@ -19,7 +19,7 @@ export class VoiceHandler {
    * @param {object} VoiceHandlerOptions Voice handler Interface options for class VoiceHandler
    */
 
-  constructor (
+  constructor(
     Client,
     VoiceHandlerInterfaceOptions = {
       LeaveOnEmpty: false,
@@ -27,8 +27,8 @@ export class VoiceHandler {
       LeaveOnOnlyUsers: false,
       LeaveDelay: 0,
       selfDeaf: false,
-      selfMute: false
-    }
+      selfMute: false,
+    },
   ) {
     this.Client = Client
     this.LeaveOnEmpty = VoiceHandlerInterfaceOptions.LeaveOnEmpty ? true : false
@@ -44,7 +44,102 @@ export class VoiceHandler {
         : 0
     this.selfDeaf = VoiceHandlerInterfaceOptions.selfDeaf ? true : false
     this.selfMute = VoiceHandlerInterfaceOptions.selfMute ? true : false
+
+    /**
+     * @event voiceStateUpdate Voice Update from discord.js v13
+     * @param OldState old State in Voice Channel
+     * @param NewState new State in Voice Channel
+     */
+
+    this.Client.on('voiceStateUpdate', (OldState, NewState) => {
+      if (
+        OldState &&
+        !NewState &&
+        OldState.member.id !== this.Client.user.id &&
+        VoiceHandler.#GetVoiceConnection(OldState.guild.id)
+      ) {
+        const UserChecker = (member) => !member.user.bot
+        const BotChecker = (member) => member.user.bot
+        if (
+          OldState.guild.me &&
+          OldState.guild.me.voice &&
+          OldState.guild.me.voice.channel &&
+          OldState.guild.me.voice.channel.members &&
+          OldState.guild.me.voice.channel.members.size <= 1 &&
+          OldState.guild.me.voice.channel.members.has(`${Client.user.id}`) &&
+          this.LeaveOnEmpty
+        )
+          return this.disconnect(OldState.guild.id, this.LeaveDelay)
+        else if (
+          OldState.guild.me &&
+          OldState.guild.me.voice &&
+          OldState.guild.me.voice.channel &&
+          OldState.guild.me.voice.channel.members &&
+          OldState &&
+          OldState.guild.me.voice.channel.members.some(UserChecker) &&
+          !OldState.guild.me.voice.channel.members.some(BotChecker) &&
+          this.LeaveOnOnlyUsers
+        )
+          return this.disconnect(OldState.guild.id, this.LeaveDelay)
+        else if (
+          OldState.guild.me &&
+          OldState.guild.me.voice &&
+          OldState.guild.me.voice.channel &&
+          OldState.guild.me.voice.channel.members &&
+          OldState &&
+          !OldState.guild.me.voice.channel.members.some(UserChecker) &&
+          OldState.guild.me.voice.channel.members.some(BotChecker) &&
+          this.LeaveOnOnlyBot
+        )
+          return this.disconnect(OldState.guild.id, this.LeaveDelay)
+        else return void null
+      } else if (
+        NewState &&
+        !OldState &&
+        VoiceHandler.#GetVoiceConnection(NewState.guild.id)
+      ) {
+        const UserChecker = (member) => !member.user.bot
+        const BotChecker = (member) => member.user.bot
+        if (
+          NewState.guild.me &&
+          NewState.guild.me.voice &&
+          NewState.guild.me.voice.channel &&
+          NewState.guild.me.voice.channel.members &&
+          NewState.guild.me.voice.channel.members.size <= 1 &&
+          NewState.guild.me.voice.channel.members.has(`${Client.user.id}`) &&
+          this.LeaveOnEmpty
+        )
+          return this.disconnect(NewState.guild.id, this.LeaveDelay)
+        else if (
+          NewState.guild.me &&
+          NewState.guild.me.voice &&
+          NewState.guild.me.voice.channel &&
+          NewState.guild.me.voice.channel.members &&
+          NewState &&
+          NewState.guild.me.voice.channel.members.some(UserChecker) &&
+          !NewState.guild.me.voice.channel.members.some(BotChecker) &&
+          this.LeaveOnOnlyUsers
+        )
+          return this.disconnect(NewState.guild.id, this.LeaveDelay)
+        else if (
+          NewState.guild.me &&
+          NewState.guild.me.voice &&
+          NewState.guild.me.voice.channel &&
+          NewState.guild.me.voice.channel.members &&
+          NewState &&
+          !NewState.guild.me.voice.channel.members.some(UserChecker) &&
+          NewState.guild.me.voice.channel.members.some(BotChecker) &&
+          this.LeaveOnOnlyBot
+        )
+          return this.disconnect(NewState.guild.id, this.LeaveDelay)
+        else return void null
+      }
+    })
   }
+
+  /**
+   * @property {object} #VoiceConnectionRecords - Cache Value of Voice Connections
+   */
 
   static #VoiceConnectionRecords = {}
 
@@ -55,7 +150,7 @@ export class VoiceHandler {
    * @return
    */
 
-  async join (
+  async join(
     channel,
     JoinVoiceChannelOptions = {
       StageChannelTitle: `Voice Channel Handler - Jericho Framework`,
@@ -66,23 +161,23 @@ export class VoiceHandler {
       LeaveOnOnlyUsers: false,
       LeaveDelay: 0,
       selfDeaf: false,
-      selfMute: false
-    }
+      selfMute: false,
+    },
   ) {
     if (!channel) throw SyntaxError(`Invalid Voice Type Channel is Detected !`)
     else channel = ChannnelResolver(this.Client, channel, { type: 'allvoice' })
     //Updating Class Properties
     JoinVoiceChannelOptions.LeaveOnEmpty = BooleanResolver(
       JoinVoiceChannelOptions.LeaveOnEmpty,
-      this.LeaveOnEmpty
+      this.LeaveOnEmpty,
     )
     JoinVoiceChannelOptions.LeaveOnOnlyBot = BooleanResolver(
       JoinVoiceChannelOptions.LeaveOnEmpty,
-      this.LeaveOnEmpty
+      this.LeaveOnEmpty,
     )
     JoinVoiceChannelOptions.LeaveOnOnlyUsers = BooleanResolver(
       JoinVoiceChannelOptions.LeaveOnEmpty,
-      this.LeaveOnEmpty
+      this.LeaveOnEmpty,
     )
     JoinVoiceChannelOptions.LeaveDelay =
       JoinVoiceChannelOptions.LeaveDelay > 0
@@ -90,11 +185,11 @@ export class VoiceHandler {
         : this.LeaveDelay
     JoinVoiceChannelOptions.selfDeaf = BooleanResolver(
       JoinVoiceChannelOptions.LeaveOnEmpty,
-      this.LeaveOnEmpty
+      this.LeaveOnEmpty,
     )
     JoinVoiceChannelOptions.selfMute = BooleanResolver(
       JoinVoiceChannelOptions.LeaveOnEmpty,
-      this.LeaveOnEmpty
+      this.LeaveOnEmpty,
     )
 
     const VoiceConnectionInstance = new VoiceConnectionBuilder(
@@ -108,32 +203,38 @@ export class VoiceHandler {
         LeaveOnOnlyUsers: this.LeaveOnOnlyUsers,
         LeaveDelay: this.LeaveDelay,
         selfDeaf: this.selfDeaf,
-        selfMute: this.selfMute
-      }
+        selfMute: this.selfMute,
+      },
     )
     VoiceConnectionInstance = VoiceConnectionInstance.create()
     return VoiceHandler.#RegisterVoiceConnection(
       channel.guild.id,
-      VoiceConnectionInstance
+      VoiceConnectionInstance,
     )
   }
 
   /**
    * @method disconnect Disconnect Voice Connection on Discord Server
    * @param {Snowflake} GuildId Guild.id Snowflake for Getter Private method
+   * @param {Number} Delay Disconnect Delay in Number in Seconds
+   * @returns {Boolean} true if Disconnect is Successfull
    */
 
-  disconnect (GuildId) {
+  disconnect(GuildId, Delay = 0) {
     const VoiceConnectionInstance = VoiceHandler.#GetVoiceConnection(GuildId)
     if (VoiceConnectionInstance && VoiceConnectionInstance.disconnect)
       throw Error(
-        `[Connection is already Disconnected] : Please Connect to Channel`
+        `[Connection is already Disconnected] : Please Connect to Channel`,
       )
     else if (!VoiceConnectionInstance)
       throw Error(
-        `[Connection is already Destroyed] : Please Connect to Channel`
+        `[Connection is already Destroyed] : Please Connect to Channel`,
       )
-    VoiceConnectionInstance.disconnect()
+    if (Delay && Delay !== 0)
+      return setTimeout(() => {
+        return VoiceConnectionInstance.disconnect()
+      }, Delay)
+    else return VoiceConnectionInstance.disconnect()
   }
 
   /**
@@ -142,15 +243,15 @@ export class VoiceHandler {
    * @param {Boolean} AdapterAvailable Boolean Checker if Adaptar is Required
    */
 
-  destroy (GuildId, AdapterAvailable = true) {
+  destroy(GuildId, AdapterAvailable = true) {
     const VoiceConnectionInstance = VoiceHandler.#GetVoiceConnection(GuildId)
     if (VoiceConnectionInstance && VoiceConnectionInstance.disconnect)
       throw Error(
-        `[Connection is already Disconnected] : Please Connect to Channel`
+        `[Connection is already Disconnected] : Please Connect to Channel`,
       )
     else if (!VoiceConnectionInstance)
       throw Error(
-        `[Connection is already Destroyed] : Please Connect to Channel`
+        `[Connection is already Destroyed] : Please Connect to Channel`,
       )
     VoiceConnectionInstance.destroy(AdapterAvailable)
     return VoiceHandler.#DestroyVoiceConnection(GuildId)
@@ -161,11 +262,11 @@ export class VoiceHandler {
    * @param {Snowflake} GuildId Guild.id Snowflake for Getter Private method
    */
 
-  get (GuildId) {
+  get(GuildId) {
     const VoiceConnectionInstance = VoiceHandler.#GetVoiceConnection(GuildId)
     if (!VoiceConnectionInstance)
       throw Error(
-        `[Connection is already Destroyed] : Please Connect to Channel`
+        `[Connection is already Destroyed] : Please Connect to Channel`,
       )
     return VoiceConnectionInstance.get()
   }
@@ -176,7 +277,7 @@ export class VoiceHandler {
    * @param {object} VoiceConnectionInstance Builder Class Instance for Cache
    */
 
-  static #RegisterVoiceConnection (GuildId, VoiceConnectionInstance) {
+  static #RegisterVoiceConnection(GuildId, VoiceConnectionInstance) {
     VoiceHandler.#VoiceConnectionRecords[
       `"${GuildId}"`
     ] = VoiceConnectionInstance
@@ -188,8 +289,16 @@ export class VoiceHandler {
    * @param {Snowflake} GuildId Guild.id Snowflake for Getter Private method
    */
 
-  static #GetVoiceConnection (GuildId) {
-    return VoiceHandler.#VoiceConnectionRecords[`"${GuildId}"`]
+  static #GetVoiceConnection(GuildId) {
+    const VoiceConnectionInstance =
+      VoiceHandler.#VoiceConnectionRecords[`"${GuildId}"`]
+    if (VoiceConnectionInstance) {
+      VoiceConnectionInstance = VoiceConnectionInstance.get()
+      VoiceHandler.#VoiceConnectionRecords[
+        `"${GuildId}"`
+      ] = VoiceConnectionInstance
+    }
+    return VoiceConnectionInstance
   }
 
   /**
@@ -197,7 +306,7 @@ export class VoiceHandler {
    * @param {Snowflake} GuildId Guild.id Snowflake for Getter Private method
    */
 
-  static #DestroyVoiceConnection (GuildId) {
+  static #DestroyVoiceConnection(GuildId) {
     VoiceHandler.#VoiceConnectionRecords[`"${GuildId}"`] = null
     return true
   }

@@ -1,5 +1,6 @@
 import { joinVoiceChannel, getVoiceConnection } from '@discordjs/voice'
 import { Client, Guild, StageChannel, VoiceChannel } from 'discord.js'
+import { GuildResolver } from '../Utilities/Resolver_Utils.js'
 
 /**
  * @class VoiceConnectionBuilder - VoiceConnectionInstanceBuilder for Voice Handler for discord.js v13
@@ -15,7 +16,7 @@ export class VoiceConnectionBuilder {
    * @param {object} ConnectioneOptions Interface Options for Builder
    */
 
-  constructor (
+  constructor(
     Client,
     Channel,
     Guild,
@@ -26,8 +27,8 @@ export class VoiceConnectionBuilder {
       LeaveOnOnlyUsers: false,
       LeaveDelay: 0,
       selfDeaf: false,
-      selfMute: false
-    }
+      selfMute: false,
+    },
   ) {
     this.Client = Client
     this.ChannelId = Channel.id
@@ -46,14 +47,14 @@ export class VoiceConnectionBuilder {
    * @returns VoiceConnectionBuilder's Instance
    */
 
-  create () {
+  create() {
     try {
       const VoiceConnection = joinVoiceChannel({
         channelId: this.ChannelId,
         guildId: this.GuildId,
         selfDeaf: this.selfDeaf ? true : false,
         selfMute: this.selfMute ? true : false,
-        adapterCreator: Adaptar ? Adaptar : this.Adaptar
+        adapterCreator: Adaptar ? Adaptar : this.Adaptar,
       })
       this.VoiceConnection = VoiceConnection
       return this
@@ -66,8 +67,12 @@ export class VoiceConnectionBuilder {
    * @returns VoiceConnectionBuilder
    */
 
-  get () {
+  get() {
     this.VoiceConnection = getVoiceConnection({ guildId: this.GuildId })
+    const Guild = GuildResolver(this.Client, this.GuildId)
+    if (Guild.me && Guild.me.voice && Guild.me.voice.channel) {
+      this.ChannelId = Guild.me.voice.channel.id
+    }
     return this
   }
 
@@ -76,7 +81,7 @@ export class VoiceConnectionBuilder {
    * @returns {Boolean} true if the Conenction Disconnect Successfull
    */
 
-  disconnect () {
+  disconnect() {
     if (!this.VoiceConnection)
       throw TypeError(`No Voice Connection found in Handler!`)
     const SuccessBooleanResult = this.VoiceConnection.disconnect()
@@ -91,11 +96,11 @@ export class VoiceConnectionBuilder {
    * @returns {Boolean} true if the Conenction Destroy Successfull
    */
 
-  destroy (AdapterAvailable = true) {
+  destroy(AdapterAvailable = true) {
     if (!this.VoiceConnection)
       throw TypeError(`No Voice Connection found in Handler!`)
     const SuccessBooleanResult = this.VoiceConnection.destroy({
-      adapterAvailable: AdapterAvailable
+      adapterAvailable: AdapterAvailable,
     })
     if (!SuccessBooleanResult)
       throw TypeError(`Voice Connection can't be distroyed!`)
