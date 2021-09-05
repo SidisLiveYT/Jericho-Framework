@@ -27,6 +27,7 @@ npm install jericho-framework
 ### Optional packages
 
 - [discord.js v13](https://www.npmjs.com/package/discord.js) for major Library Support for Discord API
+- [@discordjs/voice](https://www.npmjs.com/package/@discordjs/voice) for major Voice Support for Discord API
 
 ```
 npm install discord.js@latest
@@ -134,6 +135,20 @@ const Guild = GuildResolver(<Guild-Resolve>,{
   ifmessage: true,
 });
 ```
+
+Register a Void Handler for Discord API:
+
+```js
+import { VoiceHandler } from 'jericho-framework'
+const Voice_Handler = new VoiceHandler(Client, {
+  LeaveOnEmpty: true,
+})
+Voice_Handler.disconnect()
+Voice_Handler.destroy()
+Voice_Handler.get()
+```
+
+Structure of Void Connection is Same as Connection in "@discordjs/voice"
 
 ## Links
 

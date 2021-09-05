@@ -182,7 +182,7 @@ export class VoiceHandler {
    * @method join - Voice Handler for discord.js v13
    * @param {StageChannel | VoiceChannel} channel Discord API Client from discord.js v13
    * @param {object} JoinVoiceOptions Voice handler Interface options for class VoiceHandler
-   * @return
+   * @return {VoiceConnection} Voice Connection from "@discordjs/voice"
    */
 
   async join(
