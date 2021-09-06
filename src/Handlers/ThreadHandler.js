@@ -9,12 +9,12 @@ const {
   ChannnelResolver,
   GuildResolver,
 } = require('../Utilities/Resolver_Utils.js');
-const { ThreadBuilder } = require('../Structures/Thread.js');
+const ThreadBuilder = require('../Structures/Thread.js');
 
 /**
  * @class ThreadHandler - Thread handlers for Discord API
  * @param {Client} Client Discord API Client from discord.js v13
- * @param {object} ThreadClassCreateOptions Default Options for Thread ThreadHandler
+ * @param {object} ThreadHandlerIntefaceOptions Default Options for Thread ThreadHandler
  */
 
 module.exports = class ThreadHandler {
@@ -25,14 +25,12 @@ module.exports = class ThreadHandler {
   /**
    * @constructor
    * @param {Client} Client Discord API Client from discord.js v13
-   * @param {Guild} guild Guild Resolve from Discord.js v13
-   * @param {GuildChannel} channel Channel Resolve from Discord.js v13
-   * @param {object} metadata Extra Stuff to check or Cache Data
+   * @param {object} ThreadHandlerIntefaceOptions ThreadHandlerInterfaceOptions
    */
 
   constructor(
     Client,
-    ThreadClassCreateOptions = {
+    ThreadHandlerIntefaceOptions = {
       guild: undefined,
       channel: undefined,
       metadata: null,
@@ -40,14 +38,14 @@ module.exports = class ThreadHandler {
   ) {
     this.Client = Client;
     this.ChannelCode = ++ThreadHandler.#ChannelInstancesNumber;
-    this.guild = GuildResolver(Client, ThreadClassCreateOptions.guild, {
+    this.guild = GuildResolver(Client, ThreadHandlerIntefaceOptions.guild, {
       ifmessage: true,
     });
-    this.channel = ChannnelResolver(Client, ThreadClassCreateOptions.channel, {
+    this.channel = ChannnelResolver(Client, ThreadHandlerIntefaceOptions.channel, {
       type: 'text',
       ifmessage: true,
     });
-    this.metadata = ThreadClassCreateOptions.metadata;
+    this.metadata = ThreadHandlerIntefaceOptions.metadata;
     ThreadHandler.#ThreadInstanceRecords[
       `'${ThreadHandler.#ChannelInstancesNumber}'`
     ] = [];
@@ -89,7 +87,7 @@ module.exports = class ThreadHandler {
 
   /**
    * @method CreateThread Create Method method of the Channel Class
-   * @param {object} ThreadOptions Options to create Thread for Particular Server and Channel
+   * @param {object} CreateThreadOptions Options to create Thread for Particular Server and Channel
    * @returns {object} ThreadInstance - ThreadInstance , Fetched from Class Instance .
    */
 

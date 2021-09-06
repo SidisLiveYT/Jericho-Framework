@@ -12,12 +12,8 @@ module.exports = class ThreadBuilder {
   static #ThreadInstanceNumber = 0
 
   /**
-   * @property {Client} Client Discord API Client from discord.js v13
-   * @property {Number} ThreadCode Thread-main Channel's Code for Instance get method
-   * @property {GuildChannel} channel Channel Resolve from Discord.js v13
-   * @property {Guild} guild Guild Resolve from Discord.js v13
-   * @property {object} metadata Extra Stuff to check or Cache Data
-   * @property {ThreadChannel} thread Thread Collection from Discord API v9
+   * @constructor
+   * @param ThreadBuilderCreateOptions Thread Bulder Options
    */
 
   constructor(

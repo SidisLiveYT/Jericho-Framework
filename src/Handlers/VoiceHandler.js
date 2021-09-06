@@ -3,7 +3,7 @@ const {
   ChannnelResolver,
   BooleanResolver,
 } = require('../Utilities/Resolver_Utils.js');
-const { VoiceConnectionBuilder } = require('../Structures/VoiceConnection.js');
+const VoiceConnectionBuilder = require('../Structures/VoiceConnection.js');
 
 /**
  * @class VoiceHandler - Voice Handler for discord.js v13
@@ -15,7 +15,7 @@ module.exports = class VoiceHandler {
   /**
    * @constructor VoiceHandler - Voice Handler for discord.js v13
    * @param {Client} Client Discord API Client from discord.js v13
-   * @param {object} VoiceHandlerOptions Voice handler Interface options for class VoiceHandler
+   * @param {object} VoiceHandlerInterfaceOptions Voice handler Interface options for class VoiceHandler
    */
 
   constructor(
