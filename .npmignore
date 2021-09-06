@@ -8,3 +8,5 @@ LICENSE
 .github/
 .gitignore
 example/
+.babelrc
+.eslintignore

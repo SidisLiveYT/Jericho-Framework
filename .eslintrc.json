@@ -1,7 +1,9 @@
 {
+  "root": true,
+  "parser": "@babel/eslint-parser",
   "extends": "airbnb-base",
   "env": {
-    "mocha": true
+    "node": true
   },
   "rules": {
     "class-methods-use-this": "off",
@@ -11,6 +13,12 @@
     "import/extensions": "off",
     "import/prefer-default-export": "off",
     "no-unused-vars": "off",
-    "no-shadow": "off"
+    "no-shadow": "off",
+    "no-return-await": "off",
+    "no-void": "off",
+    "no-plusplus": "off",
+    "no-loop-func": "off",
+    "no-param-reassign": "off",
+    "radix": "off"
   }
 }
