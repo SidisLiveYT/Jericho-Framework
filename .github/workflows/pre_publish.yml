@@ -25,7 +25,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
-    - run: npm run lint
+    - run: npm run lint:fix
   publish:
     runs-on: "ubuntu-latest"
     if: ${{ github.ref == 'refs/heads/beta' }}
