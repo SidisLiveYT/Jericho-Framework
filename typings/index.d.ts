@@ -10,7 +10,11 @@ import {
   VoiceChannel,
   StageChannel
 } from 'discord.js'
-import { ThreadInstance, SlashCommandHandlerInstance } from './Instances'
+import {
+  ThreadInstance,
+  SlashCommandHandlerInstance,
+  RawSlashCommand
+} from './Instances'
 
 export class ThreadHandler {
   public constructor (
@@ -57,7 +61,7 @@ export class SlashCommandHandler {
       | {
           guild: Guild | Message | Channel | Snowflake | String
           global: false
-          SlashCommands: []
+          SlashCommands: Array<RawSlashCommand>
         }
       | null
       | undefined

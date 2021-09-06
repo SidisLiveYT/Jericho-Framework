@@ -1,5 +1,7 @@
 import {
-  ApplicationCommand,
+  ApplicationCommandData,
+  ApplicationCommandOptionData,
+  ApplicationCommandType,
   Channel,
   Client,
   Guild,
@@ -33,14 +35,24 @@ export type SlashCommandHandlerInstance = {
   readonly client: Client
   readonly guild: Guild | Message | Channel | Snowflake | String
   readonly global: Boolean
-  readonly SlashCommands: Array<ApplicationCommand>
-  readonly ApplicationCommands: Array<ApplicationCommand>
-  set(commands: []): Promise<ApplicationCommand> | undefined
+  readonly SlashCommands: Array<RawSlashCommand>
+  readonly ApplicationCommands: Array<ApplicationCommandType>
+  set(commands: []): Promise<ApplicationCommandType> | undefined
   deploy(): Promise<SlashCommandHandlerInstance> | undefined
   get(
     CommandId: Number | Snowflake | String
-  ): Promise<ApplicationCommand> | undefined
+  ): Promise<ApplicationCommandType> | undefined
   destroy(
     CommandId: Number | Snowflake | String
-  ): Array<Promise<ApplicationCommand>> | undefined
+  ): Array<Promise<ApplicationCommandType>> | undefined
 }
+
+export type RawSlashCommand =
+  | ApplicationCommandData
+  | {
+      name: String
+      description: String
+      type: ApplicationCommandType
+      options: Array<Promise<ApplicationCommandOptionData>>
+      defaultPermission: Boolean
+    }
