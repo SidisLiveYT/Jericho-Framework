@@ -1,5 +1,3 @@
-'use strict'
-
 module.exports = {
   ThreadHandler: require('./Handlers/ThreadHandler.js'),
   SlashCommandHandler: require('./Handlers/SlashCommandHandler.js'),
@@ -7,4 +5,4 @@ module.exports = {
   ChannnelResolver: require('./Utilities/Resolver_Utils.js').ChannnelResolver,
   VoiceHandler: require('./Handlers/VoiceHandler.js'),
   BooleanResolver: require('./Utilities/Resolver_Utils.js').BooleanResolver,
-}
+};

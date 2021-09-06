@@ -1,6 +1,8 @@
-const { joinVoiceChannel, getVoiceConnection } = require('@discordjs/voice')
-const { Client, Guild, StageChannel, VoiceChannel } = require('discord.js')
-const { GuildResolver } = require('../Utilities/Resolver_Utils.js')
+const { joinVoiceChannel, getVoiceConnection } = require('@discordjs/voice');
+const {
+  Client, Guild, StageChannel, VoiceChannel,
+} = require('discord.js');
+const { GuildResolver } = require('../Utilities/Resolver_Utils.js');
 
 /**
  * @class VoiceConnectionBuilder - VoiceConnectionInstanceBuilder for Voice Handler for discord.js v13
@@ -33,19 +35,19 @@ module.exports = class VoiceConnectionBuilder {
       ActiveChannel: false,
     },
   ) {
-    this.Client = Client
-    this.ChannelId = Channel.id
-    this.GuildId = Guild.id
-    this.Adaptar = Adaptar || Guild.voiceAdapterCreator
-    this.LeaveOnEmpty = ConnectionInterfaceOptions.LeaveOnEmpty
-    this.LeaveOnOnlyBot = ConnectionInterfaceOptions.LeaveOnOnlyBot
-    this.LeaveOnOnlyUsers = ConnectionInterfaceOptions.LeaveOnOnlyUsers
-    this.LeaveDelay = ConnectionInterfaceOptions.LeaveDelay
-    this.selfDeaf = ConnectionInterfaceOptions.selfDeaf
-    this.selfMute = ConnectionInterfaceOptions.selfMute
-    this.StageTopic = ConnectionInterfaceOptions.StageTopic
-    this.StageSuppress = ConnectionInterfaceOptions.StageSuppress
-    this.ActiveChannel = ConnectionInterfaceOptions.ActiveChannel
+    this.Client = Client;
+    this.ChannelId = Channel.id;
+    this.GuildId = Guild.id;
+    this.Adaptar = Adaptar || Guild.voiceAdapterCreator;
+    this.LeaveOnEmpty = ConnectionInterfaceOptions.LeaveOnEmpty;
+    this.LeaveOnOnlyBot = ConnectionInterfaceOptions.LeaveOnOnlyBot;
+    this.LeaveOnOnlyUsers = ConnectionInterfaceOptions.LeaveOnOnlyUsers;
+    this.LeaveDelay = ConnectionInterfaceOptions.LeaveDelay;
+    this.selfDeaf = ConnectionInterfaceOptions.selfDeaf;
+    this.selfMute = ConnectionInterfaceOptions.selfMute;
+    this.StageTopic = ConnectionInterfaceOptions.StageTopic;
+    this.StageSuppress = ConnectionInterfaceOptions.StageSuppress;
+    this.ActiveChannel = ConnectionInterfaceOptions.ActiveChannel;
   }
 
   /**
@@ -61,12 +63,12 @@ module.exports = class VoiceConnectionBuilder {
         selfDeaf: !!this.selfDeaf,
         selfMute: !!this.selfMute,
         adapterCreator: this.Adaptar,
-      })
-      this.VoiceConnection = VoiceConnection
-      this.#RegisterStageChannel()
-      return this
+      });
+      this.VoiceConnection = VoiceConnection;
+      this.#RegisterStageChannel();
+      return this;
     } catch (error) {
-      throw Error(error)
+      throw Error(error);
     }
   }
   /**
@@ -75,12 +77,12 @@ module.exports = class VoiceConnectionBuilder {
    */
 
   get() {
-    this.VoiceConnection = getVoiceConnection({ guildId: this.GuildId })
-    const Guild = GuildResolver(this.Client, this.GuildId)
+    this.VoiceConnection = getVoiceConnection({ guildId: this.GuildId });
+    const Guild = GuildResolver(this.Client, this.GuildId);
     if (Guild.me && Guild.me.voice && Guild.me.voice.channel) {
-      this.ChannelId = Guild.me.voice.channel.id
+      this.ChannelId = Guild.me.voice.channel.id;
     }
-    return this
+    return this;
   }
 
   /**
@@ -90,12 +92,12 @@ module.exports = class VoiceConnectionBuilder {
 
   disconnect() {
     if (!this.VoiceConnection) {
-      throw TypeError('No Voice Connection found in Handler!')
+      throw TypeError('No Voice Connection found in Handler!');
     }
-    const SuccessBooleanResult = this.VoiceConnection.disconnect()
+    const SuccessBooleanResult = this.VoiceConnection.disconnect();
     if (!SuccessBooleanResult) {
-      throw TypeError("Voice Connection can't be disconnected!")
-    } else return SuccessBooleanResult
+      throw TypeError("Voice Connection can't be disconnected!");
+    } else return SuccessBooleanResult;
   }
 
   /**
@@ -106,16 +108,16 @@ module.exports = class VoiceConnectionBuilder {
 
   destroy(AdapterAvailable = true) {
     if (!this.VoiceConnection) {
-      throw TypeError('No Voice Connection found in Handler!')
+      throw TypeError('No Voice Connection found in Handler!');
     }
     const SuccessBooleanResult = this.VoiceConnection.destroy({
       adapterAvailable: AdapterAvailable,
-    })
+    });
     if (!SuccessBooleanResult) {
-      throw TypeError("Voice Connection can't be distroyed!")
+      throw TypeError("Voice Connection can't be distroyed!");
     } else {
-      this.VoiceConnection = null
-      return true
+      this.VoiceConnection = null;
+      return true;
     }
   }
 
@@ -141,19 +143,18 @@ module.exports = class VoiceConnectionBuilder {
       ActiveChannel: false,
     },
   ) {
-    this.ChannelId = channel.id
-    this.GuildId = channel.guild.id
-    this.Adaptar =
-      SetVoiceChannelOptions.Adaptar || channel.Guild.voiceAdapterCreator
-    this.LeaveOnEmpty = SetVoiceChannelOptions.LeaveOnEmpty
-    this.LeaveOnOnlyBot = SetVoiceChannelOptions.LeaveOnOnlyBot
-    this.LeaveOnOnlyUsers = SetVoiceChannelOptions.LeaveOnOnlyUsers
-    this.LeaveDelay = SetVoiceChannelOptions.LeaveDelay
-    this.selfDeaf = SetVoiceChannelOptions.selfDeaf
-    this.selfMute = SetVoiceChannelOptions.selfMute
-    this.StageTopic = SetVoiceChannelOptions.StageTopic
-    this.StageSuppress = SetVoiceChannelOptions.StageSuppress
-    this.ActiveChannel = SetVoiceChannelOptions.ActiveChannel
+    this.ChannelId = channel.id;
+    this.GuildId = channel.guild.id;
+    this.Adaptar = SetVoiceChannelOptions.Adaptar || channel.Guild.voiceAdapterCreator;
+    this.LeaveOnEmpty = SetVoiceChannelOptions.LeaveOnEmpty;
+    this.LeaveOnOnlyBot = SetVoiceChannelOptions.LeaveOnOnlyBot;
+    this.LeaveOnOnlyUsers = SetVoiceChannelOptions.LeaveOnOnlyUsers;
+    this.LeaveDelay = SetVoiceChannelOptions.LeaveDelay;
+    this.selfDeaf = SetVoiceChannelOptions.selfDeaf;
+    this.selfMute = SetVoiceChannelOptions.selfMute;
+    this.StageTopic = SetVoiceChannelOptions.StageTopic;
+    this.StageSuppress = SetVoiceChannelOptions.StageSuppress;
+    this.ActiveChannel = SetVoiceChannelOptions.ActiveChannel;
 
     try {
       const VoiceConnection = joinVoiceChannel({
@@ -162,12 +163,12 @@ module.exports = class VoiceConnectionBuilder {
         selfDeaf: !!this.selfDeaf,
         selfMute: !!this.selfMute,
         adapterCreator: this.Adaptar,
-      })
-      this.VoiceConnection = VoiceConnection
-      this.#RegisterStageChannel()
-      return this
+      });
+      this.VoiceConnection = VoiceConnection;
+      this.#RegisterStageChannel();
+      return this;
     } catch (error) {
-      throw Error(error)
+      throw Error(error);
     }
   }
 
@@ -175,7 +176,7 @@ module.exports = class VoiceConnectionBuilder {
     return void this.Client.channels
       .fetch(`${this.ChannelId}`)
       .then((Channel) => {
-        if (Channel.type !== 'GUILD_STAGE_VOICE') return void null
+        if (Channel.type !== 'GUILD_STAGE_VOICE') return void null;
         if (Channel.Guild.me && Channel.Guild.me.voice && this.StageSuppress) {
           return void Channel.Guild.me.voice
             .setSuppressed(false)
@@ -187,14 +188,14 @@ module.exports = class VoiceConnectionBuilder {
                 })
                   .then(() => true)
                   .catch((error) => {
-                    throw error
-                  })
+                    throw error;
+                  });
               }
-              return true
+              return true;
             })
             .catch((error) => {
-              throw error
-            })
+              throw error;
+            });
         }
         if (this.StageTopic) {
           return void Channel.createStageInstance({
@@ -203,13 +204,13 @@ module.exports = class VoiceConnectionBuilder {
           })
             .then(() => true)
             .catch((error) => {
-              throw error
-            })
+              throw error;
+            });
         }
-        return true
+        return true;
       })
       .catch((error) => {
-        throw error
-      })
+        throw error;
+      });
   }
-}
+};

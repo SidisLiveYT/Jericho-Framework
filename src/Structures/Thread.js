@@ -4,7 +4,7 @@
  * @returns {object} A Class Instance of Single Channel [ Unique Instance ]
  */
 
- module.exports = class ThreadBuilder {
+module.exports = class ThreadBuilder {
   /**
    * @property {Number} ThreadInstanceNumber : For Storing Instance Numbers for further Utils Requirements
    */
@@ -28,12 +28,12 @@
       metadata: undefined,
     },
   ) {
-    this.Client = ThreadBuilderCreateOptions.Client
-    this.ThreadCode = ThreadBuilder.#ThreadInstanceNumber + 1
-    this.channel = ThreadBuilderCreateOptions.channel
-    this.guild = ThreadBuilderCreateOptions.guild
-    this.metadata = ThreadBuilderCreateOptions.metadata
-    this.thread = null
+    this.Client = ThreadBuilderCreateOptions.Client;
+    this.ThreadCode = ThreadBuilder.#ThreadInstanceNumber + 1;
+    this.channel = ThreadBuilderCreateOptions.channel;
+    this.guild = ThreadBuilderCreateOptions.guild;
+    this.metadata = ThreadBuilderCreateOptions.metadata;
+    this.thread = null;
   }
 
   /**
@@ -52,15 +52,13 @@
       AutoArchiveDuration: 0,
     },
   ) {
-    if (!CreateThreadOptions)
-      throw TypeError('Invalid Options Detected for Thread Creator')
+    if (!CreateThreadOptions) throw TypeError('Invalid Options Detected for Thread Creator');
     else if (
-      CreateThreadOptions.Type &&
-      !['private', 'public'].includes(
+      CreateThreadOptions.Type
+      && !['private', 'public'].includes(
         `${CreateThreadOptions.Type.toLowerCase().trim()}`,
       )
-    )
-      throw TypeError('Invalid Thread Type is Detected!')
+    ) throw TypeError('Invalid Thread Type is Detected!');
     const Thread = await this.channel.threads
       .create({
         name: CreateThreadOptions.Name
@@ -78,10 +76,10 @@
           : `Thread Created by ${this.Client.user.name} on Thread Handler | Jericho Framework`,
       })
       .catch((error) => {
-        throw error
-      })
-    this.thread = Thread
-    return this
+        throw error;
+      });
+    this.thread = Thread;
+    return this;
   }
 
   /**
@@ -99,30 +97,29 @@
     if (!DestroyThreadOptions) {
       throw SyntaxError(
         "Options Variable can't be Undefined , Reason is Compulsory",
-      )
+      );
     }
     if (
-      DestroyThreadOptions.Delay &&
-      !Number.isNaN(DestroyThreadOptions.Delay) &&
-      DestroyThreadOptions.Reason
+      DestroyThreadOptions.Delay
+      && !Number.isNaN(DestroyThreadOptions.Delay)
+      && DestroyThreadOptions.Reason
     ) {
       return setTimeout(
         ThreadDeletion(this.thread, DestroyThreadOptions.Reason),
         parseInt(DestroyThreadOptions.Delay) * 1000,
-      )
+      );
     }
-    if (DestroyThreadOptions.Reason)
-      return ThreadDeletion(this.thread, DestroyThreadOptions.Reason)
+    if (DestroyThreadOptions.Reason) return ThreadDeletion(this.thread, DestroyThreadOptions.Reason);
     throw SyntaxError(
       "Options Variable can't be Undefined , Reason is Compulsory",
-    )
+    );
 
     function ThreadDeletion(Thread, Reason) {
       return Thread.delete(`${Reason || 'Deleted Thread Instance}'}`)
         .then(() => true)
         .catch((error) => {
-          throw error
-        })
+          throw error;
+        });
     }
   }
-}
+};

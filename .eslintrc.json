@@ -19,6 +19,7 @@
     "no-plusplus": "off",
     "no-loop-func": "off",
     "no-param-reassign": "off",
-    "radix": "off"
+    "radix": "off",
+    "global-require": "off"
   }
 }
