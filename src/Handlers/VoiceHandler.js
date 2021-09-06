@@ -1,10 +1,9 @@
-import { StageChannel, VoiceChannel, Client } from 'discord.js';
-import { Snowflake } from 'discord-api-types';
-import {
+const { StageChannel, VoiceChannel, Client } = require('discord.js')
+const {
   ChannnelResolver,
   BooleanResolver,
-} from '../Utilities/Resolver_Utils.js';
-import { VoiceConnectionBuilder } from '../Structures/VoiceConnection.js';
+} = require('../Utilities/Resolver_Utils.js')
+const { VoiceConnectionBuilder } = require('../Structures/VoiceConnection.js')
 
 /**
  * @class VoiceHandler - Voice Handler for discord.js v13
@@ -12,7 +11,7 @@ import { VoiceConnectionBuilder } from '../Structures/VoiceConnection.js';
  * @param {object} VoiceHandlerInterfaceOptions Voice handler Interface options for class VoiceHandler
  */
 
-export class VoiceHandler {
+module.exports = class VoiceHandler {
   /**
    * @constructor VoiceHandler - Voice Handler for discord.js v13
    * @param {Client} Client Discord API Client from discord.js v13
@@ -32,17 +31,18 @@ export class VoiceHandler {
       StageSuppress: true,
     },
   ) {
-    this.Client = Client;
-    this.LeaveOnEmpty = !!VoiceHandlerInterfaceOptions.LeaveOnEmpty;
-    this.LeaveOnOnlyBot = !!VoiceHandlerInterfaceOptions.LeaveOnOnlyBot;
-    this.LeaveOnOnlyUsers = !!VoiceHandlerInterfaceOptions.LeaveOnOnlyUsers;
-    this.LeaveDelay = VoiceHandlerInterfaceOptions.LeaveDelay > 0
-      ? VoiceHandlerInterfaceOptions.LeaveDelay
-      : 0;
-    this.selfDeaf = !!VoiceHandlerInterfaceOptions.selfDeaf;
-    this.selfMute = !!VoiceHandlerInterfaceOptions.selfMute;
-    this.StageTopic = VoiceHandlerInterfaceOptions.StageTopic;
-    this.StageSuppress = !!VoiceHandlerInterfaceOptions.StageSuppress;
+    this.Client = Client
+    this.LeaveOnEmpty = !!VoiceHandlerInterfaceOptions.LeaveOnEmpty
+    this.LeaveOnOnlyBot = !!VoiceHandlerInterfaceOptions.LeaveOnOnlyBot
+    this.LeaveOnOnlyUsers = !!VoiceHandlerInterfaceOptions.LeaveOnOnlyUsers
+    this.LeaveDelay =
+      VoiceHandlerInterfaceOptions.LeaveDelay > 0
+        ? VoiceHandlerInterfaceOptions.LeaveDelay
+        : 0
+    this.selfDeaf = !!VoiceHandlerInterfaceOptions.selfDeaf
+    this.selfMute = !!VoiceHandlerInterfaceOptions.selfMute
+    this.StageTopic = VoiceHandlerInterfaceOptions.StageTopic
+    this.StageSuppress = !!VoiceHandlerInterfaceOptions.StageSuppress
 
     // Event Call for Leaveon attributes to check
     /**
@@ -53,50 +53,53 @@ export class VoiceHandler {
 
     this.Client.on('voiceStateUpdate', (OldState, NewState) => {
       if (
-        OldState
-        && !NewState
-        && OldState.member.id !== this.Client.user.id
-        && VoiceHandler.#GetVoiceConnection(OldState.guild.id)
+        OldState &&
+        !NewState &&
+        OldState.member.id !== this.Client.user.id &&
+        VoiceHandler.#GetVoiceConnection(OldState.guild.id)
       ) {
-        const UserChecker = (member) => !member.user.bot;
-        const BotChecker = (member) => member.user.bot;
+        const UserChecker = (member) => !member.user.bot
+        const BotChecker = (member) => member.user.bot
         if (
-          OldState.guild.me
-          && OldState.guild.me.voice
-          && OldState.guild.me.voice.channel
-          && OldState.guild.me.voice.channel.members
-          && OldState.guild.me.voice.channel.members.size <= 1
-          && OldState.guild.me.voice.channel.members.has(`${Client.user.id}`)
-          && this.LeaveOnEmpty
-        ) return this.disconnect(OldState.guild.id, this.LeaveDelay);
+          OldState.guild.me &&
+          OldState.guild.me.voice &&
+          OldState.guild.me.voice.channel &&
+          OldState.guild.me.voice.channel.members &&
+          OldState.guild.me.voice.channel.members.size <= 1 &&
+          OldState.guild.me.voice.channel.members.has(`${Client.user.id}`) &&
+          this.LeaveOnEmpty
+        )
+          return this.disconnect(OldState.guild.id, this.LeaveDelay)
         if (
-          OldState.guild.me
-          && OldState.guild.me.voice
-          && OldState.guild.me.voice.channel
-          && OldState.guild.me.voice.channel.members
-          && OldState
-          && OldState.guild.me.voice.channel.members.some(UserChecker)
-          && !OldState.guild.me.voice.channel.members.some(BotChecker)
-          && this.LeaveOnOnlyUsers
-        ) return this.disconnect(OldState.guild.id, this.LeaveDelay);
+          OldState.guild.me &&
+          OldState.guild.me.voice &&
+          OldState.guild.me.voice.channel &&
+          OldState.guild.me.voice.channel.members &&
+          OldState &&
+          OldState.guild.me.voice.channel.members.some(UserChecker) &&
+          !OldState.guild.me.voice.channel.members.some(BotChecker) &&
+          this.LeaveOnOnlyUsers
+        )
+          return this.disconnect(OldState.guild.id, this.LeaveDelay)
         if (
-          OldState.guild.me
-          && OldState.guild.me.voice
-          && OldState.guild.me.voice.channel
-          && OldState.guild.me.voice.channel.members
-          && OldState
-          && !OldState.guild.me.voice.channel.members.some(UserChecker)
-          && OldState.guild.me.voice.channel.members.some(BotChecker)
-          && this.LeaveOnOnlyBot
-        ) return this.disconnect(OldState.guild.id, this.LeaveDelay);
-        return void null;
+          OldState.guild.me &&
+          OldState.guild.me.voice &&
+          OldState.guild.me.voice.channel &&
+          OldState.guild.me.voice.channel.members &&
+          OldState &&
+          !OldState.guild.me.voice.channel.members.some(UserChecker) &&
+          OldState.guild.me.voice.channel.members.some(BotChecker) &&
+          this.LeaveOnOnlyBot
+        )
+          return this.disconnect(OldState.guild.id, this.LeaveDelay)
+        return void null
       }
       if (
-        OldState
-        && !NewState
-        && OldState.member.id === this.Client.user.id
-        && VoiceHandler.#GetVoiceConnection(OldState.guild.id)
-        && VoiceHandler.#GetVoiceConnection(OldState.guild.id).ActiveChannel
+        OldState &&
+        !NewState &&
+        OldState.member.id === this.Client.user.id &&
+        VoiceHandler.#GetVoiceConnection(OldState.guild.id) &&
+        VoiceHandler.#GetVoiceConnection(OldState.guild.id).ActiveChannel
       ) {
         return this.join(
           VoiceHandler.#GetVoiceConnection(OldState.guild.id).ChannelId,
@@ -119,48 +122,51 @@ export class VoiceHandler {
             StageSuppress: VoiceHandler.#GetVoiceConnection(OldState.guild.id)
               .StageSuppress,
           },
-        );
+        )
       }
       if (
-        NewState
-        && !OldState
-        && VoiceHandler.#GetVoiceConnection(NewState.guild.id)
+        NewState &&
+        !OldState &&
+        VoiceHandler.#GetVoiceConnection(NewState.guild.id)
       ) {
-        const UserChecker = (member) => !member.user.bot;
-        const BotChecker = (member) => member.user.bot;
+        const UserChecker = (member) => !member.user.bot
+        const BotChecker = (member) => member.user.bot
         if (
-          NewState.guild.me
-          && NewState.guild.me.voice
-          && NewState.guild.me.voice.channel
-          && NewState.guild.me.voice.channel.members
-          && NewState.guild.me.voice.channel.members.size <= 1
-          && NewState.guild.me.voice.channel.members.has(`${Client.user.id}`)
-          && this.LeaveOnEmpty
-        ) return this.disconnect(NewState.guild.id, this.LeaveDelay);
+          NewState.guild.me &&
+          NewState.guild.me.voice &&
+          NewState.guild.me.voice.channel &&
+          NewState.guild.me.voice.channel.members &&
+          NewState.guild.me.voice.channel.members.size <= 1 &&
+          NewState.guild.me.voice.channel.members.has(`${Client.user.id}`) &&
+          this.LeaveOnEmpty
+        )
+          return this.disconnect(NewState.guild.id, this.LeaveDelay)
         if (
-          NewState.guild.me
-          && NewState.guild.me.voice
-          && NewState.guild.me.voice.channel
-          && NewState.guild.me.voice.channel.members
-          && NewState
-          && NewState.guild.me.voice.channel.members.some(UserChecker)
-          && !NewState.guild.me.voice.channel.members.some(BotChecker)
-          && this.LeaveOnOnlyUsers
-        ) return this.disconnect(NewState.guild.id, this.LeaveDelay);
+          NewState.guild.me &&
+          NewState.guild.me.voice &&
+          NewState.guild.me.voice.channel &&
+          NewState.guild.me.voice.channel.members &&
+          NewState &&
+          NewState.guild.me.voice.channel.members.some(UserChecker) &&
+          !NewState.guild.me.voice.channel.members.some(BotChecker) &&
+          this.LeaveOnOnlyUsers
+        )
+          return this.disconnect(NewState.guild.id, this.LeaveDelay)
         if (
-          NewState.guild.me
-          && NewState.guild.me.voice
-          && NewState.guild.me.voice.channel
-          && NewState.guild.me.voice.channel.members
-          && NewState
-          && !NewState.guild.me.voice.channel.members.some(UserChecker)
-          && NewState.guild.me.voice.channel.members.some(BotChecker)
-          && this.LeaveOnOnlyBot
-        ) return this.disconnect(NewState.guild.id, this.LeaveDelay);
-        return void null;
+          NewState.guild.me &&
+          NewState.guild.me.voice &&
+          NewState.guild.me.voice.channel &&
+          NewState.guild.me.voice.channel.members &&
+          NewState &&
+          !NewState.guild.me.voice.channel.members.some(UserChecker) &&
+          NewState.guild.me.voice.channel.members.some(BotChecker) &&
+          this.LeaveOnOnlyBot
+        )
+          return this.disconnect(NewState.guild.id, this.LeaveDelay)
+        return void null
       }
-      return undefined;
-    });
+      return undefined
+    })
   }
 
   /**
@@ -191,46 +197,48 @@ export class VoiceHandler {
       ActiveChannel: false,
     },
   ) {
-    if (!channel) throw SyntaxError('Invalid Voice Type Channel is Detected !');
-    else channel = ChannnelResolver(this.Client, channel, { type: 'allvoice' });
+    if (!channel) throw SyntaxError('Invalid Voice Type Channel is Detected !')
+    else channel = ChannnelResolver(this.Client, channel, { type: 'allvoice' })
     // Updating Class Properties
     JoinVoiceChannelOptions.LeaveOnEmpty = BooleanResolver(
       JoinVoiceChannelOptions.LeaveOnEmpty,
       this.LeaveOnEmpty,
-    );
+    )
     JoinVoiceChannelOptions.LeaveOnOnlyBot = BooleanResolver(
       JoinVoiceChannelOptions.LeaveOnEmpty,
       this.LeaveOnEmpty,
-    );
+    )
     JoinVoiceChannelOptions.LeaveOnOnlyUsers = BooleanResolver(
       JoinVoiceChannelOptions.LeaveOnEmpty,
       this.LeaveOnEmpty,
-    );
-    JoinVoiceChannelOptions.LeaveDelay = JoinVoiceChannelOptions.LeaveDelay > 0
-      ? JoinVoiceChannelOptions.LeaveDelay
-      : this.LeaveDelay;
-    JoinVoiceChannelOptions.StageTopic = JoinVoiceChannelOptions.StageTopic || this.StageTopic;
+    )
+    JoinVoiceChannelOptions.LeaveDelay =
+      JoinVoiceChannelOptions.LeaveDelay > 0
+        ? JoinVoiceChannelOptions.LeaveDelay
+        : this.LeaveDelay
+    JoinVoiceChannelOptions.StageTopic =
+      JoinVoiceChannelOptions.StageTopic || this.StageTopic
     JoinVoiceChannelOptions.StageSuppress = BooleanResolver(
       JoinVoiceChannelOptions.StageSuppress,
       this.StageSuppress,
-    );
+    )
     JoinVoiceChannelOptions.selfDeaf = BooleanResolver(
       JoinVoiceChannelOptions.LeaveOnEmpty,
       this.LeaveOnEmpty,
-    );
+    )
     JoinVoiceChannelOptions.selfMute = BooleanResolver(
       JoinVoiceChannelOptions.LeaveOnEmpty,
       this.LeaveOnEmpty,
-    );
+    )
     JoinVoiceChannelOptions.ActiveChannel = BooleanResolver(
       JoinVoiceChannelOptions.ActiveChannel,
       false,
-    );
+    )
 
     if (VoiceHandler.#GetVoiceConnection(channel.guild.id)) {
       const VoiceConnectionInstance = VoiceHandler.#GetVoiceConnection(
         channel.guild.id,
-      );
+      )
       const NewVoiceConnectionInstance = VoiceConnectionInstance.set(channel, {
         LeaveOnEmpty: JoinVoiceChannelOptions.LeaveOnEmpty,
         LeaveOnOnlyBot: JoinVoiceChannelOptions.LeaveOnOnlyBot,
@@ -241,11 +249,11 @@ export class VoiceHandler {
         StageSuppress: JoinVoiceChannelOptions.StageSuppress,
         StageTopic: JoinVoiceChannelOptions.StageTopic,
         ActiveChannel: JoinVoiceChannelOptions.ActiveChannel,
-      });
+      })
       return VoiceHandler.#RegisterVoiceConnection(
         channel.guild.id,
         NewVoiceConnectionInstance,
-      );
+      )
     }
     let VoiceConnectionInstance = new VoiceConnectionBuilder(
       this.Client,
@@ -263,12 +271,12 @@ export class VoiceHandler {
         StageTopic: JoinVoiceChannelOptions.StageTopic,
         ActiveChannel: JoinVoiceChannelOptions.ActiveChannel,
       },
-    );
-    VoiceConnectionInstance = VoiceConnectionInstance.create();
+    )
+    VoiceConnectionInstance = VoiceConnectionInstance.create()
     return VoiceHandler.#RegisterVoiceConnection(
       channel.guild.id,
       VoiceConnectionInstance,
-    );
+    )
   }
 
   /**
@@ -279,23 +287,23 @@ export class VoiceHandler {
    */
 
   disconnect(GuildId, Delay = 0) {
-    const VoiceConnectionInstance = VoiceHandler.#GetVoiceConnection(GuildId);
+    const VoiceConnectionInstance = VoiceHandler.#GetVoiceConnection(GuildId)
     if (VoiceConnectionInstance && VoiceConnectionInstance.disconnect) {
       throw Error(
         '[Connection is already Disconnected] : Please Connect to Channel',
-      );
+      )
     } else if (!VoiceConnectionInstance) {
       throw Error(
         '[Connection is already Destroyed] : Please Connect to Channel',
-      );
+      )
     }
     if (Delay && Delay !== 0) {
       return setTimeout(
         () => VoiceConnectionInstance.disconnect(),
         Delay * 1000,
-      );
+      )
     }
-    return VoiceConnectionInstance.disconnect();
+    return VoiceConnectionInstance.disconnect()
   }
 
   /**
@@ -306,24 +314,24 @@ export class VoiceHandler {
    */
 
   destroy(GuildId, AdapterAvailable = true, Delay = 0) {
-    const VoiceConnectionInstance = VoiceHandler.#GetVoiceConnection(GuildId);
+    const VoiceConnectionInstance = VoiceHandler.#GetVoiceConnection(GuildId)
     if (VoiceConnectionInstance && VoiceConnectionInstance.disconnect) {
       throw Error(
         '[Connection is already Disconnected] : Please Connect to Channel',
-      );
+      )
     } else if (!VoiceConnectionInstance) {
       throw Error(
         '[Connection is already Destroyed] : Please Connect to Channel',
-      );
+      )
     }
-    VoiceConnectionInstance.destroy(AdapterAvailable);
+    VoiceConnectionInstance.destroy(AdapterAvailable)
     if (Delay && Delay !== 0) {
       return setTimeout(
         () => VoiceHandler.#DestroyVoiceConnection(GuildId),
         Delay * 1000,
-      );
+      )
     }
-    return VoiceHandler.#DestroyVoiceConnection(GuildId);
+    return VoiceHandler.#DestroyVoiceConnection(GuildId)
   }
 
   /**
@@ -332,13 +340,13 @@ export class VoiceHandler {
    */
 
   get(GuildId) {
-    const VoiceConnectionInstance = VoiceHandler.#GetVoiceConnection(GuildId);
+    const VoiceConnectionInstance = VoiceHandler.#GetVoiceConnection(GuildId)
     if (!VoiceConnectionInstance) {
       throw Error(
         '[Connection is already Destroyed] : Please Connect to Channel',
-      );
+      )
     }
-    return VoiceConnectionInstance.get();
+    return VoiceConnectionInstance.get()
   }
 
   /**
@@ -350,8 +358,8 @@ export class VoiceHandler {
   static #RegisterVoiceConnection(GuildId, VoiceConnectionInstance) {
     VoiceHandler.#VoiceConnectionRecords[
       `"${GuildId}"`
-    ] = VoiceConnectionInstance;
-    return VoiceConnectionInstance.VoiceConnection;
+    ] = VoiceConnectionInstance
+    return VoiceConnectionInstance.VoiceConnection
   }
 
   /**
@@ -360,14 +368,15 @@ export class VoiceHandler {
    */
 
   static #GetVoiceConnection(GuildId) {
-    let VoiceConnectionInstance = VoiceHandler.#VoiceConnectionRecords[`"${GuildId}"`];
+    let VoiceConnectionInstance =
+      VoiceHandler.#VoiceConnectionRecords[`"${GuildId}"`]
     if (VoiceConnectionInstance) {
-      VoiceConnectionInstance = VoiceConnectionInstance.get();
+      VoiceConnectionInstance = VoiceConnectionInstance.get()
       VoiceHandler.#VoiceConnectionRecords[
         `"${GuildId}"`
-      ] = VoiceConnectionInstance;
+      ] = VoiceConnectionInstance
     }
-    return VoiceConnectionInstance;
+    return VoiceConnectionInstance
   }
 
   /**
@@ -376,7 +385,7 @@ export class VoiceHandler {
    */
 
   static #DestroyVoiceConnection(GuildId) {
-    VoiceHandler.#VoiceConnectionRecords[`"${GuildId}"`] = null;
-    return true;
+    VoiceHandler.#VoiceConnectionRecords[`"${GuildId}"`] = null
+    return true
   }
 }

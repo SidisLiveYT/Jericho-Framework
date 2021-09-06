@@ -10,3 +10,4 @@ LICENSE
 example/
 .babelrc
 .eslintignore
+.npmrc
