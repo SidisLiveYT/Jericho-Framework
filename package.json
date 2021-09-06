@@ -1,6 +1,6 @@
 {
   "name": "jericho-framework",
-  "version": "1.1.1",
+  "version": "1.1.5",
   "description": "Jericho Framework for Discord Bots to make bot real easy in Java-Script and discord.js v13",
   "main": "src/index.js",
   "module": "./src/index.mjs",
@@ -43,9 +43,6 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.15.4",
     "@babel/preset-env": "^7.15.4",
-    "@semantic-release/commit-analyzer": "^8.0.1",
-    "@semantic-release/git": "^9.0.1",
-    "@semantic-release/release-notes-generator": "^9.0.3",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
@@ -59,7 +56,7 @@
     }
   },
   "engines": {
-    "node": ">= 15.0.0",
+    "node": ">= 16.6.0",
     "npm": ">=7.0.0"
   },
   "dependencies": {
