@@ -40,7 +40,7 @@ jobs:
     - run: npm run lint:fix
     - run: |
         npm version --git-tag-version=false $(jq --raw-output '.version' package.json)-dev.$(date +%s).$(git rev-parse --short HEAD)
-        npm publish --tag dev || true
+        npm publish --tag beta || true
       env: 
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

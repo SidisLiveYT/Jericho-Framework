@@ -1,4 +1,8 @@
-import { ThreadHandler, SlashCommandHandler, VoiceHandler } from '../src/index'
+const {
+  ThreadHandler,
+  SlashCommandHandler,
+  VoiceHandler,
+} = require('../src/index.js')
 
 //Creating Channel Instance for Particular Text Channel
 const ChannelInstance = new ThreadHandler(Client, {
