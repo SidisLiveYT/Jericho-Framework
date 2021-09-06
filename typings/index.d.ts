@@ -111,3 +111,22 @@ export class VoiceHandler {
     AdapterAvailable: Boolean
   ): Boolean
 }
+
+export function GuildResolver (
+  Client: Client,
+  GuildResolve: Guild | Message | Channel | Snowflake | String,
+  Extraif: {
+    ifmessage: Boolean
+  }
+): Promise<Guild> | undefined
+
+export function ChannelResolver (
+  Client: Client,
+  ChannelResolve: Message | Channel | Snowflake | String,
+  Extraif: { ifmessage: Boolean; type: String }
+): Promise<Channel> | undefined
+
+export function BooleanResolver (
+  FirstHand: Boolean,
+  SecondHand: Boolean
+): Boolean
