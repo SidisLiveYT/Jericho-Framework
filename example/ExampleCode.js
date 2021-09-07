@@ -11,12 +11,12 @@ const ChannelInstance = new ThreadHandler(Client, {
 })
 
 //Creating Thread Instance for Particular Thread-Main Channel
-const ThreadInstance1 = ChannelInstance.CreateThread(Options)
+const ThreadInstance1 = await ChannelInstance.CreateThread(Options)
 //Thread Channel OR Value
-const Thread1 = ThreadInstance1.Thread
+const Thread1 = ThreadInstance1.thread
 
-const ThreadInstance2 = ChannelInstance.CreateThread(Options)
-const Thread2 = ThreadInstance2.Thread
+const ThreadInstance2 = await ChannelInstance.CreateThread(Options)
+const Thread2 = ThreadInstance2.thread
 
 console.log(Thread1)
 console.log(Thread2)
@@ -26,13 +26,13 @@ const SlashCommandInstance = new SlashCommandHandler(Client, {
   guild: message,
 })
 //Slash Command Handler to Set Commands
-SlashCommandInstance.set(Commands)
+await SlashCommandInstance.set(Commands)
 //Slash Command Handler to Deploy Commands
-SlashCommandInstance.deploy()
+await SlashCommandInstance.deploy()
 
 const Voice_Handler = new VoiceHandler(Client, {
   LeaveOnEmpty: true,
 })
-const VoiceConnection = Voice_Handler.join(channel)
+const VoiceConnection = await Voice_Handler.join(channel)
 Voice_Handler.destroy()
 Voice_Handler.disconnect()
