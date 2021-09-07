@@ -26,7 +26,7 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run lint:fix
-  publish:
+  pre_publish:
     runs-on: "ubuntu-latest"
     if: ${{ github.ref == 'refs/heads/beta' }}
     needs: [quality]
@@ -39,7 +39,7 @@ jobs:
     - run: npm ci
     - run: npm run lint:fix
     - run: |
-        npm version --git-tag-version=false $(jq --raw-output '.version' package.json)-dev.$(date +%s).$(git rev-parse --short HEAD)
+        npm version --git-tag-version=false $(jq --raw-output '.version' package.json)-beta.$(date +%s).$(git rev-parse --short HEAD)
         npm publish --tag beta || true
       env: 
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
