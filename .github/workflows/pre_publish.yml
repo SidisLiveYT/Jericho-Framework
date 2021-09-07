@@ -39,6 +39,7 @@ jobs:
     - run: npm ci
     - run: npm run lint:fix
     - run: |
+        npm login
         npm version --git-tag-version=false $(jq --raw-output '.version' package.json)-beta.$(date +%s).$(git rev-parse --short HEAD)
         npm publish --tag beta || true
       env: 
