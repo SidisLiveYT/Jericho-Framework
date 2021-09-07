@@ -108,12 +108,12 @@ export class VoiceHandler {
   public disconnect (
     GuildId: Guild['id'],
     Delay: Number | 'Time in Seconds for Delay'
-  ): Boolean
+  ): Promise<Boolean>
   public destroy (
     GuildId: Guild['id'],
     Delay: Number | 'Time in Seconds for Delay',
     AdapterAvailable: Boolean
-  ): Boolean
+  ): Promise<Boolean>
 }
 
 export function GuildResolver (
@@ -133,4 +133,4 @@ export function ChannelResolver (
 export function BooleanResolver (
   FirstHand: Boolean,
   SecondHand: Boolean
-): Boolean
+): Promise<Boolean>
