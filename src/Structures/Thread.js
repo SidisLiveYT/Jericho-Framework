@@ -102,7 +102,7 @@ module.exports = class ThreadBuilder {
     ) {
       setTimeout(async () => await ThreadDeletion(this.thread, DestroyThreadOptions.Reason), Number(DestroyThreadOptions.Delay) * 1000);
       return true;
-    } if (DestroyThreadOptions.Delay !== 0 && DestroyThreadOptions.Reason) return await ThreadDeletion(this.thread, DestroyThreadOptions.Reason);
+    } if (DestroyThreadOptions.Delay === 0 && DestroyThreadOptions.Reason) return await ThreadDeletion(this.thread, DestroyThreadOptions.Reason);
     throw SyntaxError(
       "Options Variable can't be Undefined , Reason is Compulsory",
     );
