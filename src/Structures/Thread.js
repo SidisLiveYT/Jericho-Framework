@@ -100,7 +100,7 @@ module.exports = class ThreadBuilder {
       && !Number.isNaN(DestroyThreadOptions.Delay)
       && DestroyThreadOptions.Reason
     ) {
-      setTimeout(async () => await ThreadDeletion(this.thread, DestroyThreadOptions.Reason), Number(DestroyThreadOptions.Delay) * 1000);
+      setTimeout(async () => { await ThreadDeletion(this.thread, DestroyThreadOptions.Reason) }, Number(DestroyThreadOptions.Delay) * 1000);
       return true;
     } if (DestroyThreadOptions.Delay === 0 && DestroyThreadOptions.Reason) return await ThreadDeletion(this.thread, DestroyThreadOptions.Reason);
     throw SyntaxError(
