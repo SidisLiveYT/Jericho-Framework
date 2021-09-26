@@ -36,6 +36,11 @@ module.exports = class ThreadHandler {
       metadata: null,
     },
   ) {
+    const ThreadChannelException = ThreadHandlerIntefaceOptions.channel
+      ? ThreadHandlerIntefaceOptions.channel.isThread()
+        ? ThreadHandlerIntefaceOptions.channel.parent
+        : null
+      : null
     this.Client = Client
     this.ChannelCode = ++ThreadHandler.#ChannelInstancesNumber
     this.guild = ThreadHandlerIntefaceOptions.guild
@@ -43,7 +48,7 @@ module.exports = class ThreadHandler {
           ifmessage: true,
         })
       : null
-    this.channel = ThreadHandlerIntefaceOptions.guild
+    this.channel = ThreadChannelException || ThreadHandlerIntefaceOptions.channel
       ? ChannnelResolver(Client, ThreadHandlerIntefaceOptions.channel, {
           type: 'text',
           ifmessage: true,
@@ -105,21 +110,30 @@ module.exports = class ThreadHandler {
       AutoArchiveDuration: 0,
     },
   ) {
+    const ThreadChannelException = CreateThreadOptions.channel
+      ? CreateThreadOptions.channel.isThread()
+        ? CreateThreadOptions.channel.parent
+        : null
+      : null
     const ThreadInstanceClass = new ThreadBuilder({
       Client: this.Client,
       guild: this.guild,
-      channel: await ChannnelResolver(
-        this.Client,
-        CreateThreadOptions.channel || this.channel,
-        {
-          type: 'text',
-          ifmessage: true,
-        },
-      ),
+      channel:
+        ThreadChannelException ||
+        (await ChannnelResolver(
+          this.Client,
+          CreateThreadOptions.channel || this.channel,
+          {
+            type: 'text',
+            ifmessage: true,
+          },
+        )),
       metadata: CreateThreadOptions
         ? CreateThreadOptions.metadata
         : this.metadata,
     })
+    if (ThreadChannelException)
+      CreateThreadOptions.channel = ThreadChannelException
     const ThreadInstance = await ThreadInstanceClass.create(CreateThreadOptions)
     let ThreadInstances =
       ThreadHandler.#ThreadInstanceRecords[`'${this.ChannelCode}'`]
