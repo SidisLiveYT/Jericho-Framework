@@ -36,9 +36,6 @@ module.exports = class ThreadHandler {
       metadata: null,
     },
   ) {
-    const ThreadChannelException = ThreadHandlerIntefaceOptions.channel.isThread()
-      ? ThreadHandlerIntefaceOptions.channel.parent
-      : null;
     this.Client = Client;
     this.ChannelCode = ++ThreadHandler.#ChannelInstancesNumber;
     this.guild = ThreadHandlerIntefaceOptions.guild
@@ -46,7 +43,7 @@ module.exports = class ThreadHandler {
         ifmessage: true,
       })
       : null;
-    this.channel = ThreadChannelException || ThreadHandlerIntefaceOptions.channel
+    this.channel = ThreadHandlerIntefaceOptions.channel
       ? ChannnelResolver(Client, ThreadHandlerIntefaceOptions.channel, {
         type: 'text',
         ifmessage: true,
