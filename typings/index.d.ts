@@ -34,6 +34,7 @@ export class ThreadHandler {
           Name: String
           Reason: String
           AutoArchiveDuration: Number | 'Time in Seconds'
+          IgnoreError: Boolean
         }
       | null
       | undefined
@@ -50,6 +51,7 @@ export class ThreadHandler {
     DestroyThreadOptions: {
       Delay: Number
       Reason: String | 'Destroy Thread Instances'
+      IgnoreError: Boolean
     }
   ): undefined
 }

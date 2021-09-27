@@ -103,6 +103,7 @@ module.exports = class ThreadHandler {
       Name: undefined,
       Reason: undefined,
       AutoArchiveDuration: 0,
+      IgnoreError: false,
     },
   ) {
     const ThreadChannelException = CreateThreadOptions.channel.isThread()
@@ -125,7 +126,9 @@ module.exports = class ThreadHandler {
         ? CreateThreadOptions.metadata
         : this.metadata,
     });
-    if (ThreadChannelException) { CreateThreadOptions.channel = ThreadChannelException; }
+    if (ThreadChannelException) {
+      CreateThreadOptions.channel = ThreadChannelException;
+    }
     const ThreadInstance = await ThreadInstanceClass.create(CreateThreadOptions);
     let ThreadInstances = ThreadHandler.#ThreadInstanceRecords[`'${this.ChannelCode}'`];
     if (ThreadInstances) ThreadInstances.push(ThreadInstance);
@@ -148,6 +151,7 @@ module.exports = class ThreadHandler {
     DestroyThreadOptions = {
       Delay: 0,
       Reason: undefined,
+      IgnoreError: false,
     },
   ) {
     const ThreadInstances = ThreadHandler.#CheckInstance(this.ChannelCode);
@@ -216,9 +220,13 @@ module.exports = class ThreadHandler {
       Instance
       && typeof Instance === 'string'
       && Instance.toLowerCase().trim() === 'all'
-    ) { return ThreadInstances; }
+    ) {
+      return ThreadInstances;
+    }
     for (count = 0; count < ThreadInstances.length; ++count) {
-      if (Instance && ThreadInstances[count].ThreadCode === Instance) { Threads.push(ThreadInstances[count]); } else if (!Instance) Threads.push(ThreadInstances[count]);
+      if (Instance && ThreadInstances[count].ThreadCode === Instance) {
+        Threads.push(ThreadInstances[count]);
+      } else if (!Instance) Threads.push(ThreadInstances[count]);
       if (Amount && choice === Amount) break;
       else ++choice;
     }

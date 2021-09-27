@@ -20,6 +20,7 @@ export type ThreadInstance = {
   destroy(DestroyThreadOptions: {
     Delay: Number
     Reason: String
+    IgnoreError: Boolean,
   }): Promise<Boolean> | undefined
 }
 

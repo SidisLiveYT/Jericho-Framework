@@ -46,14 +46,19 @@ module.exports = class ThreadBuilder {
       Name: undefined,
       Reason: undefined,
       AutoArchiveDuration: 0,
+      IgnoreError: false,
     },
   ) {
-    if (!CreateThreadOptions) { throw TypeError('Invalid Options Detected for Thread Creator'); } else if (
+    if (!CreateThreadOptions) {
+      throw TypeError('Invalid Options Detected for Thread Creator');
+    } else if (
       CreateThreadOptions.Type
       && !['private', 'public'].includes(
         `${CreateThreadOptions.Type.toLowerCase().trim()}`,
       )
-    ) { throw TypeError('Invalid Thread Type is Detected!'); }
+    ) {
+      throw TypeError('Invalid Thread Type is Detected!');
+    }
     const Thread = await this.channel.threads
       .create({
         name: CreateThreadOptions.Name
@@ -71,6 +76,7 @@ module.exports = class ThreadBuilder {
           : `Thread Created by ${this.Client.user.name} on Thread Handler | Jericho Framework`,
       })
       .catch((error) => {
+        if (CreateThreadOptions.IgnoreError) return void null;
         throw error;
       });
     this.thread = Thread;
@@ -87,6 +93,7 @@ module.exports = class ThreadBuilder {
     DestroyThreadOptions = {
       Delay: 0,
       Reason: undefined,
+      IgnoreError: false,
     },
   ) {
     if (!DestroyThreadOptions) {
@@ -94,14 +101,24 @@ module.exports = class ThreadBuilder {
         "Options Variable can't be Undefined , Reason is Compulsory",
       );
     }
-    if (DestroyThreadOptions.Delay === 0 && DestroyThreadOptions.Reason) { return await ThreadDeletion(this.thread, DestroyThreadOptions.Reason); }
+    if (DestroyThreadOptions.Delay === 0 && DestroyThreadOptions.Reason) {
+      return await ThreadDeletion(
+        this.thread,
+        DestroyThreadOptions.Reason,
+        DestroyThreadOptions.IgnoreError,
+      );
+    }
     if (
       DestroyThreadOptions.Delay
       && !Number.isNaN(DestroyThreadOptions.Delay)
       && DestroyThreadOptions.Reason
     ) {
       setTimeout(async () => {
-        await ThreadDeletion(this.thread, DestroyThreadOptions.Reason);
+        await ThreadDeletion(
+          this.thread,
+          DestroyThreadOptions.Reason,
+          DestroyThreadOptions.IgnoreError,
+        );
       }, Number(DestroyThreadOptions.Delay) * 1000);
       return true;
     }
@@ -109,10 +126,11 @@ module.exports = class ThreadBuilder {
       "Options Variable can't be Undefined , Reason is Compulsory",
     );
 
-    async function ThreadDeletion(Thread, Reason) {
+    async function ThreadDeletion(Thread, Reason, IgnoreError) {
       return await Thread.delete(`${Reason || 'Deleted Thread Instance}'}`)
         .then(() => true)
         .catch((error) => {
+          if (IgnoreError) return void null;
           throw error;
         });
     }
