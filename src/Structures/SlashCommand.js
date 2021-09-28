@@ -11,13 +11,13 @@ module.exports = class SlashCommandBuilder {
    * @property {Array} DefaultOptionsTypes Array of Option type for Slash Command Interactions.
    */
 
-  static #DefaultOptionsTypes = ['CHAT_INPUT', 'USER', 'MESSAGE']
+  static #DefaultCommandTypes = ['CHAT_INPUT', 'USER', 'MESSAGE']
 
   /**
    * @property {Array} DefaultCommandTypes Array of Command type for Slash Command Interactions.
    */
 
-  static #DefaultCommandTypes = [
+  static #DefaultOptionsTypes = [
     'SUB_COMMAND',
     'SUB_COMMAND_GROUP',
     'STRING',
@@ -109,7 +109,7 @@ module.exports = class SlashCommandBuilder {
    */
 
   #OptionTypePlacement(Type) {
-    if (!Type) throw SyntaxError('No Application Command Type Credential is Detected!');
+    if (!Type) throw SyntaxError('No Application Command Option Type Credential is Detected!');
     let count = 0;
     for (
       count = 0;
@@ -131,7 +131,7 @@ module.exports = class SlashCommandBuilder {
    */
 
   #CommandTypePlacement(Type) {
-    if (!Type) throw SyntaxError('No Application Command Type Credential is Detected!');
+    if (!Type) return void null;
     let count = 0;
     for (
       count = 0;
