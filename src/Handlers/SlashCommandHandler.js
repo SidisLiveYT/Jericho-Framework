@@ -47,7 +47,7 @@ module.exports = class SlashCommandHandler {
    */
 
   async set(commands) {
-    this.SlashCommands = commands || SlashCommandHandler.#deployed ? null : this.SlashCommands;
+    this.SlashCommands = commands || (SlashCommandHandler.#deployed ? null : this.SlashCommands);
     if (!this.SlashCommands && SlashCommandHandler.#deployed) {
       throw SyntaxError(
         'Slash Command has been already Deployed with Previous Set Values | Try Setting New Slash Commands',
@@ -61,10 +61,10 @@ module.exports = class SlashCommandHandler {
       Client,
       this.SlashCommands,
     );
-    this.SlashCommands = SlashCommandInstance.create();
-    if (this.SlashCommands) {
+    this.ApplicationCommands = SlashCommandInstance.create();
+    if (this.ApplicationCommands) {
       SlashCommandHandler.#deployed = false;
-      return this.SlashCommands;
+      return this.ApplicationCommands;
     }
     return undefined;
   }
