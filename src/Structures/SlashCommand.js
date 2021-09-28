@@ -52,8 +52,8 @@ module.exports = class SlashCommandBuilder {
     if (!this.SlashCommands) throw new Error('No Commands have been Passed to Slash Command Handler!');
     let count = 0;
     const CookedCommands = [];
-    for (count = 0; count < SlashCommands.length; count++) {
-      CookedCommands.push(this.#CommandPlacement(SlashCommands[0]));
+    for (count = 0; count < this.SlashCommands.length; count++) {
+      CookedCommands.push(this.#CommandPlacement(this.SlashCommands[0]));
     }
     return CookedCommands;
   }
