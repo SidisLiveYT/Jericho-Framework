@@ -39,6 +39,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: npm run lint:fix
+      - run: npm exec --no npm-deprecate -- --name "*beta*" --package "jericho-framework"
       - run: npm run semantic-release
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
