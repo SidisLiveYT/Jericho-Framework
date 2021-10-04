@@ -39,7 +39,9 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: npm run lint:fix
-      - run: npm deprecate jericho-framework@">=1.1.7-beta <1.1.7" "Bug Fixes in 1.1.17"
+      - run: |
+          npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
+          npm deprecate jericho-framework@">1.1.7-beta <1.1.7" "Bug Fixes in 1.1.17"
       - run: npm run semantic-release
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
