@@ -39,7 +39,7 @@ jobs:
       - run: npm run lint:fix
       - run: |
           npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
-          npm exec --no npm-deprecate -- --name "*beta*" --package "jericho-framework"
+          npm deprecate jericho-framework@"[>=1.1.7-beta <1.1.7]" "Bug Fixes in 1.1.17"
           npm version --git-tag-version=false $(jq --raw-output '.version' package.json)-beta.$(date +%s).$(git rev-parse --short HEAD)
           npm publish --tag beta || true
         env:
