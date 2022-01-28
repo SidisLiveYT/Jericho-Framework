@@ -11,7 +11,7 @@ module.exports = class SlashCommandBuilder {
    * @property {Array} DefaultOptionsTypes Array of Option type for Slash Command Interactions.
    */
 
-  static #DefaultCommandTypes = ['CHAT_INPUT', 'USER', 'MESSAGE']
+  static #DefaultCommandTypes = ['CHAT_INPUT', 'USER', 'MESSAGE'];
 
   /**
    * @property {Array} DefaultCommandTypes Array of Command type for Slash Command Interactions.
@@ -28,7 +28,7 @@ module.exports = class SlashCommandBuilder {
     'ROLE',
     'MENTIONABLE',
     'NUMBER',
-  ]
+  ];
 
   /**
    * @constructor Construct Class SlashCommandBuilder

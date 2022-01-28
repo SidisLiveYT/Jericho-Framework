@@ -1,7 +1,5 @@
 const {
   Client,
-  Guild,
-  GuildChannel,
   TextChannel,
   ThreadChannel,
 } = require('discord.js');
@@ -18,9 +16,9 @@ const ThreadBuilder = require('../Structures/Thread.js');
  */
 
 module.exports = class ThreadHandler {
-  static #ChannelInstancesNumber = 0
+  static #ChannelInstancesNumber = 0;
 
-  static #ThreadInstanceRecords = {}
+  static #ThreadInstanceRecords = {};
 
   /**
    * @constructor

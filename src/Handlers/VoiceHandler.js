@@ -167,7 +167,7 @@ module.exports = class VoiceHandler {
    * @property {object} #VoiceConnectionRecords - Cache Value of Voice Connections
    */
 
-  static #VoiceConnectionRecords = {}
+  static #VoiceConnectionRecords = {};
 
   /**
    * @method join - Voice Handler for discord.js v13

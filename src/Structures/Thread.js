@@ -9,7 +9,7 @@ module.exports = class ThreadBuilder {
    * @property {Number} ThreadInstanceNumber : For Storing Instance Numbers for further Utils Requirements
    */
 
-  static #ThreadInstanceNumber = 0
+  static #ThreadInstanceNumber = 0;
 
   /**
    * @constructor

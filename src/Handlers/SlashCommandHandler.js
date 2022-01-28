@@ -13,7 +13,7 @@ module.exports = class SlashCommandHandler {
    * @property {Boolean} deployed What if Slash Command has been deployed to Discord API
    */
 
-  static #deployed = false
+  static #deployed = false;
 
   /**
    * @constructor
